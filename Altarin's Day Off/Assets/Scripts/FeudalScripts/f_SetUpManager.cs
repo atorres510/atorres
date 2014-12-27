@@ -28,9 +28,9 @@ public class f_SetUpManager : MonoBehaviour {
 
 		if (g != null) {
 				
-				Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-				Vector2 mousePos = new Vector2(v3Pos.x, v3Pos.y);
-				g.transform.position = mousePos;
+				//Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				///Vector2 mousePos = new Vector2(v3Pos.x, v3Pos.y);
+				g.transform.position = MousePosition();
 				
 
 		}
