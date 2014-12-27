@@ -85,12 +85,17 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
-			
-			f_Tile c = selectedObject.GetComponent<f_Tile>();
-			
-			c.transform.position = t.transform.position;
-			c.x = t.x;
-			c.y = t.y;
+
+			if(selectedObject != emptyObject){
+
+				f_Tile c = selectedObject.GetComponent<f_Tile>();
+				
+				c.transform.position = t.transform.position;
+				c.x = t.x;
+				c.y = t.y;
+
+			}
+
 
 
 		}
@@ -140,11 +145,17 @@ public class f_SetUpManager : MonoBehaviour {
 
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
 
-			f_Piece p = selectedObject.GetComponent<f_Piece>();
 
-			p.transform.position = t.transform.position;
-			p.x = t.x;
-			p.y = t.y;
+			if(selectedObject != emptyObject){
+
+				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				
+				p.transform.position = t.transform.position;
+				p.x = t.x;
+				p.y = t.y;
+
+			}
+
 
 
 
