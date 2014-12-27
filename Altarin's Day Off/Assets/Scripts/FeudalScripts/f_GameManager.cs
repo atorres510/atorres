@@ -106,7 +106,10 @@ public class f_GameManager : MonoBehaviour {
 			
 		}
 
-
+		whiteCastle.SetUpCastleGreens (whiteCastle.castleGreens);
+		whiteCastle.ReplaceOccupiedTile (whiteCastle);
+		blackCastle.SetUpCastleGreens (blackCastle.castleGreens);
+		blackCastle.ReplaceOccupiedTile (blackCastle);
 		
 	}
 
@@ -264,7 +267,10 @@ public class f_GameManager : MonoBehaviour {
 	
 	}
 
-	
+
+
+
+
 	void DisableAllPieceColliders(){
 
 		for(int i = 0; i < whitePieces.Length; i++){

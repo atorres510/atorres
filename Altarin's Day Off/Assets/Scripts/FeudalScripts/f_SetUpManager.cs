@@ -14,6 +14,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	bool isPlacingCastle;
 	bool isWhiteSetUp;
+	bool isSetUp;
 
 
 
@@ -53,22 +54,22 @@ public class f_SetUpManager : MonoBehaviour {
 	void SelectCastle(bool isWhitePlacing){
 
 		int layerMask = 1 << LayerMask.NameToLayer("Castle");
-		RaycastHit2D hit = Physics2D.Raycast(MousePosition(), Vector2.right, 0.01f);
+		RaycastHit2D hit = Physics2D.Raycast(MousePosition(), Vector2.right, 0.01f, layerMask);
 		
 		if(hit.collider != null && hit.collider.tag == "f_Tile"){
-			//f_Castle c = hit.collider.gameObject.GetComponent<f_Castle>();
+			f_Castle c = hit.collider.gameObject.GetComponent<f_Castle>();
 
 
-			//if(c.isWhite == isWhitePlacing){
+			if(c.isWhite == isWhitePlacing){
 
 				selectedObjectPosOld = hit.collider.gameObject.transform.position;
 				selectedObject = hit.collider.gameObject;
 				lastCastleSelected = selectedObject;
 				Debug.Log(selectedObject + " is selected.");
 
-			//}
+			}
 
-			//else{}
+			else{}
 
 			
 		}
@@ -123,8 +124,6 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	
 	}
-
-
 	
 
 	void DropPiece(){
@@ -168,6 +167,7 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	
 	}
+
 
 
 	void RotateCastle(GameObject g){
@@ -237,11 +237,11 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 
 
+
+
+
+
 	void MouseControls(bool placingCastle){
-
-
-
-
 
 
 		//initial left click selects the piece
@@ -291,79 +291,75 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void OnGUI(){
 
-
-
-		if (!isWhiteSetUp) {
+		if (isSetUp) {
 				
-			if (GUI.Button (new Rect (10, 50, 150, 25), "Start Game")) {
-
-				f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-				c.ReplaceOccupiedTile(c);
-				c.SetUpCastleGreens(c.castleGreens);
+			if (!isWhiteSetUp) {
 				
-				f_gameManager.SetUpBoard();
-				StartCoroutine(f_gameManager.Game());
-				
-			}
-		
-		
-		}
-
-		else{
-
-			if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {
-				
-				
-				//f_gameManager.SetUpBoard();
-				//StartCoroutine(f_gameManager.Game());
-				f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-				c.ReplaceOccupiedTile(c);
-				c.SetUpCastleGreens(c.castleGreens);
-
-
-
-				isWhiteSetUp = false;
-				isPlacingCastle = true;
-
-				
-			}
-
-		}
-
-
-
-
-
-
-
-		if(isPlacingCastle){
-
-			if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
-				
-				
-				
-				isPlacingCastle = false;
-				
+				if (GUI.Button (new Rect (10, 50, 150, 25), "Start Game")) {
+					
+					//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					//c.ReplaceOccupiedTile(c);
+					//c.SetUpCastleGreens(c.castleGreens);
+					isSetUp = false;
+					f_gameManager.SetUpBoard();
+					StartCoroutine(f_gameManager.Game());
+					
+				}
 				
 				
 			}
-
-			if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
-				
-				
-				RotateCastle(lastCastleSelected);
-
-				
-				
-				
-			}
-
 			
+			else{
+				
+				if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {
+					
+					
+					//f_gameManager.SetUpBoard();
+					//StartCoroutine(f_gameManager.Game());
+					//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					//c.ReplaceOccupiedTile(c);
+					//c.SetUpCastleGreens(c.castleGreens);
+					
+					
+					
+					isWhiteSetUp = false;
+					isPlacingCastle = true;
+					
+					
+				}
+				
+			}
+				
+		
+			if(isPlacingCastle){
+				
+				if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
+					
+					
+					
+					isPlacingCastle = false;
+					
+					
+					
+				}
+				
+				if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
+					
+					
+					RotateCastle(lastCastleSelected);
+					
+					
+					
+					
+				}
+				
+				
+				
+			}
 
+		
 		}
 
-
-	
 	
 	}
 
@@ -371,6 +367,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void Awake () {
 
+		isSetUp = true;
 		isPlacingCastle = true;
 		isWhiteSetUp = true;
 	

@@ -13,8 +13,8 @@ public class Tile : MonoBehaviour {
 	
 	GameObject gameManagerObject;
 	GameManager gameManager;
-	GameObject mainCameraObject;
-	Camera mainCamera;
+	//GameObject mainCameraObject;
+	//Camera mainCamera;
 
 
 
@@ -101,8 +101,8 @@ public class Tile : MonoBehaviour {
 		meshCollider = gameObject.GetComponent<MeshCollider> ();
 		gameManagerObject = GameObject.FindGameObjectWithTag ("GameManager");
 		gameManager = gameManagerObject.GetComponent<GameManager> ();
-		mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
-		mainCamera = mainCameraObject.GetComponent<Camera> ();
+		//mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
+		//mainCamera = mainCameraObject.GetComponent<Camera> ();
 
 
 	
