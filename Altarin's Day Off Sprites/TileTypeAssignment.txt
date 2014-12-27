@@ -1,0 +1,6 @@
+0 = Empty; 
+2 = rough terrain; 
+3 = Mountain terrain;  
+4 = castle greens; 
+5 = castle;
+

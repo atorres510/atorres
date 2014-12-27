@@ -1,0 +1,23 @@
+Piece Designators:
+
+0 null;
+
+White Pieces
+1 white king;
+2 white prince;
+3 white duke;
+4 white knight;
+5 white archer/mage;
+6 white sergeant;
+7 white pikeman;
+8 white squire
+
+Black Pieces
+9 black king;
+10 black prince;
+11 black duke;
+12 black knight;
+13 black archer/mage;
+14 black sergeant;
+15 black pikeman;
+16 black squire
