@@ -94,13 +94,25 @@ public class f_SetUpManager : MonoBehaviour {
 				c.x = t.x;
 				c.y = t.y;
 
+				selectedObjectPosOld = Vector2.zero;
+				selectedObject = emptyObject;
+
 			}
 
+			else{}
 
 
 		}
-		selectedObjectPosOld = Vector2.zero;
-		selectedObject = emptyObject;
+
+		else{
+			
+			selectedObject.transform.position = selectedObjectPosOld;
+			selectedObjectPosOld = Vector2.zero;
+			selectedObject = emptyObject;
+
+		}
+
+
 	}
 
 	void SelectPiece(bool isWhitePlacing){
@@ -154,10 +166,13 @@ public class f_SetUpManager : MonoBehaviour {
 				p.x = t.x;
 				p.y = t.y;
 
+				selectedObjectPosOld = Vector2.zero;
+				selectedObject = emptyObject;
+
 			}
 
 
-
+			else{}
 
 
 			//Debug.Log("hit3");
@@ -170,15 +185,84 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		}*/
 
+		else{
+
+			selectedObject.transform.position = selectedObjectPosOld;
+			selectedObjectPosOld = Vector2.zero;
+			selectedObject = emptyObject;
+
+		}
 
 
-		selectedObjectPosOld = Vector2.zero;
-		selectedObject = emptyObject;
 		//Debug.Log ("hit1");
 	
 	
 	}
 
+
+	bool ValidPiecePlacement(GameObject g, f_Tile t){
+
+		f_Piece p = g.GetComponent<f_Piece>();
+
+		// if player tries to place unit on a mountain
+		if(t.tileType == 3){
+
+			Debug.Log("This is not a valid piece placement");
+			return false;
+
+		}
+
+		//if player tries to place a mounted unit on rough terrain
+		else if((p.pieceDesignator >= 2 && p.pieceDesignator <= 4) || (p.pieceDesignator >= 10 && p.pieceDesignator <= 12)){
+			if(t.tileType == 2){
+
+				Debug.Log("This is not a valid piece placement");
+				return false;
+
+			}
+
+			else{
+
+				return true;
+
+			}
+
+
+		}
+
+		//if player tries to place an archer on his own castle
+		else if(p.pieceDesignator == 5 || p.pieceDesignator == 13){
+
+			if(t.tileType == 5){
+				f_Castle c = t.GetComponent<f_Castle>();
+				if(p.isWhite == c.isWhite){
+
+					return false;
+
+				}
+
+				else{
+					Debug.Log("This is not a valid piece placement");
+					return true;
+
+				}
+
+
+			}
+
+			else {
+				return true;
+			}
+
+		}
+
+		else{
+
+			return true;
+		}
+
+
+	}
 
 
 	void RotateCastle(GameObject g){
@@ -312,6 +396,8 @@ public class f_SetUpManager : MonoBehaviour {
 					//c.ReplaceOccupiedTile(c);
 					//c.SetUpCastleGreens(c.castleGreens);
 					isSetUp = false;
+					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					c.isSetup = false;
 					f_gameManager.SetUpBoard();
 					StartCoroutine(f_gameManager.Game());
 					
@@ -335,6 +421,8 @@ public class f_SetUpManager : MonoBehaviour {
 					
 					isWhiteSetUp = false;
 					isPlacingCastle = true;
+					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					c.isSetup = false;
 					
 					
 				}
@@ -387,7 +475,12 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void Update () {
 
-		MouseControls (isPlacingCastle);
+		if(isSetUp){
+
+			MouseControls (isPlacingCastle);
+
+		}
+
 		//ClickandDrag (selectedObject);
 	
 	}

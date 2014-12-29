@@ -39,27 +39,35 @@ public class f_GameManager : MonoBehaviour {
 		for(int i = 0; i < tiles.Length; i++){
 			
 			f_Tile t = tiles[i].GetComponent<f_Tile>();
-			
-			tileCoordinates[t.x, t.y] = tiles[i];
 
 			if(t.tileType == 5){
-
-
+				
+				
 				f_Castle c = t.GetComponent<f_Castle>();
-
+				
 				if(c.isWhite){
-
+					
 					whiteCastle = c;
-
-
+					
+					
 				}
 				else{
-
+					
 					blackCastle = c;
-				
+					
 				}
+				
+			}
+
+			else{
+
+				tileCoordinates[t.x, t.y] = tiles[i];
 
 			}
+			
+
+
+
 		}
 		
 		int j = 0;
