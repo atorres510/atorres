@@ -278,7 +278,7 @@ public abstract class f_Piece : MonoBehaviour {
 					//toggles the enemy projection of movement tiles
 					if(f_gameManager.selectedPiece == f_gameManager.emptyPiece){
 						
-						if(!toggle){
+						/*if(!toggle){
 							
 							this.ProjectMovementTiles();
 							this.HighlightMovementTiles(this.MovementTiles, true);
@@ -292,7 +292,7 @@ public abstract class f_Piece : MonoBehaviour {
 							this.MovementTiles.Clear();
 							toggle = false;
 							
-						}
+						}*/
 						
 						
 					}
