@@ -131,6 +131,17 @@ public class f_SetUpManager : MonoBehaviour {
 				selectedObjectPosOld = hit.collider.gameObject.transform.position;
 				selectedObject = hit.collider.gameObject;
 				Debug.Log(selectedObject + " is selected.");
+				int layerMask = 1 << LayerMask.NameToLayer("Tile");
+				hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
+				
+				
+				if (hit.collider != null && hit.collider.tag == "f_Tile") {
+
+					f_Tile t = hit.collider.GetComponent<f_Tile>();
+					t.isOccupied = false;
+
+
+				}
 
 			}
 
@@ -146,66 +157,99 @@ public class f_SetUpManager : MonoBehaviour {
 	void DropPiece(){
 
 		//Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		//Vector2 piecePos = new Vector2(selectedObject.transform.position.x, selectedObject.transform.position.y);
+		Vector2 piecePos = new Vector2(selectedObject.transform.position.x, selectedObject.transform.position.y);
 		
 		//Debug.Log(mousePos);
-		int layerMask = 1 << LayerMask.NameToLayer("Tile");
-		RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
 
+		/*int layerMask = 1 << LayerMask.NameToLayer("Piece");
+		RaycastHit2D hit = Physics2D.Raycast (piecePos, Vector3.right, 0.01f, layerMask);
 
-		if (hit.collider != null && hit.collider.tag == "f_Tile") {
+		//protects from placing on top of another unit
+		if(hit.collider != null && hit.collider.tag == "f_Piece"){
 
-			f_Tile t = hit.collider.GetComponent<f_Tile>();
-
-
-			if(selectedObject != emptyObject){
-
-				f_Piece p = selectedObject.GetComponent<f_Piece>();
-				
-				p.transform.position = t.transform.position;
-				p.x = t.x;
-				p.y = t.y;
-
-				selectedObjectPosOld = Vector2.zero;
-				selectedObject = emptyObject;
-
-			}
-
-
-			else{}
-
-
-			//Debug.Log("hit3");
-		
-		}
-		/*if (hit.collider != null && hit.collider.tag == "f_Tile") {
-				
-			Debug.Log(hit.collider.gameObject);
-			Debug.Log("hit");
-		
-		}*/
-
-		else{
-
+			Debug.Log("this is not a valid move");
 			selectedObject.transform.position = selectedObjectPosOld;
 			selectedObjectPosOld = Vector2.zero;
 			selectedObject = emptyObject;
 
-		}
 
+		}*/
 
-		//Debug.Log ("hit1");
-	
-	
+		//else{
+
+			int layerMask = 1 << LayerMask.NameToLayer("Tile");
+			RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
+
+			
+			if (hit.collider != null && hit.collider.tag == "f_Tile") {
+				
+				f_Tile t = hit.collider.GetComponent<f_Tile>();
+				
+				
+				if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
+					
+					f_Piece p = selectedObject.GetComponent<f_Piece>();
+					
+					p.transform.position = t.transform.position;
+					p.x = t.x;
+					p.y = t.y;
+					t.isOccupied = true;
+					selectedObjectPosOld = Vector2.zero;
+					selectedObject = emptyObject;
+					
+				}
+				
+				
+				else{
+
+					selectedObject.transform.position = selectedObjectPosOld;
+					selectedObjectPosOld = Vector2.zero;
+					selectedObject = emptyObject;
+
+				}
+				
+				
+				//Debug.Log("hit3");
+				
+			}
+			/*if (hit.collider != null && hit.collider.tag == "f_Tile") {
+				
+			Debug.Log(hit.collider.gameObject);
+			Debug.Log("hit");
+		
+			}*/
+			
+			else{
+				
+				selectedObject.transform.position = selectedObjectPosOld;
+				selectedObjectPosOld = Vector2.zero;
+				selectedObject = emptyObject;
+				
+			}
+			
+			
+			//Debug.Log ("hit1");
+
+		//}
+
 	}
 
 
-	bool ValidPiecePlacement(GameObject g, f_Tile t){
+	bool isValidPiecePlacement(GameObject g, f_Tile t){
 
 		f_Piece p = g.GetComponent<f_Piece>();
 
+		if(t.isOccupied == true){
+
+			Debug.Log("This is not a valid piece placement: Cannot place on top of other pieces");
+			return false;
+
+		}
+
+
+
 		// if player tries to place unit on a mountain
-		if(t.tileType == 3){
+		else if(t.tileType == 3){
 
 			Debug.Log("This is not a valid piece placement");
 			return false;
