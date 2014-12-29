@@ -1,9 +1,6 @@
 fileFormatVersion: 2
 guid: 9181bee7228c35849816efe6b514d38e
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: SarahBlue
-    21300002: SarahBlue_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +35,6 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 30
   alphaIsTransparency: 1
   textureType: 8
@@ -54,6 +50,5 @@ TextureImporter:
         height: 26
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
