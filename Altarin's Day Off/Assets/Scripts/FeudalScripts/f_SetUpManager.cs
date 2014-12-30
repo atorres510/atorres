@@ -180,11 +180,20 @@ public class f_SetUpManager : MonoBehaviour {
 			int layerMask = 1 << LayerMask.NameToLayer("Tile");
 			RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
 
-			
+			/*if (hit.collider != null && hit.collider.tag == "f_Castle"){
+
+
+
+			}*/
+
+			//Debug.Log ("this");
+			//layerMask = 1 << LayerMask.NameToLayer("Tile");
+			//hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
+
 			if (hit.collider != null && hit.collider.tag == "f_Tile") {
 				
 				f_Tile t = hit.collider.GetComponent<f_Tile>();
-				
+					Debug.Log(t);
 				
 				if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 					
@@ -276,17 +285,18 @@ public class f_SetUpManager : MonoBehaviour {
 
 		//if player tries to place an archer on his own castle
 		else if(p.pieceDesignator == 5 || p.pieceDesignator == 13){
-
+			Debug.Log("a;ldkjf");
 			if(t.tileType == 5){
+				Debug.Log("hello");
 				f_Castle c = t.GetComponent<f_Castle>();
 				if(p.isWhite == c.isWhite){
-
+					Debug.Log("This is not a valid piece placement");
 					return false;
 
 				}
 
 				else{
-					Debug.Log("This is not a valid piece placement");
+
 					return true;
 
 				}
