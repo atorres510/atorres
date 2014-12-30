@@ -451,7 +451,7 @@ public class f_Knight : f_Piece {
 		//if selected piece occupies the greens
 		if (j.tileType == 4) {
 				
-			if (i.tileType == 2 || i.tileType == 3) {
+			if (i.tileType == 2 || i.tileType == 3 || i.isOccupied) {
 
 				return true;
 

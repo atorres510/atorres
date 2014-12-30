@@ -264,9 +264,7 @@ public abstract class f_Piece : MonoBehaviour {
 				
 				//clears movement tile projection
 				if(f_gameManager.selectedPiece == this){
-					
-					
-					
+
 					this.HighlightMovementTiles(this.MovementTiles, false);
 					this.MovementTiles.Clear();
 					f_gameManager.selectedPiece = f_gameManager.emptyPiece;
@@ -371,6 +369,7 @@ public abstract class f_Piece : MonoBehaviour {
 						
 						if(f_gameManager.isPlayer1Turn == this.isWhite){
 							//Debug.Log("3");
+				
 							f_gameManager.selectedPiece = gameObject.GetComponent<f_Piece>();
 							Debug.Log(f_gameManager.selectedPiece + " is selected");
 							f_gameManager.selectedPiece.ProjectMovementTiles();
@@ -382,22 +381,17 @@ public abstract class f_Piece : MonoBehaviour {
 						}
 						
 						else {
-							
-							//Debug.Log("4");
-							
-							
-							
-							
+			
 						}
 						
 						
-						
-						
+
 					}
 					
 					//clear piece selection
 					else{
-						
+
+						f_gameManager.selectedPiece.HighlightMovementTiles(f_gameManager.selectedPiece.MovementTiles, false);
 						f_gameManager.selectedPiece = f_gameManager.emptyPiece;
 						
 					}
@@ -419,6 +413,9 @@ public abstract class f_Piece : MonoBehaviour {
 
 	
 	}
+
+
+
 
 
 

@@ -157,7 +157,7 @@ public class f_SetUpManager : MonoBehaviour {
 	void DropPiece(){
 
 		//Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Vector2 piecePos = new Vector2(selectedObject.transform.position.x, selectedObject.transform.position.y);
+		//Vector2 piecePos = new Vector2(selectedObject.transform.position.x, selectedObject.transform.position.y);
 		
 		//Debug.Log(mousePos);
 

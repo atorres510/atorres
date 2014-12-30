@@ -59,6 +59,11 @@ public class f_GameManager : MonoBehaviour {
 				
 			}
 
+			else if(t.tileType == 4){
+
+				//pass
+			}
+
 			else{
 
 				tileCoordinates[t.x, t.y] = tiles[i];
@@ -69,6 +74,12 @@ public class f_GameManager : MonoBehaviour {
 
 
 		}
+
+		whiteCastle.SetUpCastleGreens (whiteCastle.castleGreens);
+		whiteCastle.ReplaceOccupiedTile (whiteCastle);
+		blackCastle.SetUpCastleGreens (blackCastle.castleGreens);
+		blackCastle.ReplaceOccupiedTile (blackCastle);
+
 		
 		int j = 0;
 		int k = 0;
@@ -114,11 +125,7 @@ public class f_GameManager : MonoBehaviour {
 			
 		}
 
-		whiteCastle.SetUpCastleGreens (whiteCastle.castleGreens);
-		whiteCastle.ReplaceOccupiedTile (whiteCastle);
-		blackCastle.SetUpCastleGreens (blackCastle.castleGreens);
-		blackCastle.ReplaceOccupiedTile (blackCastle);
-		
+
 	}
 
 
