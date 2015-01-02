@@ -5,6 +5,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 	public f_GameManager f_gameManager;
 	public GameObject emptyObject;
+	public GameObject emptyTile;
+	public GameObject trayObject;
 
 	GameObject selectedObject;
 	Vector2 selectedObjectPosOld;
@@ -124,25 +126,37 @@ public class f_SetUpManager : MonoBehaviour {
 
 		RaycastHit2D hit = Physics2D.Raycast(MousePosition(), Vector2.right, 0.01f);
 		
+
 		if(hit.collider != null && hit.collider.tag == "f_Piece"){
 			f_Piece p = hit.collider.gameObject.GetComponent<f_Piece>();
 			if(p.isWhite == isWhitePlacing){
 
+				if(p.occupiedTile != null){
+
+					p.occupiedTile.isOccupied = false;
+
+				}
+
+				else{}
+
 				selectedObjectPosOld = hit.collider.gameObject.transform.position;
 				selectedObject = hit.collider.gameObject;
 				Debug.Log(selectedObject + " is selected.");
+
 				int layerMask = 1 << LayerMask.NameToLayer("Tile");
 				hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
 				
-				
+				/*
 				if (hit.collider != null && hit.collider.tag == "f_Tile") {
 
+					Debug.Log("hi");
 					f_Tile t = hit.collider.GetComponent<f_Tile>();
 					t.isOccupied = false;
 
 
 				}
 
+				else{}*/
 			}
 
 
@@ -202,13 +216,14 @@ public class f_SetUpManager : MonoBehaviour {
 					p.transform.position = t.transform.position;
 					p.x = t.x;
 					p.y = t.y;
+					p.occupiedTile = t;
 					t.isOccupied = true;
 					selectedObjectPosOld = Vector2.zero;
 					selectedObject = emptyObject;
 					
 				}
-				
-				
+
+
 				else{
 
 					selectedObject.transform.position = selectedObjectPosOld;
@@ -221,6 +236,51 @@ public class f_SetUpManager : MonoBehaviour {
 				//Debug.Log("hit3");
 				
 			}
+
+
+
+			else if(hit.collider != null && hit.collider.tag == "f_TrayObject"){
+				if(selectedObject != emptyObject){
+
+					for(int i = 0; i < slots.Length; i++){
+						
+						if(!slots[i].isOccupied){
+							
+							f_Piece p = selectedObject.GetComponent<f_Piece>();
+							f_Tile t = slots[i];
+							
+							
+							p.transform.position = t.transform.position;
+							p.x = t.x;
+							p.y = t.y;
+							p.occupiedTile = t;
+							t.isOccupied = true;
+							selectedObjectPosOld = Vector2.zero;
+							selectedObject = emptyObject;
+							break;
+							
+						}
+						
+						else{
+							//pass
+						}
+
+
+
+					}
+				
+				
+
+				}
+					
+				else{
+				//pass
+				}
+				
+			}
+
+
+
 			/*if (hit.collider != null && hit.collider.tag == "f_Tile") {
 				
 			Debug.Log(hit.collider.gameObject);
@@ -436,6 +496,83 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 		
+
+	//tray that holds pieces for placement on the board 
+
+	Rect tray = new Rect(Screen.width - 250, 50, 200, 500);
+
+	f_Tile[] slots;
+
+
+	//create "slots" within the tray 
+	void CreateSlots(){
+
+		slots = new f_Tile[15];
+		int i = 0;
+		int rows = 5;
+		int columns = 3;
+
+		Vector3 rectPos = new Vector3(tray.x + 25, Screen.height - tray.y - 25, 0);
+		Vector3 convertedPos = Camera.main.ScreenToWorldPoint(rectPos);
+
+
+		Vector3 trayPos = Camera.main.ScreenToWorldPoint(tray.center);
+		trayPos.z = 1.0f;
+		trayObject.transform.position = trayPos;
+
+		for(int y = 0; y < rows; y++){
+			float yAdjust = ((- 3f) * y);
+			for(int x = 0; x < columns; x++){
+				Vector3 adjust = new Vector3(2f * x, yAdjust, 0);
+
+				//Vector3 rectPos = tray.center;
+
+
+				Vector3 adjustedPos = convertedPos + adjust;
+				adjustedPos.z = 1.0f;
+				//Vector3 adjustedPos = new Vector3(convertedPos.x, convertedPos.y, 1.0f);
+				GameObject g = Instantiate(emptyTile, adjustedPos, Quaternion.identity) as GameObject;
+				slots[i] = g.GetComponent<f_Tile>();
+				Debug.Log(slots[i] + ", " + g.transform.position);
+
+				i++;
+				//Rect r = guiTexture.GetScreenRect();				
+				
+			}
+
+		}
+			
+	}
+
+
+	void FillTray(){
+
+		GameObject[] pieces = GameObject.FindGameObjectsWithTag("f_Piece");
+
+		int j = 0;
+
+		for(int i = 0; i < pieces.Length; i++){
+
+			f_Piece p = pieces[i].GetComponent<f_Piece>();
+
+			if(isWhiteSetUp == p.isWhite){
+
+				p.transform.position = slots[j].gameObject.transform.position;
+				slots[j].isOccupied = true;
+				p.occupiedTile = slots[j];
+				j++;
+
+			}
+
+			else{
+
+				//pass
+			}
+
+		}
+
+	}
+
 	
 
 	void OnGUI(){
@@ -511,6 +648,17 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 
 		
+
+			///create a tray that holds pieces for placement on the map.
+
+			//GUI.Box(tray, "");
+
+
+		
+
+
+
+
 		}
 
 	
@@ -523,6 +671,9 @@ public class f_SetUpManager : MonoBehaviour {
 		isSetUp = true;
 		isPlacingCastle = true;
 		isWhiteSetUp = true;
+		CreateSlots();
+		FillTray();
+		
 	
 	}
 	
