@@ -249,7 +249,7 @@ public class TextBox : MonoBehaviour {
 		windowRectCollapsed.x -= editor.scrollPosition.x - oldscrollposition.x;
 		
 		oldscrollposition = editor.scrollPosition;
-		
+
 	
 	}
 	
@@ -363,13 +363,14 @@ public class TextBox : MonoBehaviour {
 
 
 
-		Debug.Log (t1.windowID);
-		Debug.Log (t2.windowID);
+		//Debug.Log (t1.windowID);
+		//Debug.Log (t2.windowID);
 
 		Vector3 tPos = windowRect.position;
 
 		Rect rect1 = t1.windowRect;
 		Rect rect2 = t2.windowRect;
+		//Debug.Log(rect1 + ", " + rect2);
 
 		/*float x1 = rect1.x;
 		float y1 = rect1.y;
@@ -384,25 +385,25 @@ public class TextBox : MonoBehaviour {
 		Vector3 v4 = Camera.main.ScreenToWorldPoint (v3);
 	*/	
 
-		Debug.Log (rect1.x + "    " + rect1.y);
+		//Debug.Log (rect1.x + "    " + rect1.y);
 
+		Vector3 rect1Pos = new Vector3(rect1.x, rect1.y, 1.0f);
+		Vector3 rect2Pos = new Vector3 (rect2.x, rect2.y, 1.0f);
 
+		Vector3 v1 = Camera.main.ScreenToWorldPoint (rect1Pos);
+		Vector3 v2 = Camera.main.ScreenToWorldPoint (rect2Pos);
 
-
-		Vector3 v1 = camera.ScreenToWorldPoint (new Vector3 (rect1.x, rect1.y, camera.nearClipPlane));
-		Vector3 v2 = camera.ScreenToWorldPoint (new Vector3 (rect2.x, rect2.y, camera.nearClipPlane));
-
-		Debug.Log (v1.x + "    " + v1.y);
-
+		v1.z = 1.0f;
+		//Debug.Log (v1.x + "    " + v1.y);
 
 		//Distance between nodes
 
-		float distanceX = v2.x - (v1.x + 250);
-		float distanceY = v2.y - (v1.y - 100);
+		//float distanceX = v2.x - (v1.x + 250);
+		//float distanceY = v2.y - (v1.y - 100);
 
 		//Divide distance x 
 
-		float distanceXhalved = distanceX / 2;
+		//float distanceXhalved = distanceX / 2;
 
 		//instantiate segment1
 		GameObject lineSegmentclone1 = Instantiate (lineSegmentPrefab) as GameObject;
@@ -410,6 +411,8 @@ public class TextBox : MonoBehaviour {
 		lineSegment1.InstantiateLineSegment (v1.x, v1.y, v2.x, v1.y);
 		lineSegment1.origin = t1;
 		lineSegment1.destination = t2;
+		//editor.quad.transform.position = v1;
+		//lineSegment1.transform.position = v1;
 		//instantiate segment2
 		//GameObject lineSegmentclone2 = Instantiate (lineSegmentPrefab) as GameObject;
 		//LineSegment lineSegment2 = lineSegmentclone2.GetComponent<LineSegment> ();

@@ -11,6 +11,7 @@ public class Editor : MonoBehaviour {
 	public GameObject lineSegmentPrefab;
 	public Camera mainCamera;
 
+
 	List<TextBox> textboxes = new List<TextBox> ();
 
 	public TextBox currentWindow; //holds the current window

@@ -1,0 +1,4 @@
+["Hey, are you okay?  I saw them messing you up pretty badly back there."], False, 0, {1, 2, 3}
+["I'm fine."], False, 1, {}
+["Thanks for the help."], False, 2, {}
+[Say nothing.], False, 3, {}
