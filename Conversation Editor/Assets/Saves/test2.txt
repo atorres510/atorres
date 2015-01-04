@@ -1,0 +1,4 @@
+[node0], False, 0, , 1, 2}
+[node 1], False, 1, }
+[node 2], False, 2, , 3}
+[node 3], False, 3, }

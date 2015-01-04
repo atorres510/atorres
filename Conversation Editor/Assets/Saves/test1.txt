@@ -1,0 +1,4 @@
+[Hello!], False, 0, , 1, 2}
+[Who are you?], False, 1, }
+[I need to go.], False, 2, , 3}
+[Goodbye?], False, 3, }
