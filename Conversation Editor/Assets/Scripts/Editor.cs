@@ -34,7 +34,7 @@ public class Editor : MonoBehaviour {
 		TextBox t = textBoxClone.GetComponent<TextBox> ();
 
 		t.editor = this;
-		t.camera = mainCamera.GetComponent<Camera> ();
+	//	t.camera = mainCamera.GetComponent<Camera> ();
 		t.lineSegmentPrefab = lineSegmentPrefab;
 		t.oldscrollposition = scrollPosition;
 		t.WindowID = totalTextBoxes;
@@ -129,6 +129,8 @@ public class Editor : MonoBehaviour {
 		//GUI.EndGroup();
 
 	}
+
+
 
 
 

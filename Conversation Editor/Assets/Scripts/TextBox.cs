@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class TextBox : MonoBehaviour {
 	
 	public Editor editor;
-	public Camera camera;
+	//public Camera camera;
 	public GameObject lineSegmentPrefab;
 
 	int windowRectLeft;
@@ -287,14 +287,13 @@ public class TextBox : MonoBehaviour {
 
 			if(!pass){
 					
-				editor.currentWindow.nextTextBoxID.Add(this.windowID);
-				DrawLine(editor.currentWindow, this);
-				Debug.Log("Node " + editor.currentWindow.windowID + " is linked to node " + this.windowID);
-				editor.selectedWindow = null;
-				editor.currentWindow = null;
+				LinkNodes(editor.currentWindow, this);
 				
 			}
 		}
+
+
+
 
 
 
@@ -305,7 +304,7 @@ public class TextBox : MonoBehaviour {
 
 		}
 
-		else{
+		else{ 
 
 			//editor.currentWindow.nextTextBoxID.Add(this.windowID);
 			//Debug.Log("Node " + editor.currentWindow.windowID + "is linked to node " + editor.currentWindow.nextTextBoxID[0]);
@@ -353,6 +352,21 @@ public class TextBox : MonoBehaviour {
 	}
 
 
+	void LinkNodes(TextBox t1, TextBox t2){
+		
+		t1.nextTextBoxID.Add(t2.windowID);
+		//DrawLine(editor.currentWindow, this);
+		Debug.Log("Node " + t1.windowID + " is linked to node " + t2.windowID);
+		editor.selectedWindow = null;
+		editor.currentWindow = null;
+		
+		
+	}
+
+
+
+
+
 	//draws three lines to connect nodes
 	public void DrawLine(TextBox t1, TextBox t2){
 
@@ -366,7 +380,7 @@ public class TextBox : MonoBehaviour {
 		//Debug.Log (t1.windowID);
 		//Debug.Log (t2.windowID);
 
-		Vector3 tPos = windowRect.position;
+		//Vector3 tPos = windowRect.position;
 
 		Rect rect1 = t1.windowRect;
 		Rect rect2 = t2.windowRect;
