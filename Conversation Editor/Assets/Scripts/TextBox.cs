@@ -13,6 +13,7 @@ public class TextBox : MonoBehaviour {
 	int windowRectWidth;
 	int windowRectHeigth;
 	bool isCollapsed;
+	bool isConditionalDisplayed;
 
 	
 
@@ -218,8 +219,10 @@ public class TextBox : MonoBehaviour {
 
 
 	//Rect windowRect = new Rect (windowRectLeft, windowRectTop, windowRectWidth, windowRectHeigth);
+	//public Rect currentWindowRect= new Rect(50, 60, 250, 200);
 	public Rect windowRect = new Rect (50, 60, 250, 200);
 	Rect windowRectCollapsed = new Rect(50, 60, 100, 70);
+	Rect conditionalRect = new Rect (50, 60, 250, 70);
 	//Rect windowRect;
 
 	public Vector2 oldscrollposition = new Vector2(0,0);
@@ -240,6 +243,15 @@ public class TextBox : MonoBehaviour {
   		 	
 		}
 
+		if (isConditionalDisplayed) {
+				
+			GUI.Box(conditionalRect, "");
+		
+		
+		}
+
+		//currentWindowRect = GUI.Window (windowID, new Rect (windowRectLeft, windowRectTop, windowRectWidth, windowRectHeigth), WindowFunction, "Node_" + windowID);
+
 		WindowSync();
 
 
@@ -249,6 +261,7 @@ public class TextBox : MonoBehaviour {
 		windowRectCollapsed.x -= editor.scrollPosition.x - oldscrollposition.x;
 		
 		oldscrollposition = editor.scrollPosition;
+
 
 	
 	}
@@ -304,15 +317,17 @@ public class TextBox : MonoBehaviour {
 
 		}
 
+
+
 		else{ 
 
-			//editor.currentWindow.nextTextBoxID.Add(this.windowID);
-			//Debug.Log("Node " + editor.currentWindow.windowID + "is linked to node " + editor.currentWindow.nextTextBoxID[0]);
-			//Debug.Log("linked");
-			//editor.selectedWindow = null;
-			//editor.currentWindow = null;
-			
-			//editor.currentWindow.nextTextBoxID.IndexOf(
+			if(GUI.Button(new Rect(10, 60, 140, 25), "Conditionals")){
+
+				//display conditional GUI.box
+				isConditionalDisplayed = !isConditionalDisplayed;
+
+			}
+
 
 			isCollapsed = GUI.Toggle(new Rect(10, 25, 140, 25), isCollapsed, "Collapse"); 
 			//terminatesDialogue = GUI.Toggle(new Rect(10, 40, 140, 25), terminatesDialogue, "Terminates Dialogue");
@@ -331,12 +346,26 @@ public class TextBox : MonoBehaviour {
 	}
 
 
+
+
+
+
+
+
+
+
+
+
+
 	void WindowSync(){
 
 		if(!isCollapsed){
 
+			conditionalRect.height = windowRect.height - 200;
+			conditionalRect.x = windowRect.x;
 			windowRectCollapsed.x = windowRect.x;
 			windowRectCollapsed.y = windowRect.y;
+			//currentWindowRect = windowRect;
 
 		}
 
@@ -344,6 +373,7 @@ public class TextBox : MonoBehaviour {
 
 			windowRect.x = windowRectCollapsed.x;
 			windowRect.y = windowRectCollapsed.y;
+			//currentWindowRect = windowRectCollapsed;
 
 		}
 
