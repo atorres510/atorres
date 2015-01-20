@@ -501,11 +501,15 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 
 	}
-		
+
+
+
+
+
 
 	//tray that holds pieces for placement on the board 
 
-	Rect tray = new Rect(Screen.width - 250, 50, 200, 500);
+	Rect tray = new Rect(Screen.width - 500, 50, 400, 900);
 
 	f_Tile[] slots;
 
@@ -518,7 +522,7 @@ public class f_SetUpManager : MonoBehaviour {
 		int rows = 5;
 		int columns = 3;
 
-		Vector3 rectPos = new Vector3(tray.x + 25, Screen.height - tray.y - 25, 0);
+		Vector3 rectPos = new Vector3(tray.x + 85, Screen.height - tray.y - 25, 0);
 		Vector3 convertedPos = Camera.main.ScreenToWorldPoint(rectPos);
 
 
@@ -527,7 +531,7 @@ public class f_SetUpManager : MonoBehaviour {
 		trayObject.transform.position = trayPos;
 
 		for(int y = 0; y < rows; y++){
-			float yAdjust = ((- 3f) * y);
+			float yAdjust = ((- 2f) * y);
 			for(int x = 0; x < columns; x++){
 				Vector3 adjust = new Vector3(2f * x, yAdjust, 0);
 
@@ -545,7 +549,7 @@ public class f_SetUpManager : MonoBehaviour {
 				SpriteRenderer r = g.GetComponent<SpriteRenderer>();
 				r.enabled = false;
 
-				Debug.Log(slots[i] + ", " + g.transform.position);
+				//Debug.Log(slots[i] + ", " + g.transform.position);
 
 				i++;
 				//Rect r = guiTexture.GetScreenRect();				
@@ -581,6 +585,42 @@ public class f_SetUpManager : MonoBehaviour {
 				//pass
 			}
 
+		}
+
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("f_Tile");
+
+		for (int i = 0; i < tiles.Length; i++) {
+				
+			f_Tile t = tiles[i].GetComponent<f_Tile>();
+
+			if(t.tileType == 5){
+
+				f_Castle c = tiles[i].GetComponent<f_Castle>();
+
+				if(isWhiteSetUp == c.isWhite){
+					
+					c.transform.position = slots[j].gameObject.transform.position;
+					slots[j].isOccupied = true;
+					c.rotation = 3;
+					//c.occupiedTile = slots[j];
+					j++;
+					
+				}
+
+				else{
+
+					//pass
+				}
+
+			}
+
+
+			else{
+				
+				//pass
+			}
+		
+		
 		}
 
 	}

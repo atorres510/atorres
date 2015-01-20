@@ -28,6 +28,9 @@ public class TextBox : MonoBehaviour {
 
 	/*public*/ List<int> nextTextBoxID = new List<int>();
 
+	/*public*/ int conditionalWindowID;
+	/*public*/ List<Conditional> conditionals = new List<Conditional>();
+
 
 
 
@@ -63,6 +66,37 @@ public class TextBox : MonoBehaviour {
 		get{return windowID;} 
 		set{windowID = value;}
 	}
+
+
+	//Defines "Conditional Class" with all string members specifying variable type and conditional to be met, 
+
+	public class Conditional
+	{
+
+		public string type;
+		public string condition;
+
+
+
+		public Conditional(string t, string c){
+
+			type = t;
+			condition = c;
+
+
+		}
+		
+	}
+
+
+
+
+
+
+
+
+
+
 
 	//Replaces the [keyword] to the appropriate gender name
 	/*bool ReturnGenderSignifier(string s){
@@ -222,7 +256,7 @@ public class TextBox : MonoBehaviour {
 	//public Rect currentWindowRect= new Rect(50, 60, 250, 200);
 	public Rect windowRect = new Rect (50, 60, 250, 200);
 	Rect windowRectCollapsed = new Rect(50, 60, 100, 70);
-	Rect conditionalRect = new Rect (50, 60, 250, 70);
+	Rect conditionalRect = new Rect (50, 60, 250, 150);
 	//Rect windowRect;
 
 	public Vector2 oldscrollposition = new Vector2(0,0);
@@ -243,9 +277,10 @@ public class TextBox : MonoBehaviour {
   		 	
 		}
 
-		if (isConditionalDisplayed) {
+		if (isConditionalDisplayed && !isCollapsed) {
 				
-			GUI.Box(conditionalRect, "");
+
+			conditionalRect = GUI.Window(conditionalWindowID, conditionalRect, ConditionalWindowFunction, "Conditionals_" + windowID);
 		
 		
 		}
@@ -351,21 +386,42 @@ public class TextBox : MonoBehaviour {
 
 
 
+	void ConditionalWindowFunction(int conditionalID){
+
+		if(GUI.Button(new Rect(220, 25, 20, 25), "+")){
+
+
+
+		}
+
+
+
+	}
 
 
 
 
+	void AddConditional(){
+
+		
+	
+	
+	
+	}
 
 
 	void WindowSync(){
 
 		if(!isCollapsed){
 
-			conditionalRect.height = windowRect.height - 200;
+			conditionalRect.y = windowRect.y + windowRect.height;
 			conditionalRect.x = windowRect.x;
+			//conditionalRect.height = windowRect.height;
+			//conditionalRect.width = windowRect.width;
 			windowRectCollapsed.x = windowRect.x;
 			windowRectCollapsed.y = windowRect.y;
 			//currentWindowRect = windowRect;
+			GUI.BringWindowToFront(conditionalWindowID);
 
 		}
 
@@ -400,13 +456,7 @@ public class TextBox : MonoBehaviour {
 	//draws three lines to connect nodes
 	public void DrawLine(TextBox t1, TextBox t2){
 
-
-
-
-
-
-
-
+		
 		//Debug.Log (t1.windowID);
 		//Debug.Log (t2.windowID);
 
@@ -529,7 +579,10 @@ public class TextBox : MonoBehaviour {
 
 	void Start(){
 
+		//(-windowID -1) to give unique IDs for conditional windows (even for node 0)
+		conditionalWindowID = (-windowID - 1);
 		text = "Enter Text";
+
 		//windowRectLeft = 50;
 		//windowRectTop = 60;
 		//windowRectWidth = 250;

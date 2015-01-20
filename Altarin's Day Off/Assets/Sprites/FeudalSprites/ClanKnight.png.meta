@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 3af49b624c406494b92e3fbb8f84325c
+guid: 73a94ea85f4303f45b049d4c9fa98fc9
 TextureImporter:
   fileIDToRecycleName:
-    21300000: fNormalTileHighlighted
+    21300000: ClanKnight
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -22,7 +22,7 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: -2
+  textureFormat: -3
   maxTextureSize: 1024
   textureSettings:
     filterMode: 0
