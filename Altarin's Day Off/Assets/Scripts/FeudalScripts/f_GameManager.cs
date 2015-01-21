@@ -48,13 +48,14 @@ public class f_GameManager : MonoBehaviour {
 				if(c.isWhite){
 					
 					whiteCastle = c;
+					//tileCoordinates[t.x, t.y] = tiles[i];
 					
 					
 				}
 				else{
 					
 					blackCastle = c;
-					
+					//tileCoordinates[t.x, t.y] = tiles[i];
 				}
 				
 			}
@@ -75,9 +76,9 @@ public class f_GameManager : MonoBehaviour {
 
 		}
 
-		whiteCastle.SetUpCastleGreens (whiteCastle.castleGreens);
+		whiteCastle.ReplaceOccupiedTile (whiteCastle.castleGreens);
 		whiteCastle.ReplaceOccupiedTile (whiteCastle);
-		blackCastle.SetUpCastleGreens (blackCastle.castleGreens);
+		blackCastle.ReplaceOccupiedTile (blackCastle.castleGreens);
 		blackCastle.ReplaceOccupiedTile (blackCastle);
 
 		

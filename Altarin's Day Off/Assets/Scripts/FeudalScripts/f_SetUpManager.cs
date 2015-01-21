@@ -90,12 +90,12 @@ public class f_SetUpManager : MonoBehaviour {
 
 			if(selectedObject != emptyObject){
 
-				f_Tile c = selectedObject.GetComponent<f_Tile>();
-				
+				f_Castle c = selectedObject.GetComponent<f_Castle>();
+
 				c.transform.position = t.transform.position;
 				c.x = t.x;
 				c.y = t.y;
-				//t.tileType = 5;
+			
 
 				selectedObjectPosOld = Vector2.zero;
 				selectedObject = emptyObject;
@@ -120,10 +120,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void SelectPiece(bool isWhitePlacing){
 
-		//Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		//Vector2 mousePos = new Vector2(v3Pos.x, v3Pos.y);
-		
-		//Debug.Log(mousePos);
+	
 		int layerMask = 1 << LayerMask.NameToLayer("Piece");
 		RaycastHit2D hit = Physics2D.Raycast(MousePosition(), Vector2.right, 0.01f, layerMask);
 		
@@ -144,21 +141,10 @@ public class f_SetUpManager : MonoBehaviour {
 				selectedObject = hit.collider.gameObject;
 				Debug.Log(selectedObject + " is selected.");
 
-				//int layerMask = 1 << LayerMask.NameToLayer("Tile");
-				//
+
 				hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
 				
-				/*
-				if (hit.collider != null && hit.collider.tag == "f_Tile") {
 
-					Debug.Log("hi");
-					f_Tile t = hit.collider.GetComponent<f_Tile>();
-					t.isOccupied = false;
-
-
-				}
-
-				else{}*/
 			}
 
 
@@ -172,44 +158,53 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void DropPiece(){
 
-		//Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		//Vector2 piecePos = new Vector2(selectedObject.transform.position.x, selectedObject.transform.position.y);
+		//check if dropping on castle
+		int layerMask = 1 << LayerMask.NameToLayer("Castle");
+		RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
+
 		
-		//Debug.Log(mousePos);
+		if (hit.collider != null && hit.collider.tag == "f_Tile") {
+			
+			f_Tile t = hit.collider.GetComponent<f_Tile>();
+			Debug.Log(t);
+			
+			if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
+				
+				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				
+				p.transform.position = t.transform.position;
+				p.x = t.x;
+				p.y = t.y;
+				p.occupiedTile = t;
+				t.isOccupied = true;
+				selectedObjectPosOld = Vector2.zero;
+				selectedObject = emptyObject;
+				
+			}
+			
+			
+			else{
+				
+				selectedObject.transform.position = selectedObjectPosOld;
+				selectedObjectPosOld = Vector2.zero;
+				selectedObject = emptyObject;
+				
+			}
 
-		/*int layerMask = 1 << LayerMask.NameToLayer("Piece");
-		RaycastHit2D hit = Physics2D.Raycast (piecePos, Vector3.right, 0.01f, layerMask);
+		}
 
-		//protects from placing on top of another unit
-		if(hit.collider != null && hit.collider.tag == "f_Piece"){
+		//check if placing on tile
+		else{
 
-			Debug.Log("this is not a valid move");
-			selectedObject.transform.position = selectedObjectPosOld;
-			selectedObjectPosOld = Vector2.zero;
-			selectedObject = emptyObject;
-
-
-		}*/
-
-		//else{
-
-			int layerMask = 1 << LayerMask.NameToLayer("Tile");
-			RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
-
-			/*if (hit.collider != null && hit.collider.tag == "f_Castle"){
-
-
-
-			}*/
-
-			//Debug.Log ("this");
-			//layerMask = 1 << LayerMask.NameToLayer("Tile");
-			//hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
-
+			
+			layerMask = 1 << LayerMask.NameToLayer("Tile");
+			hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
+			
+			
 			if (hit.collider != null && hit.collider.tag == "f_Tile") {
 				
 				f_Tile t = hit.collider.GetComponent<f_Tile>();
-					Debug.Log(t);
+				Debug.Log(t);
 				
 				if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 					
@@ -224,26 +219,26 @@ public class f_SetUpManager : MonoBehaviour {
 					selectedObject = emptyObject;
 					
 				}
-
-
+				
+				
 				else{
-
+					
 					selectedObject.transform.position = selectedObjectPosOld;
 					selectedObjectPosOld = Vector2.zero;
 					selectedObject = emptyObject;
-
+					
 				}
 				
 				
-				//Debug.Log("hit3");
+		
 				
 			}
-
-
-
+			
+			
+			
 			else if(hit.collider != null && hit.collider.tag == "f_TrayObject"){
 				if(selectedObject != emptyObject){
-
+					
 					for(int i = 0; i < slots.Length; i++){
 						
 						if(!slots[i].isOccupied){
@@ -266,30 +261,22 @@ public class f_SetUpManager : MonoBehaviour {
 						else{
 							//pass
 						}
-
-
-
+						
+						
+						
 					}
-				
-				
-
-				}
 					
+					
+					
+				}
+				
 				else{
-				//pass
+					//pass
 				}
 				
 			}
-
-
-
-			/*if (hit.collider != null && hit.collider.tag == "f_Tile") {
-				
-			Debug.Log(hit.collider.gameObject);
-			Debug.Log("hit");
-		
-			}*/
 			
+		
 			else{
 				
 				selectedObject.transform.position = selectedObjectPosOld;
@@ -297,11 +284,9 @@ public class f_SetUpManager : MonoBehaviour {
 				selectedObject = emptyObject;
 				
 			}
-			
-			
-			//Debug.Log ("hit1");
 
-		//}
+		}
+
 
 	}
 
@@ -322,7 +307,7 @@ public class f_SetUpManager : MonoBehaviour {
 		// if player tries to place unit on a mountain
 		else if(t.tileType == 3){
 
-			Debug.Log("This is not a valid piece placement");
+			Debug.Log("This is not a valid piece placement: Cannot Place Units on Mountains");
 			return false;
 
 		}
@@ -331,7 +316,7 @@ public class f_SetUpManager : MonoBehaviour {
 		else if((p.pieceDesignator >= 2 && p.pieceDesignator <= 4) || (p.pieceDesignator >= 10 && p.pieceDesignator <= 12)){
 			if(t.tileType == 2){
 
-				Debug.Log("This is not a valid piece placement");
+				Debug.Log("This is not a valid piece placement: Cannot place mounted units on Rough Terrain");
 				return false;
 
 			}
@@ -360,7 +345,7 @@ public class f_SetUpManager : MonoBehaviour {
 				Debug.Log("hello");
 
 				if(p.isWhite == c.isWhite){
-					Debug.Log("This is not a valid piece placement");
+					Debug.Log("This is not a valid piece placement: Archer cannot be placed in Friendly Castle Walls");
 					return false;
 					
 				}
@@ -505,8 +490,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 
-
-
 	//tray that holds pieces for placement on the board 
 
 	Rect tray = new Rect(Screen.width - 500, 50, 400, 900);
@@ -643,7 +626,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-	
+
 
 	void OnGUI(){
 
@@ -659,6 +642,8 @@ public class f_SetUpManager : MonoBehaviour {
 					isSetUp = false;
 					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 					c.isSetup = false;
+					//c.SetUpCastleGreens(c.castleGreens);
+					//c.ReplaceOccupiedTile(c);
 					DestroyTray();
 					f_gameManager.SetUpBoard();
 					StartCoroutine(f_gameManager.Game());
@@ -675,16 +660,12 @@ public class f_SetUpManager : MonoBehaviour {
 					
 					//f_gameManager.SetUpBoard();
 					//StartCoroutine(f_gameManager.Game());
-					//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-					//c.ReplaceOccupiedTile(c);
-					//c.SetUpCastleGreens(c.castleGreens);
-					
+					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					c.isSetup = false;
 					
 					
 					isWhiteSetUp = false;
 					isPlacingCastle = true;
-					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-					c.isSetup = false;
 					FillTray();
 					
 					
@@ -700,6 +681,10 @@ public class f_SetUpManager : MonoBehaviour {
 					
 					
 					isPlacingCastle = false;
+					//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					//c.isSetup = false;
+					//c.SetUpCastleGreens(c.castleGreens);
+					//c.ReplaceOccupiedTile(c);
 					
 					
 					

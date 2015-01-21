@@ -10,11 +10,11 @@ public class f_Castle : f_Tile {
 	public bool isSetup;
 
 
-
+	//public f_Tile occupiedTile;
 	public f_Tile castleGreens;
 
 
-	public void SetUpCastleGreens(f_Tile g){
+	/*public void SetUpCastleGreens(f_Tile g){
 
 		if (rotation == 0) {
 
@@ -59,26 +59,25 @@ public class f_Castle : f_Tile {
 
 		
 	
-	}
+	}*/
 
 
 	public void ReplaceOccupiedTile(f_Tile g){
-
-		f_Tile t = f_gameManager.tileCoordinates [g.x, g.y].GetComponent<f_Tile> ();
-		g.transform.position = t.transform.position;
-		//Debug.Log (t + " : " + g);
-		//Debug.Log(g.x + ", " + g.y);
-		if(t.isOccupied){
-			g.isOccupied = t.isOccupied;
-			//f_gameManager.coordinates[g.x, g.y] = 
-
-
-
-		}
-		Destroy (f_gameManager.tileCoordinates [g.x, g.y]);
-		f_gameManager.tileCoordinates [g.x, g.y] = g.gameObject;
-	
-	
+		
+			f_Tile t = f_gameManager.tileCoordinates [g.x, g.y].GetComponent<f_Tile> ();
+			g.transform.position = t.transform.position;
+			//Debug.Log (t + " : " + g);
+			//Debug.Log(g.x + ", " + g.y);
+			if(t.isOccupied){
+				g.isOccupied = t.isOccupied;
+				//f_gameManager.coordinates[g.x, g.y] = 
+				
+				
+				
+			}
+			Destroy (f_gameManager.tileCoordinates [g.x, g.y]);
+			f_gameManager.tileCoordinates [g.x, g.y] = g.gameObject;
+		
 	}
 
 
@@ -88,6 +87,8 @@ public class f_Castle : f_Tile {
 
 			Vector2 pos = new Vector2(this.transform.position.x, this.transform.position.y + 1.06f);
 			castleGreens.transform.position = pos;
+			castleGreens.x = x;
+			castleGreens.y = y + 1;
 
 		}
 
@@ -96,6 +97,10 @@ public class f_Castle : f_Tile {
 			Vector2 pos = new Vector2(this.transform.position.x - 1.06f, this.transform.position.y);
 			castleGreens.transform.position = pos;
 			
+			castleGreens.x = x - 1;
+			castleGreens.y = y;
+
+			
 			
 		}
 
@@ -103,6 +108,9 @@ public class f_Castle : f_Tile {
 			
 			Vector2 pos = new Vector2(this.transform.position.x, this.transform.position.y - 1.06f);
 			castleGreens.transform.position = pos;
+			castleGreens.x = x;
+			castleGreens.y = y - 1;
+
 			
 		}
 
@@ -110,7 +118,9 @@ public class f_Castle : f_Tile {
 			
 			Vector2 pos = new Vector2(this.transform.position.x + 1.06f, this.transform.position.y);
 			castleGreens.transform.position = pos;
-			
+			castleGreens.x = x + 1;
+			castleGreens.y = y;
+
 		}
 
 		else{}

@@ -1,8 +1,9 @@
 fileFormatVersion: 2
-guid: aa72b38b206012342a54a33e602b8bc2
+guid: beb41a6f8d0ef964db3ff530f97c184c
 TextureImporter:
   fileIDToRecycleName:
     21300000: Altarin
+    21300002: AltarinOld
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -26,9 +27,9 @@ TextureImporter:
   maxTextureSize: 1024
   textureSettings:
     filterMode: 0
-    aniso: -1
+    aniso: 1
     mipBias: -1
-    wrapMode: -1
+    wrapMode: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
