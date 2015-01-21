@@ -6,6 +6,8 @@ public class f_Archer : f_Piece {
 	int boardLength;
 
 
+
+
 	public override void ProjectMovementTiles (){
 
 		if (this.occupiedTile.tileType == 5) {

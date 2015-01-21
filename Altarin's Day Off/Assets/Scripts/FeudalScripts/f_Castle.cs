@@ -66,8 +66,8 @@ public class f_Castle : f_Tile {
 
 		f_Tile t = f_gameManager.tileCoordinates [g.x, g.y].GetComponent<f_Tile> ();
 		g.transform.position = t.transform.position;
-		Debug.Log (t + " : " + g);
-		Debug.Log(g.x + ", " + g.y);
+		//Debug.Log (t + " : " + g);
+		//Debug.Log(g.x + ", " + g.y);
 		if(t.isOccupied){
 			g.isOccupied = t.isOccupied;
 			//f_gameManager.coordinates[g.x, g.y] = 

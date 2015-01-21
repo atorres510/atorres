@@ -16,8 +16,7 @@ public abstract class f_Piece : MonoBehaviour {
 	
 	public int pieceDesignator;
 
-	
-	
+
 	public f_Tile occupiedTile;
 	public GameObject f_gameManagerObject;
 	public f_GameManager f_gameManager;
@@ -61,7 +60,8 @@ public abstract class f_Piece : MonoBehaviour {
 	public void ChangePosition(f_Tile tile){
 		
 		if (tile != null) {
-	
+
+
 			occupiedTile.isOccupied = false;
 			f_gameManager.coordinates[x,y] = 0;
 
@@ -105,13 +105,15 @@ public abstract class f_Piece : MonoBehaviour {
 	}
 	
 	void UpdateCoordinates(int newX, int newY){
-		
+
 		f_gameManager.coordinates[x, y] = 0;
 		
 		f_gameManager.coordinates[newX, newY] = pieceDesignator;
 		
 		x = newX;
 		y = newY;
+
+		Debug.Log (f_gameManager.coordinates [newX, newY]);
 		
 	}
 	
@@ -121,7 +123,7 @@ public abstract class f_Piece : MonoBehaviour {
 		
 		//Piece p = target.GetComponent<Piece>();
 		
-		f_gameManager.coordinates[p.x, p.y] = 0;
+		//f_gameManager.coordinates[p.x, p.y] = 0;
 		if (p.isRoyalty) {
 			if(p.isWhite){
 				for(int i = 0; i < f_gameManager.whiteRoyalties.Length; i++){
@@ -151,6 +153,7 @@ public abstract class f_Piece : MonoBehaviour {
 		}
 
 		else{}
+
 
 		GameObject g = p.gameObject;
 		Destroy (g);
@@ -314,6 +317,8 @@ public abstract class f_Piece : MonoBehaviour {
 									//checks if the selected piece is an archer, and if so allows the target to be taken without moving
 									if(f_gameManager.selectedPiece.pieceDesignator == 5 || f_gameManager.selectedPiece.pieceDesignator == 13){
 										Debug.Log(f_gameManager.selectedPiece + " has taken " + this);
+										this.occupiedTile.isOccupied = false;
+										f_gameManager.coordinates[this.x, this.y] = 0;
 										DestroyTargetPiece(this);
 										f_gameManager.selectedPiece.turnTurner = true;
 									}
@@ -333,6 +338,8 @@ public abstract class f_Piece : MonoBehaviour {
 									//checks if the selected piece is an archer, and if so allows the target to be taken without moving
 									if(f_gameManager.selectedPiece.pieceDesignator == 5 || f_gameManager.selectedPiece.pieceDesignator == 13){
 										Debug.Log(f_gameManager.selectedPiece + " has taken " + this);
+										this.occupiedTile.isOccupied = false;
+										f_gameManager.coordinates[this.x, this.y] = 0;
 										DestroyTargetPiece(this);
 										f_gameManager.selectedPiece.turnTurner = true;
 									}
