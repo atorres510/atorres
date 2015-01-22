@@ -32,8 +32,8 @@ public class f_GameManager : MonoBehaviour {
 	public void SetUpBoard(){
 
 		gameOn = true;
-		//GameObject[] tiles = new GameObject[576];
-		GameObject[] tiles = new GameObject[169];
+		GameObject[] tiles = new GameObject[576];
+		//GameObject[] tiles = new GameObject[169];
 		tiles = GameObject.FindGameObjectsWithTag("f_Tile");
 		
 		for(int i = 0; i < tiles.Length; i++){
@@ -374,9 +374,9 @@ public class f_GameManager : MonoBehaviour {
 
 	void Awake () {
 		
-		/*tileCoordinates = new GameObject[24,24];
+		tileCoordinates = new GameObject[24,24];
 		coordinates = new int[24,24];
-		whitePieces = new f_Piece[13];
+		/*whitePieces = new f_Piece[13];
 		blackPieces = new f_Piece[13];
 
 		tileCoordinates = new GameObject[5,5];
@@ -386,8 +386,8 @@ public class f_GameManager : MonoBehaviour {
 
 		*/
 
-		tileCoordinates = new GameObject[13,13];
-		coordinates = new int[13,13];
+		//tileCoordinates = new GameObject[13,13];
+		//coordinates = new int[13,13];
 		whitePieces = new f_Piece[13];
 		blackPieces = new f_Piece[13];
 		whiteRoyalties = new int[3];
