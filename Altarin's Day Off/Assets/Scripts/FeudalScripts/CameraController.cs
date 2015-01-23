@@ -16,16 +16,16 @@ public class CameraController : MonoBehaviour {
 		
 		//camera movement controlled with WASD
 		if (Input.GetKey(KeyCode.W) && isWithinBorder(transform, 0)){
-			rigidbody2D.transform.position += Vector3.up * cameraSpeed * Time.deltaTime;
+			rigidbody2D.transform.position += Vector3.up * cameraSpeed * Time.fixedDeltaTime;
 		}
 		if (Input.GetKey(KeyCode.S) && isWithinBorder(transform, 1)){
-			rigidbody2D.transform.position += Vector3.down * cameraSpeed * Time.deltaTime;
+			rigidbody2D.transform.position += Vector3.down * cameraSpeed * Time.fixedDeltaTime;
 		}
 		if (Input.GetKey(KeyCode.A)&& isWithinBorder(transform, 2)){
-			rigidbody2D.transform.position += Vector3.left * cameraSpeed * Time.deltaTime;
+			rigidbody2D.transform.position += Vector3.left * cameraSpeed * Time.fixedDeltaTime;
 		}
 		if (Input.GetKey(KeyCode.D)&& isWithinBorder(transform, 3)){
-			rigidbody2D.transform.position += Vector3.right * cameraSpeed * Time.deltaTime;
+			rigidbody2D.transform.position += Vector3.right * cameraSpeed * Time.fixedDeltaTime;
 		}
 
 		//else {}
@@ -86,7 +86,7 @@ public class CameraController : MonoBehaviour {
 
 
 
-	void Update () {
+	void FixedUpdate () {
 		Controller ();
 	}
 }
