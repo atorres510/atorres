@@ -10,7 +10,7 @@ public class f_Castle : f_Tile {
 	public bool isSetup;
 
 
-	//public f_Tile occupiedTile;
+	public f_Tile occupiedTile;
 	public f_Tile castleGreens;
 
 
@@ -85,7 +85,7 @@ public class f_Castle : f_Tile {
 
 		if(rotation == 0){
 
-			Vector2 pos = new Vector2(this.transform.position.x, this.transform.position.y + 1.06f);
+			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1.06f, -9.0f);
 			castleGreens.transform.position = pos;
 			castleGreens.x = x;
 			castleGreens.y = y + 1;
@@ -94,7 +94,7 @@ public class f_Castle : f_Tile {
 
 		else if(rotation == 1){
 
-			Vector2 pos = new Vector2(this.transform.position.x - 1.06f, this.transform.position.y);
+			Vector3 pos = new Vector3(this.transform.position.x - 1.06f, this.transform.position.y, -9.0f);
 			castleGreens.transform.position = pos;
 			
 			castleGreens.x = x - 1;
@@ -106,7 +106,7 @@ public class f_Castle : f_Tile {
 
 		else if(rotation == 2){
 			
-			Vector2 pos = new Vector2(this.transform.position.x, this.transform.position.y - 1.06f);
+			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y - 1.06f, -9.0f);
 			castleGreens.transform.position = pos;
 			castleGreens.x = x;
 			castleGreens.y = y - 1;
@@ -116,7 +116,7 @@ public class f_Castle : f_Tile {
 
 		else if(rotation == 3){
 			
-			Vector2 pos = new Vector2(this.transform.position.x + 1.06f, this.transform.position.y);
+			Vector3 pos = new Vector3(this.transform.position.x + 1.06f, this.transform.position.y, -9.0f);
 			castleGreens.transform.position = pos;
 			castleGreens.x = x + 1;
 			castleGreens.y = y;

@@ -431,7 +431,6 @@ public abstract class f_Piece : MonoBehaviour {
 	void Update(){
 		
 
-		
 	}
 	
 	

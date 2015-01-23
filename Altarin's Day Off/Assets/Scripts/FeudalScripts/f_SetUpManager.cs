@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class f_SetUpManager : MonoBehaviour {
 
@@ -12,10 +13,11 @@ public class f_SetUpManager : MonoBehaviour {
 	Vector2 selectedObjectPosOld;
 
 	GameObject lastCastleSelected;
+	GameObject currentCastleBeingPlaced;
 	//GameObject castleBlack;
 
 	bool isPlacingCastle;
-	bool isWhiteSetUp;
+	public bool isWhiteSetUp;
 	bool isSetUp;
 
 
@@ -67,6 +69,8 @@ public class f_SetUpManager : MonoBehaviour {
 				selectedObjectPosOld = hit.collider.gameObject.transform.position;
 				selectedObject = hit.collider.gameObject;
 				lastCastleSelected = selectedObject;
+				c.occupiedTile.isOccupied = false;
+				c.occupiedTile = null;
 				Debug.Log(selectedObject + " is selected.");
 
 			}
@@ -95,6 +99,8 @@ public class f_SetUpManager : MonoBehaviour {
 				c.transform.position = t.transform.position;
 				c.x = t.x;
 				c.y = t.y;
+				c.occupiedTile = t;
+				t.isOccupied = true;
 			
 
 				selectedObjectPosOld = Vector2.zero;
@@ -132,6 +138,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if(p.occupiedTile != null){
 
 					p.occupiedTile.isOccupied = false;
+					p.occupiedTile = null;
 
 				}
 
@@ -492,26 +499,33 @@ public class f_SetUpManager : MonoBehaviour {
 
 	//tray that holds pieces for placement on the board 
 
-	Rect tray = new Rect(Screen.width, 50, 400, 900);
+	//Rect tray = new Rect(Screen.width, 50, 400, 900);
 
 	f_Tile[] slots;
-
+	Vector3 oldTrayPosition;
 
 	//create tray with slots
-	void CreateTray(){
+	void CreateTray(GameObject trayObject){
+
+		Vector3 tray = trayObject.transform.position;
+		oldTrayPosition = tray;
 
 		slots = new f_Tile[15];
 		int i = 0;
 		int rows = 5;
 		int columns = 3;
 
-		Vector3 rectPos = new Vector3(tray.x + 85, Screen.height - tray.y - 25, 0);
-		Vector3 convertedPos = Camera.main.ScreenToWorldPoint(rectPos);
+		// gives the upper most left corner of the trayObject with a leeway of 0.5x0.5 
+		Vector3 trayOrigin = new Vector3((tray.x - 2.0f), (tray.y + 5.5f), 1);
+		//Vector3 convertedPos = Camera.main.ScreenToWorldPoint(rectPos);
 
 
-		Vector3 trayPos = Camera.main.ScreenToWorldPoint(tray.center);
-		trayPos.z = 2.0f;
-		trayObject.transform.position = trayPos;
+		//Vector3 trayPos = Camera.main.ScreenToWorldPoint(tray.center);
+		//trayPos.z = 2.0f;
+		//trayObject.transform.position = trayPos;
+
+
+
 
 		for(int y = 0; y < rows; y++){
 			float yAdjust = ((- 2f) * y);
@@ -521,10 +535,13 @@ public class f_SetUpManager : MonoBehaviour {
 				//Vector3 rectPos = tray.center;
 
 
-				Vector3 adjustedPos = convertedPos + adjust;
+				//Vector3 adjustedPos = convertedPos + adjust;
+				Vector3 adjustedPos = trayOrigin + adjust;
+
 				adjustedPos.z = 1.0f;
 				//Vector3 adjustedPos = new Vector3(convertedPos.x, convertedPos.y, 1.0f);
 				GameObject g = Instantiate(emptyTile, adjustedPos, Quaternion.identity) as GameObject;
+				Debug.Log(g);
 				slots[i] = g.GetComponent<f_Tile>();
 
 				g.tag = "Untagged";
@@ -543,13 +560,17 @@ public class f_SetUpManager : MonoBehaviour {
 			
 	}
 
+	GameObject[] pieces;
+	List<GameObject> piecesInTray = new List<GameObject>();
 
 	void FillTray(){
 
-		GameObject[] pieces = GameObject.FindGameObjectsWithTag("f_Piece");
+		pieces = GameObject.FindGameObjectsWithTag("f_Piece");
+
 
 		int j = 0;
 
+		//find the pieces
 		for(int i = 0; i < pieces.Length; i++){
 
 			f_Piece p = pieces[i].GetComponent<f_Piece>();
@@ -559,6 +580,7 @@ public class f_SetUpManager : MonoBehaviour {
 				p.transform.position = slots[j].gameObject.transform.position;
 				slots[j].isOccupied = true;
 				p.occupiedTile = slots[j];
+				piecesInTray.Add(p.gameObject);
 				j++;
 
 			}
@@ -570,6 +592,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 		}
 
+		//find the castle
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("f_Tile");
 
 		for (int i = 0; i < tiles.Length; i++) {
@@ -585,7 +608,9 @@ public class f_SetUpManager : MonoBehaviour {
 					c.transform.position = slots[j].gameObject.transform.position;
 					slots[j].isOccupied = true;
 					c.rotation = 3;
-					//c.occupiedTile = slots[j];
+					c.occupiedTile = slots[j];
+					c.occupiedTile.isOccupied = true;
+					currentCastleBeingPlaced = c.gameObject;
 					j++;
 					
 				}
@@ -608,6 +633,102 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
+	void SyncTrayAssets(){
+
+		Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
+		
+		//transform.position += dPosition;
+		
+		//oldTrayPosition = trayObject.transform.position;
+
+
+		for(int i = 0; i < slots.Length; i++){
+
+			slots[i].transform.position += dPosition;
+
+		}
+
+
+
+		for (int j = 0; j < pieces.Length; j++) {
+				
+			f_Piece p = pieces[j].GetComponent<f_Piece>();
+
+			if(p.occupiedTile != null){
+
+				pieces[j].transform.position = p.occupiedTile.transform.position;
+
+			}
+
+		
+		
+		
+		}
+
+		f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
+		if (c.occupiedTile != null) {
+				
+			currentCastleBeingPlaced.transform.position = c.occupiedTile.transform.position; 
+		
+		}
+
+
+		oldTrayPosition = trayObject.transform.position;
+
+
+		
+		/*//check if any piece in the tray is not in the list and add them
+		for (int i = 0; i < pieces.Length; i++) {
+
+			f_Piece p = pieces[i].GetComponent<f_Piece>();
+
+			for(int j = 0; j < slots.Length; j++){
+
+				if(p.occupiedTile == slots[j] && !piecesInTray.Contains(pieces[i])){
+					
+					piecesInTray.Add(pieces[i]);
+					
+				}
+
+				else{}
+
+			}
+
+
+		}
+
+
+
+
+
+
+		//check if any piece from the tray have left the tray
+		foreach (GameObject element in piecesInTray) {
+			
+			f_Piece p = element.GetComponent<f_Piece>();
+			
+			for(int i = 0; i < slots.Length; i++){
+				
+				if(p.occupiedTile != slots[i]){
+					
+					piecesInTray.Remove(element);
+					
+				}
+				
+				else{}
+
+				slots[i].transform.position += dPosition;
+
+			}
+
+
+			element.transform.position += dPosition;
+
+		}*/
+
+
+	}
+
 	//Destroys tray and the tiles within slots[]
 	void DestroyTray(){
 
@@ -619,12 +740,19 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 		}
-
-
-
-
-
+	
 	}
+
+
+
+
+
+
+
+
+
+
+
 
 	bool isValidCastlePlacement(GameObject selectedCastle){
 
@@ -706,8 +834,12 @@ public class f_SetUpManager : MonoBehaviour {
 					//checks if the castle placement is within the bounds of the board before moving on
 					if(isValidCastlePlacement(lastCastleSelected)){
 
+						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+						c.occupiedTile.isOccupied = false;
+						c.occupiedTile = null;
+
 						isPlacingCastle = false;
-						//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+					
 						//c.isSetup = false;
 						//c.SetUpCastleGreens(c.castleGreens);
 						//c.ReplaceOccupiedTile(c);
@@ -761,20 +893,24 @@ public class f_SetUpManager : MonoBehaviour {
 		isSetUp = true;
 		isPlacingCastle = true;
 		isWhiteSetUp = true;
-		CreateTray();
+		CreateTray(trayObject);
 		FillTray();
 		
 	
 	}
 	
 
+
+
+
 	void Update () {
 
 		if(isSetUp){
 
 			MouseControls (isPlacingCastle);
-
+			SyncTrayAssets();
 		}
+		
 
 		//ClickandDrag (selectedObject);
 	
