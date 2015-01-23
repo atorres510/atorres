@@ -66,8 +66,6 @@ public class f_Tile : MonoBehaviour {
 	}
 
 
-
-
 	void OnMouseOver(){
 
 		if (f_gameManager.gameOn) {
