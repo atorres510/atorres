@@ -74,6 +74,9 @@ public class f_GameManager : MonoBehaviour {
 
 
 
+
+
+
 		}
 
 		whiteCastle.ReplaceOccupiedTile (whiteCastle.castleGreens);
@@ -376,6 +379,7 @@ public class f_GameManager : MonoBehaviour {
 		
 		tileCoordinates = new GameObject[24,24];
 		coordinates = new int[24,24];
+
 		/*whitePieces = new f_Piece[13];
 		blackPieces = new f_Piece[13];
 

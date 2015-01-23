@@ -492,7 +492,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	//tray that holds pieces for placement on the board 
 
-	Rect tray = new Rect(Screen.width - 500, 50, 400, 900);
+	Rect tray = new Rect(Screen.width, 50, 400, 900);
 
 	f_Tile[] slots;
 

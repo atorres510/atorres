@@ -44,7 +44,6 @@ public class MapGenerator : MonoBehaviour {
 
 						specialTiles[i].transform.position = tilePos;
 						isSpecialUsed = true;
-						Debug.Log("he");
 						break;
 					}
 
