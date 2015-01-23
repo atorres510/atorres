@@ -626,6 +626,32 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
+	bool isValidCastlePlacement(GameObject selectedCastle){
+
+		f_Castle c = selectedCastle.GetComponent<f_Castle> ();
+
+		f_Tile t = c.castleGreens;
+
+		//holds length of board and needs definition outside of this fxn
+		int boardLength = 24;
+
+		//if greens are out of bounds return false
+		if (t.x < 0 || t.y < 0 || t.x > boardLength || t.y > boardLength) {
+				
+			Debug.Log("This is not valid castle placement:  Castle Greens are out of bounds");
+			return false;
+		
+		}
+
+		else return true;
+
+	
+	
+	}
+
+
+
+
 
 
 	void OnGUI(){
@@ -675,17 +701,24 @@ public class f_SetUpManager : MonoBehaviour {
 				
 		
 			if(isPlacingCastle){
-				
+				//press to finish castle placement and move on to unit placement
 				if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
+					//checks if the castle placement is within the bounds of the board before moving on
+					if(isValidCastlePlacement(lastCastleSelected)){
+
+						isPlacingCastle = false;
+						//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+						//c.isSetup = false;
+						//c.SetUpCastleGreens(c.castleGreens);
+						//c.ReplaceOccupiedTile(c);
+
+
+
+					}
+
+					else{}
 					
-					
-					
-					isPlacingCastle = false;
-					//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-					//c.isSetup = false;
-					//c.SetUpCastleGreens(c.castleGreens);
-					//c.ReplaceOccupiedTile(c);
-					
+
 					
 					
 				}

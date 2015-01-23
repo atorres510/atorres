@@ -25,7 +25,7 @@ public class f_Sergeant : f_Piece {
 			int i = x + 1;
 			int j = y + 1;
 			
-			while (i < (x + 12) && j < (y + 12)) {
+			while (i < (x + 13) && j < (y + 13)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
@@ -72,7 +72,7 @@ public class f_Sergeant : f_Piece {
 			i = x + 1;
 			j = y - 1;
 			
-			while (i < (x + 12) && j > (y - 12)) {
+			while (i < (x + 13) && j > (y - 13)) {
 
 				//Debug.Log(i + " ," +j);
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
@@ -120,7 +120,7 @@ public class f_Sergeant : f_Piece {
 			i = x - 1;
 			j = y - 1;
 			
-			while (i > (x - 12) && j > (y - 12)) {
+			while (i > (x - 13) && j > (y - 13)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
@@ -165,7 +165,7 @@ public class f_Sergeant : f_Piece {
 			i = x - 1;
 			j = y + 1;
 			
-			while (i > (x - 12) && j < (y + 12)) {
+			while (i > (x - 13) && j < (y + 13)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
@@ -544,13 +544,6 @@ public class f_Sergeant : f_Piece {
 
 	}
 	
-
-
-
-
-
-
-
 
 
 

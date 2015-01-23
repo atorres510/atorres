@@ -207,7 +207,7 @@ public class f_Pikeman : f_Piece {
 			i = x;
 			j = y + 1;
 			
-			while (j < (y + 12)) {
+			while (j < (y + 13)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
@@ -254,7 +254,7 @@ public class f_Pikeman : f_Piece {
 			i = x + 1;
 			j = y;
 			
-			while (i < (x + 12)) {
+			while (i < (x + 13)) {
 				//Debug.Log(i);
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
@@ -301,7 +301,7 @@ public class f_Pikeman : f_Piece {
 			i = x;
 			j = y - 1;
 			
-			while (j > (y - 12)) {
+			while (j > (y - 13)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
@@ -347,7 +347,7 @@ public class f_Pikeman : f_Piece {
 			i = x - 1;
 			j = y;
 			
-			while (i > (x - 12)) {
+			while (i > (x - 13)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
