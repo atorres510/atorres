@@ -3,123 +3,77 @@ using System.Collections;
 
 public class BannerBehaviour : MonoBehaviour {
 
-
-	public bool isWhite;
-	public float xRatio;
-	public float yRatio;
-	Rect screenPosition;
+	public Sprite[] bannerSprites;
 
 
 	GameObject f_setUpManagerObject;
-
 	f_GameManager f_gameManager;
 	f_SetUpManager f_setUpManager;
 
-	SpriteRenderer spriteRenderer;
-	Texture2D bannerTexture;
+	UnityEngine.UI.Image image;
 
 
+	void UpdateImage(){
 
-
-	void UpdateSpriteRenderer(){
-
-		if (isWhite) {
+		if (!f_gameManager.gameOn) {
 				
-			if(!f_gameManager.gameOn){
-
-				if(f_setUpManager.isWhiteSetUp){
-					
-					spriteRenderer.enabled = true;
-					
-				}
+			if (f_setUpManager.isWhiteSetUp) {
 				
-				else{
-					
-					spriteRenderer.enabled = false;
-					
-				}
-
+				ChangeImage(1);
+				
+				
 			}
-
-			else {
-
-				if(f_gameManager.isPlayer1Turn){
-					
-					spriteRenderer.enabled = true;
-					
-				}
+			
+			else{
 				
-				else{
-					
-					spriteRenderer.enabled = false;
-					
-				}
-
+				ChangeImage(2);
+				
 			}
+		
 		
 		}
 
 		else{
-			
-			if(!f_gameManager.gameOn){
-				
-				if(!f_setUpManager.isWhiteSetUp){
-					
-					spriteRenderer.enabled = true;
-					
-				}
-				
-				else{
-					
-					spriteRenderer.enabled = false;
-					
-				}
-	
-			}
-			
-			else {
-				
-				if(!f_gameManager.isPlayer1Turn){
-					
-					spriteRenderer.enabled = true;
-					
-				}
-				
-				else{
-					
-					spriteRenderer.enabled = false;
-					
-				}
-				
-	
-			}
-			
-			
-		}
 
+			if (f_gameManager.isPlayer1Turn) {
+				
+				ChangeImage(1);
+				
+				
+			}
+
+			else{
+
+				ChangeImage(2);
+
+			}
+
+
+		}
+	
 	
 	}
 
 
 
-	//void OnGUI(){
 
-	//	GUI.DrawTexture (screenPosition, bannerTexture, ScaleMode.ScaleToFit, true, 0);
-	//}
+
+
+
+
+
+	void ChangeImage(int spriteID){
+
+		image.sprite = bannerSprites [spriteID];
+	
+
+	}
+
 
 
 
 	void Start(){
-
-		spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
-	//	bannerTexture = spriteRenderer.sprite.texture;
-		//Debug.Log (bannerTexture);
-
-		//screenPosition.x = Screen.width * xRatio;
-		//screenPosition.y = Screen.height * yRatio;
-		//screenPosition.z = 1;
-
-
+		image = gameObject.GetComponent<UnityEngine.UI.Image> ();
 		f_setUpManagerObject = GameObject.FindGameObjectWithTag ("f_SetUpManager");
 		f_setUpManager = f_setUpManagerObject.GetComponent<f_SetUpManager> ();
 		f_gameManager = f_setUpManager.f_gameManager;
@@ -131,7 +85,7 @@ public class BannerBehaviour : MonoBehaviour {
 
 	void Update () {
 	
-		UpdateSpriteRenderer ();
+		UpdateImage ();
 
 	}
 }

@@ -228,7 +228,7 @@ public class f_GameManager : MonoBehaviour {
 
 				Debug.Log("Black Castle Captured");
 				isGameOver = true;
-				didWhiteWin = false;
+				didWhiteWin = true;
 				return true;
 				
 			}

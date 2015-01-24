@@ -1,8 +1,7 @@
 fileFormatVersion: 2
-guid: 412b94f068bb83d4087fc486414aaf66
+guid: e9ca6369afe1ab44f9dd166180f44250
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: AllianceBanner
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -25,8 +24,8 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 1
-    aniso: 1
+    filterMode: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0

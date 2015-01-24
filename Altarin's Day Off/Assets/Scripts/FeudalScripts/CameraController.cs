@@ -94,7 +94,7 @@ public class CameraController : MonoBehaviour {
 		width = origin.position.x + borderWidth;
 		minFov = 5.0f;
 		maxFov = 15.0f;
-		zoomSensitivity =10.0f;
+		zoomSensitivity = 5.0f;
 		fov = thisCamera.orthographicSize;
 	}
 	

@@ -11,11 +11,13 @@ public class UI_Element : MonoBehaviour {
 	Vector3 worldPointPosition;
 
 	Vector3 oldCameraPosition;
+	float cameraFov;
+	float oldcameraFov;
 
 
 
 	public void SetUpElement(){
-
+	
 		screenPosition.x = Screen.width * xRatio;
 		screenPosition.y = Screen.height * yRatio;
 		screenPosition.z = 1;
@@ -26,24 +28,44 @@ public class UI_Element : MonoBehaviour {
 
 	}
 
+	public void Resize(){
+
+		float aspectRatio = cameraFov / oldcameraFov;
+		
+		gameObject.transform.localScale = gameObject.transform.localScale * aspectRatio;
+		
+
+	}
+
+
 
 
 
 	public void UpdateElementPosition(){
 
-		screenPosition.x = Screen.width * xRatio;
-		screenPosition.y = Screen.height * yRatio;
-		//screenPosition.z = 1;
-		worldPointPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-		transform.position = worldPointPosition;
+		cameraFov = Camera.main.orthographicSize;
 
-		Vector3 dPosition = Camera.main.transform.position - oldCameraPosition;
+		if (cameraFov != oldcameraFov) {
 
-		transform.position += dPosition;
+			SetUpElement();
+			oldcameraFov = cameraFov;
+			Debug.Log("HI");
 
-		//transform.position += Camera.main.transform.position - oldCameraPosition;
+		}
 
-		oldCameraPosition = Camera.main.transform.position;
+
+		else{
+		
+			
+			Vector3 dPosition = Camera.main.transform.position - oldCameraPosition;
+			
+			transform.position += dPosition;
+			
+
+			
+			oldCameraPosition = Camera.main.transform.position;
+
+		}
 
 
 	}
@@ -53,6 +75,8 @@ public class UI_Element : MonoBehaviour {
 
 	void Start () {
 
+		cameraFov = Camera.main.orthographicSize;
+		oldcameraFov = cameraFov;
 		oldCameraPosition = Camera.main.transform.position;
 		SetUpElement();
 	
@@ -60,6 +84,7 @@ public class UI_Element : MonoBehaviour {
 	
 
 	void Update () {
+
 
 		UpdateElementPosition();
 	
