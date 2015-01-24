@@ -18,6 +18,7 @@ public abstract class f_Piece : MonoBehaviour {
 
 
 	public f_Tile occupiedTile;
+	public f_Tile lastOccupiedTile;
 	public GameObject f_gameManagerObject;
 	public f_GameManager f_gameManager;
 

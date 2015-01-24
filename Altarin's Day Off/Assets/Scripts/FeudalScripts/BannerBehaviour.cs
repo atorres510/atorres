@@ -5,6 +5,10 @@ public class BannerBehaviour : MonoBehaviour {
 
 
 	public bool isWhite;
+	public float xRatio;
+	public float yRatio;
+	Rect screenPosition;
+
 
 	GameObject f_setUpManagerObject;
 
@@ -12,6 +16,7 @@ public class BannerBehaviour : MonoBehaviour {
 	f_SetUpManager f_setUpManager;
 
 	SpriteRenderer spriteRenderer;
+	Texture2D bannerTexture;
 
 
 
@@ -34,8 +39,6 @@ public class BannerBehaviour : MonoBehaviour {
 					
 				}
 
-
-
 			}
 
 			else {
@@ -52,12 +55,7 @@ public class BannerBehaviour : MonoBehaviour {
 					
 				}
 
-
-
-
-
 			}
-
 		
 		}
 
@@ -76,9 +74,7 @@ public class BannerBehaviour : MonoBehaviour {
 					spriteRenderer.enabled = false;
 					
 				}
-				
-				
-				
+	
 			}
 			
 			else {
@@ -95,10 +91,7 @@ public class BannerBehaviour : MonoBehaviour {
 					
 				}
 				
-				
-				
-				
-				
+	
 			}
 			
 			
@@ -109,10 +102,23 @@ public class BannerBehaviour : MonoBehaviour {
 
 
 
+	//void OnGUI(){
+
+	//	GUI.DrawTexture (screenPosition, bannerTexture, ScaleMode.ScaleToFit, true, 0);
+	//}
+
+
 
 	void Start(){
 
 		spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
+	//	bannerTexture = spriteRenderer.sprite.texture;
+		//Debug.Log (bannerTexture);
+
+		//screenPosition.x = Screen.width * xRatio;
+		//screenPosition.y = Screen.height * yRatio;
+		//screenPosition.z = 1;
+
 
 		f_setUpManagerObject = GameObject.FindGameObjectWithTag ("f_SetUpManager");
 		f_setUpManager = f_setUpManagerObject.GetComponent<f_SetUpManager> ();

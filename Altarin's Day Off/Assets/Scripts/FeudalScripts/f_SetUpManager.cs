@@ -138,6 +138,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if(p.occupiedTile != null){
 
 					p.occupiedTile.isOccupied = false;
+					p.lastOccupiedTile = p.occupiedTile;
 					p.occupiedTile = null;
 
 				}
@@ -159,7 +160,6 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 	
 	
-	
 	}
 	
 
@@ -173,11 +173,12 @@ public class f_SetUpManager : MonoBehaviour {
 		if (hit.collider != null && hit.collider.tag == "f_Tile") {
 			
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
-			Debug.Log(t);
+			//Debug.Log(t);
+			f_Piece p = selectedObject.GetComponent<f_Piece>();
 			
 			if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 				
-				f_Piece p = selectedObject.GetComponent<f_Piece>();
+
 				
 				p.transform.position = t.transform.position;
 				p.x = t.x;
@@ -192,8 +193,11 @@ public class f_SetUpManager : MonoBehaviour {
 			
 			else{
 				
-				selectedObject.transform.position = selectedObjectPosOld;
-				selectedObjectPosOld = Vector2.zero;
+				//selectedObject.transform.position = selectedObjectPosOld;
+				//selectedObjectPosOld = Vector2.zero;
+
+				p.transform.position = p.lastOccupiedTile.transform.position;
+				p.occupiedTile = p.lastOccupiedTile;
 				selectedObject = emptyObject;
 				
 			}
@@ -211,11 +215,11 @@ public class f_SetUpManager : MonoBehaviour {
 			if (hit.collider != null && hit.collider.tag == "f_Tile") {
 				
 				f_Tile t = hit.collider.GetComponent<f_Tile>();
-				Debug.Log(t);
-				
+				//Debug.Log(t);
+				f_Piece p = selectedObject.GetComponent<f_Piece>();
 				if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 					
-					f_Piece p = selectedObject.GetComponent<f_Piece>();
+
 					
 					p.transform.position = t.transform.position;
 					p.x = t.x;
@@ -229,9 +233,13 @@ public class f_SetUpManager : MonoBehaviour {
 				
 				
 				else{
+
 					
-					selectedObject.transform.position = selectedObjectPosOld;
-					selectedObjectPosOld = Vector2.zero;
+					//selectedObject.transform.position = selectedObjectPosOld;
+					//selectedObjectPosOld = Vector2.zero;
+					
+					p.transform.position = p.lastOccupiedTile.transform.position;
+					p.occupiedTile = p.lastOccupiedTile;
 					selectedObject = emptyObject;
 					
 				}
@@ -273,8 +281,7 @@ public class f_SetUpManager : MonoBehaviour {
 						
 					}
 					
-					
-					
+				
 				}
 				
 				else{
@@ -282,12 +289,14 @@ public class f_SetUpManager : MonoBehaviour {
 				}
 				
 			}
-			
-		
+
 			else{
 				
-				selectedObject.transform.position = selectedObjectPosOld;
-				selectedObjectPosOld = Vector2.zero;
+				//selectedObject.transform.position = selectedObjectPosOld;
+				//selectedObjectPosOld = Vector2.zero;
+				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				p.transform.position = p.lastOccupiedTile.transform.position;
+				p.occupiedTile = p.lastOccupiedTile;
 				selectedObject = emptyObject;
 				
 			}
@@ -561,7 +570,7 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 
 	GameObject[] pieces;
-	List<GameObject> piecesInTray = new List<GameObject>();
+	//List<GameObject> piecesInTray = new List<GameObject>();
 
 	void FillTray(){
 
@@ -580,7 +589,7 @@ public class f_SetUpManager : MonoBehaviour {
 				p.transform.position = slots[j].gameObject.transform.position;
 				slots[j].isOccupied = true;
 				p.occupiedTile = slots[j];
-				piecesInTray.Add(p.gameObject);
+				//piecesInTray.Add(p.gameObject);
 				j++;
 
 			}
@@ -893,6 +902,7 @@ public class f_SetUpManager : MonoBehaviour {
 		isSetUp = true;
 		isPlacingCastle = true;
 		isWhiteSetUp = true;
+		selectedObject = emptyObject;
 		CreateTray(trayObject);
 		FillTray();
 		

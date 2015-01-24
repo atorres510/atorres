@@ -8,8 +8,14 @@ public class CameraController : MonoBehaviour {
 	public float borderHeight;
 	public float borderWidth;
 
+	Camera thisCamera;
+
 	float height;
 	float width;
+	float minFov;
+	float maxFov;
+	float fov;
+	float zoomSensitivity;
 	
 
 	void Controller(){
@@ -27,6 +33,11 @@ public class CameraController : MonoBehaviour {
 		if (Input.GetKey(KeyCode.D)&& isWithinBorder(transform, 3)){
 			rigidbody2D.transform.position += Vector3.right * cameraSpeed * Time.fixedDeltaTime;
 		}
+
+		fov -= Input.GetAxis ("Mouse ScrollWheel") * zoomSensitivity;
+		fov = Mathf.Clamp (fov, minFov, maxFov);
+		thisCamera.orthographicSize = fov;
+		//Debug.Log (thisCamera.fieldOfView);
 
 		//else {}
 		
@@ -78,13 +89,15 @@ public class CameraController : MonoBehaviour {
 	
 	void Awake(){
 
+		thisCamera = gameObject.GetComponent<Camera> ();
 		height = origin.position.y + borderHeight;
 		width = origin.position.x + borderWidth;
-
+		minFov = 5.0f;
+		maxFov = 15.0f;
+		zoomSensitivity =10.0f;
+		fov = thisCamera.orthographicSize;
 	}
-
-
-
+	
 
 	void FixedUpdate () {
 		Controller ();
