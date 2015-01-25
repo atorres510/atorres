@@ -447,7 +447,7 @@ public class f_GameManager : MonoBehaviour {
 
 			}
 			
-			toggleTileGUI = GUI.Toggle (new Rect (10, 40, 125, 20), toggleTileGUI, "Toggle Tile GUI");
+			//toggleTileGUI = GUI.Toggle (new Rect (10, 40, 125, 20), toggleTileGUI, "Toggle Tile GUI");
 			
 			selectedPieceString = GUI.TextField (new Rect (10, Screen.height - 40, 300, 20), selectedPieceString, 300); 
 		

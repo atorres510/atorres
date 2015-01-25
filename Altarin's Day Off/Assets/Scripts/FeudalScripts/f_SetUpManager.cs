@@ -795,7 +795,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 
-
 	void OnGUI(){
 
 		if (isSetUp) {
