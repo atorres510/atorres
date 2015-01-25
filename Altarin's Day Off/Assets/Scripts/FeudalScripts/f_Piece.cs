@@ -42,6 +42,13 @@ public abstract class f_Piece : MonoBehaviour {
 		f_gameManager = f_gameManagerObject.GetComponent<f_GameManager> ();
 
 	}
+
+	public void TogglePieceCollider(bool usedTurn){
+		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
+
+		collider.enabled = !usedTurn;
+
+	}
 	
 	
 	public void StartPosition(){
@@ -62,6 +69,7 @@ public abstract class f_Piece : MonoBehaviour {
 		
 		if (tile != null) {
 
+			HighlightMovementTiles(MovementTiles, false);
 
 			occupiedTile.isOccupied = false;
 			f_gameManager.coordinates[x,y] = 0;
@@ -71,6 +79,8 @@ public abstract class f_Piece : MonoBehaviour {
 			occupiedTile.isOccupied = true;
 			UpdateCoordinates(tile.x, tile.y);
 			f_gameManager.selectedPiece.turnTurner = true;
+
+			f_gameManager.selectedPiece = f_gameManager.emptyPiece;
 
 
 
@@ -86,7 +96,7 @@ public abstract class f_Piece : MonoBehaviour {
 	public void ChangePosition(f_Piece piece){
 
 		if(piece != null && piece.isWhite != this.isWhite){
-			
+			HighlightMovementTiles(MovementTiles, false);
 
 			transform.position = piece.transform.position;
 			
@@ -95,9 +105,10 @@ public abstract class f_Piece : MonoBehaviour {
 			occupiedTile.isOccupied = true;
 			UpdateCoordinates(piece.x, piece.y);
 			DestroyTargetPiece(piece);
+			//f_gameManager.selectedPiece.MovementTiles.Clear ();
 			f_gameManager.selectedPiece.turnTurner = true;
 			
-			
+			f_gameManager.selectedPiece = f_gameManager.emptyPiece;
 		}
 		
 		else {
@@ -114,7 +125,7 @@ public abstract class f_Piece : MonoBehaviour {
 		x = newX;
 		y = newY;
 
-		Debug.Log (f_gameManager.coordinates [newX, newY]);
+		//Debug.Log (f_gameManager.coordinates [newX, newY]);
 		
 	}
 	
@@ -178,11 +189,18 @@ public abstract class f_Piece : MonoBehaviour {
 				if(this.isWhite){
 					if(f_gameManager.coordinates[t.x,t.y] > 8){
 
-						s.sprite = t.highLightedHostileTexture;
+
+						if(isValidMove(t)){
+
+							s.sprite = t.highLightedHostileTexture;
+
+						}
+
+					
 						//Debug.Log("hostile");
 					}
 
-					else if(f_gameManager.coordinates[t.x, t.y] <8 && f_gameManager.coordinates[t.x, t.y] != 0){
+					else if(f_gameManager.coordinates[t.x, t.y] <9 && f_gameManager.coordinates[t.x, t.y] != 0){
 
 						//pass
 						//Debug.Log("pass");
@@ -214,7 +232,12 @@ public abstract class f_Piece : MonoBehaviour {
 					
 					else if(f_gameManager.coordinates[t.x, t.y] <8 && f_gameManager.coordinates[t.x, t.y] != 0){
 						//
-						s.sprite = t.highLightedHostileTexture;
+						if(isValidMove(t)){
+							
+							s.sprite = t.highLightedHostileTexture;
+							
+						}
+
 						
 					}
 					
@@ -242,20 +265,16 @@ public abstract class f_Piece : MonoBehaviour {
 
 				s.sprite = t.defaultTexture;
 
+
 			}
 
 
 
 		}
 	
-	
+		//MovementTiles.Clear();
 	
 	}
-
-
-
-
-
 
 
 	bool toggle;
@@ -321,7 +340,10 @@ public abstract class f_Piece : MonoBehaviour {
 										this.occupiedTile.isOccupied = false;
 										f_gameManager.coordinates[this.x, this.y] = 0;
 										DestroyTargetPiece(this);
+										f_gameManager.selectedPiece.HighlightMovementTiles(f_gameManager.selectedPiece.MovementTiles, false);
+										//f_gameManager.selectedPiece.MovementTiles.Clear();
 										f_gameManager.selectedPiece.turnTurner = true;
+										f_gameManager.selectedPiece = f_gameManager.emptyPiece;
 									}
 									
 									else{
@@ -342,13 +364,17 @@ public abstract class f_Piece : MonoBehaviour {
 										this.occupiedTile.isOccupied = false;
 										f_gameManager.coordinates[this.x, this.y] = 0;
 										DestroyTargetPiece(this);
+										f_gameManager.selectedPiece.HighlightMovementTiles(f_gameManager.selectedPiece.MovementTiles, false);
+										//f_gameManager.selectedPiece.MovementTiles.Clear();
 										f_gameManager.selectedPiece.turnTurner = true;
+										f_gameManager.selectedPiece = f_gameManager.emptyPiece;
 									}
 									
 									else{
-										Debug.Log(f_gameManager.selectedPiece + " has taken " + this);
-										f_gameManager.selectedPiece.ChangePosition(this);
-										
+										if(f_gameManager.selectedPiece.isValidMove(this.occupiedTile)){
+											Debug.Log(f_gameManager.selectedPiece + " has taken " + this);
+											f_gameManager.selectedPiece.ChangePosition(this);
+										}
 									}
 								}
 								
@@ -382,7 +408,7 @@ public abstract class f_Piece : MonoBehaviour {
 							Debug.Log(f_gameManager.selectedPiece + " is selected");
 							f_gameManager.selectedPiece.ProjectMovementTiles();
 							f_gameManager.selectedPiece.HighlightMovementTiles(f_gameManager.selectedPiece.MovementTiles, true);
-							
+							//Debug.Log(f_gameManager.selectedPiece.MovementTiles);
 							//place this projection method in gamemanager .  have gamemanager project and then clean 
 							//the tiles for each piece on the board.
 							

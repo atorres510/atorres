@@ -232,6 +232,15 @@ public class f_Squire : f_Piece {
 		boardLength = (int)l;
 	
 	}
-	
+
+	void Update(){
+		
+		if (f_gameManager.gameOn) {
+			TogglePieceCollider (turnTurner);
+		}
+
+		
+	}
+
 
 }

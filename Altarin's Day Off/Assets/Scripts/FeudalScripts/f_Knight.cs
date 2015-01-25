@@ -448,7 +448,7 @@ public class f_Knight : f_Piece {
 		f_Tile i = f_gameManager.tileCoordinates [t.x, t.y].GetComponent<f_Tile> ();
 		f_Tile j = f_gameManager.tileCoordinates [x, y].GetComponent<f_Tile> ();
 
-		//if selected piece occupies the greens
+		//if selected piece occupies the greens allow movement into the castle
 		if (j.tileType == 4) {
 				
 			if (i.tileType == 2 || i.tileType == 3 || i.isOccupied) {
@@ -506,6 +506,15 @@ public class f_Knight : f_Piece {
 		float l = Mathf.Sqrt (f_gameManager.tileCoordinates.Length);
 		boardLength = (int)l;
 		//Debug.Log (boardLength);
+
+
+	}
+
+	void Update(){
+
+		if (f_gameManager.gameOn) {
+			TogglePieceCollider (turnTurner);
+		}
 
 
 	}

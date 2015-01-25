@@ -401,7 +401,7 @@ public class f_Archer : f_Piece {
 		//if selected piece occupies the greens
 		if (j.tileType == 4) {
 			
-			if (i.tileType == 2 || i.tileType == 3) {
+			if (i.tileType == 2 || i.tileType == 3 || i.isOccupied) {
 				
 				return true;
 				
@@ -574,6 +574,16 @@ public class f_Archer : f_Piece {
 		boardLength = (int)l;
 
 	}
+
+	void Update(){
+		
+		if (f_gameManager.gameOn) {
+			TogglePieceCollider (turnTurner);
+		}
+
+		
+	}
+
 	
 
 }

@@ -10,6 +10,8 @@ public class f_GameManager : MonoBehaviour {
 	
 
 	public bool isPlayer1Turn;
+	bool canPassTurn;
+	bool isTurnPassed;
 
 	//victory conditions and variables
 	bool isGameOver;
@@ -131,6 +133,89 @@ public class f_GameManager : MonoBehaviour {
 
 
 	}
+	//manages the toggle of the GUI.button "Finished with Turn" such that atleast
+	//one piece is moved before being allowed to pass the rest of the turn
+	bool isTurnPassable(){
+
+		f_Piece[] pieces;
+
+		if (isPlayer1Turn) {
+				
+			pieces = whitePieces;
+		
+		}
+
+		else{
+			pieces = blackPieces;
+		}
+
+		for(int i = 0; i < pieces.Length; i++){
+
+			if(pieces[i] != null){
+
+				if(pieces[i].turnTurner){
+
+
+					return true;
+
+				}
+
+
+
+			}
+
+		}
+		
+		return false;
+	}
+
+	void ResetTurn(f_Piece[] pieces){
+
+		selectedPiece.HighlightMovementTiles (selectedPiece.MovementTiles, false);
+
+		for(int i = 0; i < pieces.Length; i++){
+			
+			if(pieces[i] != null){
+				
+				pieces[i].turnTurner = false;
+				pieces[i].MovementTiles.Clear();
+
+			}
+			
+		}
+
+		isTurnPassed = false;
+		selectedPiece = emptyPiece;
+
+	}
+
+	bool IsTurnOver(f_Piece[] pieces, bool turn){
+
+		if (turn) {
+				
+			return true;
+		
+		}
+
+		for(int i = 0; i < pieces.Length; i++){
+			
+			if(pieces[i] != null){
+				
+				if(!pieces[i].turnTurner){
+
+					return false;
+
+				}
+				
+			}
+			
+		}
+
+		return true;
+	
+	}
+
+
 
 
 	IEnumerator Player1Turn(){
@@ -141,17 +226,12 @@ public class f_GameManager : MonoBehaviour {
 		
 		while(!isTurnOver) {
 			
-			isTurnOver = selectedPiece.turnTurner;
+			isTurnOver = IsTurnOver(whitePieces, isTurnPassed);
 			
 			yield return null;
 		}
 		
-		selectedPiece.turnTurner = false;
-
-		selectedPiece.HighlightMovementTiles (selectedPiece.MovementTiles, false);
-		selectedPiece.MovementTiles.Clear ();
-
-		selectedPiece = emptyPiece;
+		ResetTurn (whitePieces);
 
 		if (CheckVictoryConditions ()) {
 				
@@ -173,17 +253,12 @@ public class f_GameManager : MonoBehaviour {
 		
 		while(!isTurnOver) {
 			
-			isTurnOver = selectedPiece.turnTurner;
+			isTurnOver = IsTurnOver(blackPieces, isTurnPassed);
 			
 			yield return null;
 		}
 		
-		selectedPiece.turnTurner = false;
-
-		selectedPiece.HighlightMovementTiles (selectedPiece.MovementTiles, false);
-		selectedPiece.MovementTiles.Clear ();
-		
-		selectedPiece = emptyPiece;
+		ResetTurn (blackPieces);
 
 		if (CheckVictoryConditions ()) {
 				
@@ -361,6 +436,17 @@ public class f_GameManager : MonoBehaviour {
 				}
 				
 			}
+
+			if(isTurnPassable()){
+
+				if(GUI.Button(new Rect(10, 70, 150, 20), "Finish Turn")){
+
+					isTurnPassed = true;
+					Debug.Log("Turn passed: " + isTurnPassed);
+
+				}
+
+			}
 			
 			toggleTileGUI = GUI.Toggle (new Rect (10, 40, 125, 20), toggleTileGUI, "Toggle Tile GUI");
 			
@@ -397,6 +483,8 @@ public class f_GameManager : MonoBehaviour {
 		whiteRoyalties = new int[3];
 		blackRoyalties = new int[3];
 
+		canPassTurn = false;
+		isTurnPassed = false;
 		gameOn = false;
 
 		//toggleTileGUI = false;

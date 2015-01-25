@@ -407,7 +407,7 @@ public class f_Sergeant : f_Piece {
 		//if selected piece occupies the greens
 		if (j.tileType == 4) {
 			
-			if (i.tileType == 2 || i.tileType == 3) {
+			if (i.tileType == 2 || i.tileType == 3 || i.isOccupied) {
 				
 				return true;
 				
@@ -549,7 +549,7 @@ public class f_Sergeant : f_Piece {
 
 
 
-	// Use this for initialization
+
 	void Start () {
 
 		InstantiateVariables ();
@@ -558,8 +558,13 @@ public class f_Sergeant : f_Piece {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	void Update(){
+		
+		if (f_gameManager.gameOn) {
+			TogglePieceCollider (turnTurner);
+		}
+
+		
 	}
+
 }
