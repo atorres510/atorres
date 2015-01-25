@@ -47,6 +47,7 @@ public class UI_Element : MonoBehaviour {
 
 		if (cameraFov != oldcameraFov) {
 
+			Resize();
 			SetUpElement();
 			oldcameraFov = cameraFov;
 			Debug.Log("HI");
@@ -55,14 +56,11 @@ public class UI_Element : MonoBehaviour {
 
 
 		else{
-		
 			
 			Vector3 dPosition = Camera.main.transform.position - oldCameraPosition;
 			
 			transform.position += dPosition;
-			
-
-			
+	
 			oldCameraPosition = Camera.main.transform.position;
 
 		}

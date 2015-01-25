@@ -10,7 +10,6 @@ public class f_GameManager : MonoBehaviour {
 	
 
 	public bool isPlayer1Turn;
-	bool canPassTurn;
 	bool isTurnPassed;
 
 	//victory conditions and variables
@@ -482,8 +481,7 @@ public class f_GameManager : MonoBehaviour {
 		blackPieces = new f_Piece[13];
 		whiteRoyalties = new int[3];
 		blackRoyalties = new int[3];
-
-		canPassTurn = false;
+		
 		isTurnPassed = false;
 		gameOn = false;
 

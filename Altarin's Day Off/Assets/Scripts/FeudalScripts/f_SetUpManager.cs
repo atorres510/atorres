@@ -512,12 +512,14 @@ public class f_SetUpManager : MonoBehaviour {
 
 	f_Tile[] slots;
 	Vector3 oldTrayPosition;
+	float oldFov;
 
 	//create tray with slots
 	void CreateTray(GameObject trayObject){
 
 		Vector3 tray = trayObject.transform.position;
 		oldTrayPosition = tray;
+		oldFov = Camera.main.orthographicSize;
 
 		slots = new f_Tile[15];
 		int i = 0;
@@ -551,6 +553,7 @@ public class f_SetUpManager : MonoBehaviour {
 				//Vector3 adjustedPos = new Vector3(convertedPos.x, convertedPos.y, 1.0f);
 				GameObject g = Instantiate(emptyTile, adjustedPos, Quaternion.identity) as GameObject;
 				Debug.Log(g);
+				//g.AddComponent<UI_Element>();
 				slots[i] = g.GetComponent<f_Tile>();
 
 				g.tag = "Untagged";
@@ -644,16 +647,15 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void SyncTrayAssets(){
 
+		float fov = Camera.main.orthographicSize;
 		Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
-		
-		//transform.position += dPosition;
-		
-		//oldTrayPosition = trayObject.transform.position;
-
 
 		for(int i = 0; i < slots.Length; i++){
 
+			//float aspectRatio = fov / oldFov;
+			//slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
 			slots[i].transform.position += dPosition;
+
 
 		}
 
@@ -665,6 +667,9 @@ public class f_SetUpManager : MonoBehaviour {
 
 			if(p.occupiedTile != null){
 
+
+				//float aspectRatio = fov / oldFov;
+				//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
 				pieces[j].transform.position = p.occupiedTile.transform.position;
 
 			}
@@ -677,13 +682,13 @@ public class f_SetUpManager : MonoBehaviour {
 		f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
 		if (c.occupiedTile != null) {
 				
+			//float aspectRatio = fov / oldFov;
+			//currentCastleBeingPlaced.transform.localScale = currentCastleBeingPlaced.transform.localScale * aspectRatio;
 			currentCastleBeingPlaced.transform.position = c.occupiedTile.transform.position; 
-		
 		}
-
-
+		
 		oldTrayPosition = trayObject.transform.position;
-
+		oldFov = fov;
 
 		
 		/*//check if any piece in the tray is not in the list and add them
