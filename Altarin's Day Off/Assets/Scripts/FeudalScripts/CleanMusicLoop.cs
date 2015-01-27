@@ -14,7 +14,7 @@ public class CleanMusicLoop : MonoBehaviour {
 		// This assumes that there is only a single audio source, or that the one you're looping is the first one visible in the editor.
 		// I could also just use GetComponent, but this is more explicit, and can be changed in the future.
 		audioComponent = gameObject.GetComponents<AudioSource>()[0];
-		if(loopEnd == null)
+		if(loopEnd == 0.0f)
 			loopEnd = audioComponent.clip.length;
 
 		if(debuggingLoop)

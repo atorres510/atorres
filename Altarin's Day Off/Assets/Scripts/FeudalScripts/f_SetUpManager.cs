@@ -77,7 +77,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 			else{}
 
-			
+
 		}
 	}
 
@@ -659,8 +659,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 		}
 
-
-
+		
 		for (int j = 0; j < pieces.Length; j++) {
 				
 			f_Piece p = pieces[j].GetComponent<f_Piece>();

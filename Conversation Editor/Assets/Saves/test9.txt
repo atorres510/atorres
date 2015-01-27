@@ -1,0 +1,5 @@
+[Hello! ], {1; 4}, False, 0, 0
+[Who are you?], {2}, False, 1, 1
+[I am a test.], {3}, False, 2, 0
+[Oh okay.  Goodbye!], {}, True, 3, 1
+[Goodbye!], {}, True, 4, 1

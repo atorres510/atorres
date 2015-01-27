@@ -25,6 +25,7 @@ public class TextBox : MonoBehaviour {
 	/*public*/ bool hasBeenRead; //Remembers player choice and allows for player choice to have consequence.
 	
 	///*public*/ int[] nextTextBoxID; //Finds the next text box in the dialogue tree by textBoxID #
+	/*public*/ bool isPlayerResponse;
 
 	/*public*/ List<int> nextTextBoxID = new List<int>();
 
@@ -94,164 +95,6 @@ public class TextBox : MonoBehaviour {
 
 
 
-
-
-
-
-	//Replaces the [keyword] to the appropriate gender name
-	/*bool ReturnGenderSignifier(string s){
-		
-		if (s == "Sir/Ma'am") {
-			if (playerGender == 0) {
-				
-				tempText = "Sir";
-				return true;
-				
-			}
-			
-			if (playerGender == 1) {
-				
-				tempText = "Ma'am";
-				return true;
-				
-			}
-			else{return false;}
-		}
-		
-		if(s == "Mr./Mrs."){
-			if(playerGender == 0){
-				
-				tempText = "Mr.";
-				return true;
-				
-			}
-			
-			if(playerGender == 1){
-				
-				tempText = "Mrs.";
-				return true;
-				
-			}
-
-			else{return false;}
-		}
-
-		else{return false;}
-		
-	}
-
-	//Replaces [keyword] with player's name
-	bool ReturnPlayerName(string s){
-
-		if (s == "PlayerFirstName") {
-			tempText = playerFirstName;
-			return true;
-		}
-
-		if (s == "PlayerLastName") {
-			tempText = playerLastName;
-			return true;
-		}
-
-		if (s == "PlayerFullName") {
-			tempText = playerFullName;
-			return true;
-		} 
-		else {//pass
-			return false;
-		}
-
-
-	}
-
-
-
-
-
-
-	//splits the texts into chunks.  anything within brackets  should be a keywords 
-	void SplitText(){
-	
-		texts = text.Split(new char[] {'[',']'});
-	
-	}
-
-
-
-
-
-	//Takes the fragments of texts[] made in SplitText and runs them through the keyword methods and
-		//then adds them to the total compiled text.
-	void AddText(string s){
-
-		if (ReturnGenderSignifier (s)) {
-
-			compiledText = compiledText + tempText;
-
-
-		}
-
-
-		else if (ReturnPlayerName (s)) {
-		
-			compiledText = compiledText + tempText;
-
-		}
-
-
-		else {
-
-			tempText = s;
-			compiledText = compiledText + tempText;
-
-		}
-
-	}
-
-
-	//reassembles the text for GUI use.
-	public void CompileText(){
-
-		SplitText ();
-
-		for (int i = 0; i < texts.Length; i++) {
-		
-			AddText(texts[i]);
-			//Debug.Log(tempText);
-
-		}
-
-		text = compiledText;
-
-	}
-
-
-	/*public void AssignWindowID(int boxID){
-
-		windowID = boxID;
-		Debug.Log (windowID);
-
-
-
-	}*/
-
-	/*void UpdateTransform(Rect r){
-
-		Vector3 v = camera.ScreenToWorldPoint (r.position);
-
-		gameObject.transform.position = v;
-		
-
-	}*/
-
-
-
-
-
-
-
-
-
 	//Rect windowRect = new Rect (windowRectLeft, windowRectTop, windowRectWidth, windowRectHeigth);
 	//public Rect currentWindowRect= new Rect(50, 60, 250, 200);
 	public Rect windowRect = new Rect (50, 60, 250, 200);
@@ -300,7 +143,10 @@ public class TextBox : MonoBehaviour {
 
 	
 	}
-	
+
+
+
+
 	void WindowFunction (int windowID) {
 
 			//editor.selectedWindow = windowID;
@@ -342,18 +188,19 @@ public class TextBox : MonoBehaviour {
 
 
 
+		terminatesDialogue = GUI.Toggle (new Rect (100, 25, 140, 20),terminatesDialogue, "Terminates Dialogue");
+		isPlayerResponse = GUI.Toggle (new Rect (100, 40, 140, 20),isPlayerResponse, "isPlayerResponse");
 
 
 
 		if(isCollapsed){
 
-			isCollapsed = GUI.Toggle(new Rect(10, 25, 140, 25), isCollapsed, "Collapse"); 
+			isCollapsed = GUI.Toggle(new Rect(10, 25, 100, 25), isCollapsed, "Collapse"); 
 			GUI.DragWindow(new Rect(0,0,1000,20));
 
 		}
 
-
-
+		
 		else{ 
 
 			if(GUI.Button(new Rect(10, 60, 140, 25), "Conditionals")){
@@ -379,9 +226,6 @@ public class TextBox : MonoBehaviour {
 			}
 
 	}
-
-
-
 
 
 
@@ -534,6 +378,7 @@ public class TextBox : MonoBehaviour {
 
 		string compiledString;
 		string terminatesDialogueString = terminatesDialogue.ToString();
+		string isPlayerResponseString = "";
 		string windowIDString = windowID.ToString();
 		string nextTextBoxIDString = "{";
 
@@ -552,7 +397,7 @@ public class TextBox : MonoBehaviour {
 
 			}
 
-			else{nextTextBoxIDString = nextTextBoxIDString + s + ", ";}
+			else{nextTextBoxIDString = nextTextBoxIDString + s + "; ";}
 
 
 
@@ -562,10 +407,20 @@ public class TextBox : MonoBehaviour {
 		nextTextBoxIDString = nextTextBoxIDString + "}";
 
 
+		if (!isPlayerResponse) {
+				
+			isPlayerResponseString = "0";
+		}
+
+		else{
+			isPlayerResponseString = "1";
+		}
 
 
 
-		compiledString = "[" + text + "], " + terminatesDialogueString + ", " + windowIDString + ", " + nextTextBoxIDString;
+
+
+		compiledString = "[" + text + "], " + nextTextBoxIDString + ", " + terminatesDialogueString + ", " + windowIDString + ", " + isPlayerResponseString;
 
 		return compiledString;
 
