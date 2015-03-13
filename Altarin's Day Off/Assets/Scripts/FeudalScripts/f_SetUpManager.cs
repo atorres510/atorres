@@ -9,6 +9,9 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject emptyTile;
 	public GameObject trayObject;
 
+
+	Player player;
+	Camera playerCamera;
 	GameObject selectedObject;
 	Vector2 selectedObjectPosOld;
 
@@ -19,7 +22,7 @@ public class f_SetUpManager : MonoBehaviour {
 	bool isPlacingCastle;
 	public bool isWhiteSetUp;
 	bool isSetUp;
-
+	bool isOffline;
 
 
 
@@ -27,7 +30,24 @@ public class f_SetUpManager : MonoBehaviour {
 	//uses GUI elements to allow for the set up of the game
 	//holds the ability to click and drag units onto tiles
 
-
+	void FindNetworkManager(){
+		
+		NetworkManager networkManager = FindObjectOfType<NetworkManager> ();
+		
+		if (networkManager == null) {
+			
+			isOffline = true;
+			
+		}
+		
+		else{
+			
+			isOffline = false;
+			
+		}
+		
+		
+	}
 
 	void ClickandDrag(GameObject g){
 
@@ -48,7 +68,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	Vector2 MousePosition(){
 
-		Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector3 v3Pos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
 		Vector2 mousePos = new Vector2(v3Pos.x, v3Pos.y);
 		return mousePos;
 
@@ -506,6 +526,11 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 
+
+
+
+
+
 	//tray that holds pieces for placement on the board 
 
 	//Rect tray = new Rect(Screen.width, 50, 400, 900);
@@ -519,7 +544,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 		Vector3 tray = trayObject.transform.position;
 		oldTrayPosition = tray;
-		oldFov = Camera.main.orthographicSize;
+		oldFov = playerCamera.orthographicSize;
 
 		slots = new f_Tile[15];
 		int i = 0;
@@ -549,7 +574,7 @@ public class f_SetUpManager : MonoBehaviour {
 				//Vector3 adjustedPos = convertedPos + adjust;
 				Vector3 adjustedPos = trayOrigin + adjust;
 
-				adjustedPos.z = 1.0f;
+				adjustedPos.z = -9.0f;
 				//Vector3 adjustedPos = new Vector3(convertedPos.x, convertedPos.y, 1.0f);
 				GameObject g = Instantiate(emptyTile, adjustedPos, Quaternion.identity) as GameObject;
 				Debug.Log(g);
@@ -572,6 +597,9 @@ public class f_SetUpManager : MonoBehaviour {
 			
 	}
 
+
+
+
 	GameObject[] pieces;
 	//List<GameObject> piecesInTray = new List<GameObject>();
 
@@ -588,6 +616,7 @@ public class f_SetUpManager : MonoBehaviour {
 			f_Piece p = pieces[i].GetComponent<f_Piece>();
 
 			if(isWhiteSetUp == p.isWhite){
+
 
 				p.transform.position = slots[j].gameObject.transform.position;
 				slots[j].isOccupied = true;
@@ -647,7 +676,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void SyncTrayAssets(){
 
-		float fov = Camera.main.orthographicSize;
+		float fov = playerCamera.orthographicSize;
 		Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
 
 		for(int i = 0; i < slots.Length; i++){
@@ -797,117 +826,263 @@ public class f_SetUpManager : MonoBehaviour {
 	void OnGUI(){
 
 		if (isSetUp) {
-				
-			if (!isWhiteSetUp) {
-				
-				if (GUI.Button (new Rect (10, 50, 150, 25), "Start Game")) {
+
+			if(isOffline){
+
+				if (!isWhiteSetUp) {
 					
-					//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-					//c.ReplaceOccupiedTile(c);
-					//c.SetUpCastleGreens(c.castleGreens);
-					isSetUp = false;
-					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-					c.isSetup = false;
-					//c.SetUpCastleGreens(c.castleGreens);
-					//c.ReplaceOccupiedTile(c);
-					DestroyTray();
-					f_gameManager.SetUpBoard();
-					StartCoroutine(f_gameManager.Game());
+					if (GUI.Button (new Rect (10, 50, 150, 25), "Start Game")) {
+						
+						//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+						//c.ReplaceOccupiedTile(c);
+						//c.SetUpCastleGreens(c.castleGreens);
+						isSetUp = false;
+						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+						c.isSetup = false;
+						//c.SetUpCastleGreens(c.castleGreens);
+						//c.ReplaceOccupiedTile(c);
+						DestroyTray();
+						f_gameManager.SetUpBoard();
+						StartCoroutine(f_gameManager.Game());
+						
+					}
+					
+					
+				}
+				
+				else{
+					
+					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {
+						
+						
+						//f_gameManager.SetUpBoard();
+						//StartCoroutine(f_gameManager.Game());
+						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+						c.isSetup = false;
+						
+						
+						isWhiteSetUp = false;
+						isPlacingCastle = true;
+						FillTray();
+						
+						
+					}
 					
 				}
 				
 				
-			}
-			
-			else{
+				if(isPlacingCastle){
+					//press to finish castle placement and move on to unit placement
+					if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
+						//checks if the castle placement is within the bounds of the board before moving on
+						if(isValidCastlePlacement(lastCastleSelected)){
+							
+							f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+							c.occupiedTile.isOccupied = false;
+							c.occupiedTile = null;
+							
+							isPlacingCastle = false;
+							
+							//c.isSetup = false;
+							//c.SetUpCastleGreens(c.castleGreens);
+							//c.ReplaceOccupiedTile(c);
+							
+							
+							
+						}
+						
+						else{}
+						
+						
+						
+						
+					}
+					
+					if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
+						
+						
+						RotateCastle(lastCastleSelected);
+						
+						
+						
+						
+					}
+
+
+				}
 				
-				if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {
+
+				
+				
+			}
+
+			else{
+
+				if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {	
 					
 					
 					//f_gameManager.SetUpBoard();
 					//StartCoroutine(f_gameManager.Game());
 					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 					c.isSetup = false;
+					player.isReady = true;
+					isSetUp = false;
 					
 					
-					isWhiteSetUp = false;
-					isPlacingCastle = true;
-					FillTray();
-					
+					//isWhiteSetUp = false;
+					//isPlacingCastle = true;
+					//FillTray();
 					
 				}
-				
-			}
-				
-		
-			if(isPlacingCastle){
-				//press to finish castle placement and move on to unit placement
-				if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
-					//checks if the castle placement is within the bounds of the board before moving on
-					if(isValidCastlePlacement(lastCastleSelected)){
-
-						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-						c.occupiedTile.isOccupied = false;
-						c.occupiedTile = null;
-
-						isPlacingCastle = false;
-					
-						//c.isSetup = false;
-						//c.SetUpCastleGreens(c.castleGreens);
-						//c.ReplaceOccupiedTile(c);
 
 
 
+
+
+
+				if(isPlacingCastle){
+					//press to finish castle placement and move on to unit placement
+					if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
+						//checks if the castle placement is within the bounds of the board before moving on
+						if(isValidCastlePlacement(lastCastleSelected)){
+							
+							f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+							c.occupiedTile.isOccupied = false;
+							c.occupiedTile = null;
+							
+							isPlacingCastle = false;
+							
+							//c.isSetup = false;
+							//c.SetUpCastleGreens(c.castleGreens);
+							//c.ReplaceOccupiedTile(c);
+							
+							
+							
+						}
+						
+						else{}
+						
+						
+						
+						
 					}
-
-					else{}
 					
+					if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
+						
+						
+						RotateCastle(lastCastleSelected);
 
+						
+						
+					}
 					
 					
 				}
-				
-				if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
-					
-					
-					RotateCastle(lastCastleSelected);
-					
-					
-					
-					
-				}
-				
-				
-				
+
 			}
-
-		
-
-			///create a tray that holds pieces for placement on the map.
-
-			//GUI.Box(tray, "");
-
-
-		
-
-
-
 
 		}
 
+		if (player.isReady && !f_gameManager.gameOn) {
+				
+			GUI.TextField(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 150, 25), "Player is ready!");
+		
+		
+		}
 	
 	}
 
 
 
-	void Awake () {
 
+
+
+
+
+	public void InitiateSetup(){
+
+		
+		player = FindObjectOfType<Player> ();
+		playerCamera = player.gameObject.GetComponent<Camera> ();
+		//Debug.Log (player);
+		
+		if (player.isWhite) {
+			
+			isWhiteSetUp = true;
+			
+		}
+		
+		else{
+			
+			isWhiteSetUp = false;
+			
+		}
+		
+		Debug.Log ("iswhite: " + player.isWhite);
+		
 		isSetUp = true;
 		isPlacingCastle = true;
-		isWhiteSetUp = true;
+		FindNetworkManager ();
+		if (isOffline) {
+				
+			f_gameManager.isOffline = true;
+		
+		}
+
+		else{
+
+			f_gameManager.isOffline = false;
+
+		}
+		//isWhiteSetUp = true;
 		selectedObject = emptyObject;
 		CreateTray(trayObject);
 		FillTray();
+		
+	
+	
+	}
+
+
+
+
+
+
+	void Awake () {
+
+		isSetUp = false;
+
+		if (isOffline) {
+				
+			InitiateSetup();
+		
+		}
+
+
+		/*player = FindObjectOfType<Player> ();
+		playerCamera = player.gameObject.GetComponent<Camera> ();
+		Debug.Log (player);
+
+		if (player.isWhite) {
+				
+			isWhiteSetUp = true;
+		
+		}
+
+		else{
+
+			isWhiteSetUp = false;
+
+		}
+
+		Debug.Log ("iswhite: " + player.isWhite);
+
+		isSetUp = true;
+		isPlacingCastle = true;
+		//isWhiteSetUp = true;
+		selectedObject = emptyObject;
+		CreateTray(trayObject);
+		FillTray();*/
 		
 	
 	}

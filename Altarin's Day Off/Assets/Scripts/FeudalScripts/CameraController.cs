@@ -87,7 +87,7 @@ public class CameraController : MonoBehaviour {
 
 
 	
-	void Awake(){
+	void Start(){
 
 		thisCamera = gameObject.GetComponent<Camera> ();
 		height = origin.position.y + borderHeight;

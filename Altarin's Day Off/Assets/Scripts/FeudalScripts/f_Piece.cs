@@ -71,13 +71,31 @@ public abstract class f_Piece : MonoBehaviour {
 
 			HighlightMovementTiles(MovementTiles, false);
 
-			occupiedTile.isOccupied = false;
-			f_gameManager.coordinates[x,y] = 0;
+			if(f_gameManager.isOffline){
 
-			transform.position = tile.transform.position;
-			occupiedTile = tile;
-			occupiedTile.isOccupied = true;
-			UpdateCoordinates(tile.x, tile.y);
+				occupiedTile.isOccupied = false;
+				f_gameManager.coordinates[x,y] = 0;
+				
+				transform.position = tile.transform.position;
+				occupiedTile = tile;
+				occupiedTile.isOccupied = true;
+				UpdateCoordinates(tile.x, tile.y);
+
+			}
+
+			else{
+
+				occupiedTile = tile;
+				occupiedTile.isOccupied = true;
+				f_gameManager.UpdateCoordinates(x, y, tile.x, tile.y, pieceDesignator);
+				x = tile.x;
+				y = tile.y;
+
+
+			}
+
+
+
 			f_gameManager.selectedPiece.turnTurner = true;
 
 			f_gameManager.selectedPiece = f_gameManager.emptyPiece;
@@ -99,12 +117,26 @@ public abstract class f_Piece : MonoBehaviour {
 			HighlightMovementTiles(MovementTiles, false);
 
 			transform.position = piece.transform.position;
+
+			if(f_gameManager.isOffline){
+
+				occupiedTile.isOccupied = false;
+				occupiedTile = piece.occupiedTile;
+				occupiedTile.isOccupied = true;
+				UpdateCoordinates(piece.x, piece.y);
+				DestroyTargetPiece(piece);
 			
-			occupiedTile.isOccupied = false;
-			occupiedTile = piece.occupiedTile;
-			occupiedTile.isOccupied = true;
-			UpdateCoordinates(piece.x, piece.y);
-			DestroyTargetPiece(piece);
+			}
+
+			else{
+				occupiedTile = piece.occupiedTile;
+				f_gameManager.UpdateCoordinates(x, y, piece.x, piece.y, pieceDesignator);
+				x = piece.x;
+				y = piece.y;
+				PhotonNetwork.Destroy(piece.gameObject);
+			}
+			
+		
 			//f_gameManager.selectedPiece.MovementTiles.Clear ();
 			f_gameManager.selectedPiece.turnTurner = true;
 			
@@ -333,7 +365,6 @@ public abstract class f_Piece : MonoBehaviour {
 								}
 								//allow any piece on the castle greens to take the piece occupying the castle
 								else if ((this.occupiedTile.tileType == 5) && (f_gameManager.selectedPiece.occupiedTile.tileType != 4)){
-									
 									//checks if the selected piece is an archer, and if so allows the target to be taken without moving
 									if(f_gameManager.selectedPiece.pieceDesignator == 5 || f_gameManager.selectedPiece.pieceDesignator == 13){
 										Debug.Log(f_gameManager.selectedPiece + " has taken " + this);

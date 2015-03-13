@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class f_GameManager : MonoBehaviour {
+public class f_GameManager : Photon.MonoBehaviour {
 
 	
 	public f_Piece selectedPiece;
@@ -29,6 +29,7 @@ public class f_GameManager : MonoBehaviour {
 	public bool toggleTileGUI;
 
 	public bool gameOn;
+	public bool isOffline;
 
 	public void SetUpBoard(){
 
@@ -360,6 +361,28 @@ public class f_GameManager : MonoBehaviour {
 	
 	}
 
+	[RPC]
+	public void UpdateCoordinates(int oldX, int oldY, int newX, int newY, int pieceID){
+		
+		coordinates[oldX, oldY] = 0;
+		f_Tile t = tileCoordinates [oldX, oldY].GetComponent<f_Tile> ();
+		t.isOccupied = false;
+		
+		coordinates[newX, newY] = pieceID;
+		if (pieceID != 0) {
+				
+			t = tileCoordinates [oldX, oldY].GetComponent<f_Tile> ();
+			t.isOccupied = true;
+		
+		}
+
+		if (photonView.isMine) {
+				
+			photonView.RPC("UpdateCoordinates", PhotonTargets.All, oldX, oldY, newX, newY, pieceID);
+		
+		}
+
+	}
 
 
 
@@ -458,7 +481,74 @@ public class f_GameManager : MonoBehaviour {
 		}
 
 	}
+
+
+	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info){
+
+		if (stream.isWriting == true) {
+
+			stream.SendNext(isGameOver);
+			stream.SendNext(didWhiteWin);
+			stream.SendNext(isPlayer1Turn);
+			stream.SendNext(gameOn);
+
+		
+		
+		}
+
+		else{
+
+			isGameOver = (bool)stream.ReceiveNext();
+			didWhiteWin = (bool)stream.ReceiveNext();
+			isPlayer1Turn = (bool)stream.ReceiveNext();
+			gameOn = (bool)stream.ReceiveNext();
+
+		}
 	
+	
+	}
+
+
+	Player[] players;
+	
+	void ArePlayersReady(){
+
+		int[] playersReady = new int[players.Length];
+		
+		for (int i = 0; i < players.Length; i++) {
+
+			if(players[i].isReady){
+
+				playersReady[i] = 1;
+
+
+			}
+		
+		}
+
+		int readyTotal = 0;
+
+
+		for (int i = 0; i < playersReady.Length; i++) {
+				
+			readyTotal += playersReady[i];
+
+		}
+
+		if (readyTotal == players.Length) {
+				
+			gameOn = true;
+			SetUpBoard();
+		
+		}
+    
+	}
+
+
+
+
+
+
 
 	void Awake () {
 		
@@ -485,6 +575,11 @@ public class f_GameManager : MonoBehaviour {
 		isTurnPassed = false;
 		gameOn = false;
 
+		players = FindObjectsOfType<Player> ();
+		Debug.Log ("Player " + players[0].playerNumber);
+		Debug.Log ("Player " + players [1].playerNumber);
+		//FindNetworkManager ();
+
 		//toggleTileGUI = false;
 		
 		//SetUpBoard();
@@ -497,7 +592,13 @@ public class f_GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (!gameOn) {
+				
+			ArePlayersReady();
 		
+		
+		}
 		//selectedPiece.occupiedTile.gameObject.transform.renderer.material.color = Color.red;
 	
 		

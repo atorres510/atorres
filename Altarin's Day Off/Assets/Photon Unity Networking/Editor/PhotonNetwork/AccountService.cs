@@ -90,7 +90,7 @@ public class AccountService
     /// <param name="email">Email of the account.</param>
     /// <param name="origin">Marks which channel created the new account (if it's new).</param>
     /// <param name="callback">Called when the result is available.</param>
-    public void RegisterByEmailAsync(string email, Origin origin, Action<AccountService> callback = null)
+    public void RegisterByEmailAsync(string email, Origin origin, Action<AccountService> callback)
     {
         this.registrationCallback = callback;
         this.AppId = string.Empty;
