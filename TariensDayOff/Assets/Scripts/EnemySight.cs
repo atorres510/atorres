@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class EnemySight : MonoBehaviour {
 
 
+	//enemySight relays information to the enemy patrol about the player when entering the field of view
+
 	public float fieldOfView = 110f;
 	public float suspiciousPatrolSpeed;
 	public float suspiciousRotationSpeed;
@@ -17,7 +19,7 @@ public class EnemySight : MonoBehaviour {
 	private GameObject player;
 	private Transform playerLastTransform;
 	private Vector3 playerLastPosition;
-	private EnemyBehaviour enemyBehaviour;
+	//private EnemyBehaviour enemyBehaviour;
 	private EnemyPatrol enemyPatrol;
 
 	private bool playerInSight;
@@ -25,11 +27,17 @@ public class EnemySight : MonoBehaviour {
 	private bool questionMarkInstantiated;
 	private bool exclamationMarkInstantiated;
 
+	private GameObject gameManagerObject;
+	private GameManager gameManager;
+
 
 	void Awake(){
 
+		gameManagerObject = GameObject.FindGameObjectWithTag ("GameManager");
+		gameManager = gameManagerObject.GetComponent<GameManager> ();
+
 		col = GetComponent<PolygonCollider2D>();
-		enemyBehaviour = GetComponent<EnemyBehaviour> ();
+		//enemyBehaviour = GetComponent<EnemyBehaviour> ();
 		enemyPatrol = GetComponent<EnemyPatrol> ();
 		player = GameObject.FindGameObjectWithTag ("Player");
 		//Debug.Log (player);
@@ -95,6 +103,8 @@ public class EnemySight : MonoBehaviour {
 
 						if(!exclamationMarkInstantiated){
 							StartCoroutine(renderExclamationMark());
+							gameManager.GameOver();
+							
 						}
 					}
 

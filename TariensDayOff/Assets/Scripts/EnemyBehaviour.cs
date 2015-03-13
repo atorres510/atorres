@@ -3,6 +3,13 @@ using System.Collections;
 
 public class EnemyBehaviour : MonoBehaviour {
 
+
+	//This script has been retired and is replaced by EnemyPatrol and EnemySight
+
+
+
+
+
 	GameObject gameObjectManager;
 	GameManager gameManager;
 

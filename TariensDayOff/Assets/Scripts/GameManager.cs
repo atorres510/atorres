@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//Condition if player touches an enemy
-	void GameOver(){
+	public void GameOver(){
 
 		if (!gameWon) {
 

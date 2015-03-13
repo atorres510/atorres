@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class EnemyPatrol : MonoBehaviour {
 
+	//this script deals with enemy movement, patrols, and player tracking.
 
 	//Public control of Enemy patrolling speeds.
 	public float patrolSpeed;
@@ -21,7 +22,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 	//Holds a list of waypoints for a patrol
 	public List<Transform> waypoints = new List<Transform>();
-
+	List<Transform> playerLastPositions = new List<Transform>();
 
 	
 	void Start () {
@@ -84,12 +85,6 @@ public class EnemyPatrol : MonoBehaviour {
 	//Combines LookAt and MoveTo so the enemy looks then moves to a specified waypoint.
 	IEnumerator Patrol(int i){
 
-		/*for (i = 0; i < waypoints.Count; i++) {
-			i = currentWaypoint; //probably want to make this a property.
-			yield return StartCoroutine (LookAt (waypoints[i]));
-			yield return StartCoroutine (MoveTo (waypoints[i]));
-
-			}*/
 
 		for (i = currentWaypoint; i < waypoints.Count; i++) {
 		//	Debug.Log ("patrolling on waypoint " + i);
@@ -105,7 +100,7 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 
-	void InteruptPatrol(){
+	public void InteruptPatrol(){
 		StopAllCoroutines ();
 
 	//	Debug.Log ("Interupting Patrol");
@@ -113,8 +108,10 @@ public class EnemyPatrol : MonoBehaviour {
 	
 	}
 
+
+
 	//used in Update to constantly check if patrol needs resetting
-	void RestartPatrol(){
+	public void RestartPatrol(){
 
 		if (donePatrolling) {
 
@@ -135,10 +132,10 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 	
-	void ContinuePatrol(bool suspicious){
+	public void ContinuePatrol(bool suspicious){
 
 		if (!suspicious) {
-			
+
 			if(isPatrollingGuard){
 				StartCoroutine (Patrol (currentWaypoint));
 			}
