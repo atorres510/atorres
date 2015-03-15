@@ -11,6 +11,7 @@ public class EnemySight : MonoBehaviour {
 
 	public GameObject questionmarkPrefab;
 	public GameObject exclamationmarkPrefab;
+	private GameObject questionmarkInstance;
 
 	private Collider2D col;
 	private GameObject player;
@@ -63,7 +64,7 @@ public class EnemySight : MonoBehaviour {
 							}
 								
 							//Debug.Log ("Enemy is Suspicious");
-							enemyPatrol.SendMessage("InteruptPatrol", SendMessageOptions.DontRequireReceiver);
+							enemyPatrol.StopAllCoroutines();
 							suspicious = true;
 							StartCoroutine(enemyPatrol.TrackLastPosition(player));
 							suspicious = enemyPatrol.ReturnSuspicion();
@@ -73,12 +74,15 @@ public class EnemySight : MonoBehaviour {
 
 							playerInSight = true;
 							//Debug.Log(playerInSight);
-							StopAllCoroutines();
+							//StopAllCoroutines();
 							enemyPatrol.StopAllCoroutines();
 
 							if(!questionMarkInstantiated){
 								StartCoroutine(renderQuestionMark());
 							}
+
+
+
 							suspicious = true;
 							StartCoroutine(enemyPatrol.TrackLastPosition(player));
 							suspicious = enemyPatrol.ReturnSuspicion();
@@ -121,7 +125,7 @@ public class EnemySight : MonoBehaviour {
 
 		//Debug.Log ("instantiating");
 		questionMarkInstantiated = true;
-		GameObject questionmarkInstance;
+		//GameObject questionmarkInstance;
 		Vector3 questionMarkPosition = new Vector3 (transform.position.x, (transform.position.y + 1.5f), -1f);
 		questionmarkInstance = Instantiate (questionmarkPrefab, questionMarkPosition, questionmarkPrefab.transform.rotation) as GameObject;
 
@@ -156,6 +160,15 @@ public class EnemySight : MonoBehaviour {
 		
 		
 		
+	}
+
+
+
+	void Update(){
+
+
+
+
 	}
 	
 

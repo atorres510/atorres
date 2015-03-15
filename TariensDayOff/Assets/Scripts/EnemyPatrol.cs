@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,7 +16,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 	private float step; // patrollSpeed * deltatime for smoother movement
 	private bool moving; //Dunno what this was for.
-	private int currentWaypoint;
+	private int currentWaypoint; //holds the value of the next waypoint in the list for the patrol.  allows for enemies to continue the patrol without restarting if interupted by TrackLastPosition
 	private bool donePatrolling; //to check if a patrol is finished so the patrol can reset
 
 	private bool suspicious;
@@ -26,11 +26,12 @@ public class EnemyPatrol : MonoBehaviour {
 	public float secondsUntilDetection;
 	private Transform playerLastTransform;
 	private Vector3 playerLastPosition;
+	private int currentPosition; //identical to the functionality of currenwaypoint, but used instead for the enemyLast position list
 	
 
 	//Holds a list of waypoints for a patrol
 	public List<Transform> waypoints = new List<Transform>();
-	List<Transform> playerLastPositions = new List<Transform>();
+	List<Vector3> enemyLastPositions = new List<Vector3>();
 
 	
 	void Start () {
@@ -63,7 +64,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 	
 	//Rotates about Z axis to look at a specificed target
-	IEnumerator LookAt(Transform target, float rotationSpeed){
+	IEnumerator LookAt(Transform target, float rotSpeed){
 		
 		//Determines magnitude of angle between target and self
 		Vector3 targetDir = target.position - transform.position;
@@ -81,7 +82,7 @@ public class EnemyPatrol : MonoBehaviour {
 		//if the target is to the right
 		if (degAngle > 0) {
 			while (angle > 5f) {
-				transform.Rotate(-Vector3.forward, rotationSpeed*Time.deltaTime);
+				transform.Rotate(-Vector3.forward, rotSpeed*Time.deltaTime);
 				forward = -transform.right;
 				//relative = transform.InverseTransformPoint (target.position);
 				angle = Vector3.Angle (targetDir, forward);
@@ -95,7 +96,53 @@ public class EnemyPatrol : MonoBehaviour {
 		//if the target is to the left
 		else if (degAngle < 0) {
 			while (angle > 5f) {
-				transform.Rotate(Vector3.forward, rotationSpeed*Time.deltaTime);
+				transform.Rotate(Vector3.forward, rotSpeed*Time.deltaTime);
+				forward = -transform.right;
+				//relative = transform.InverseTransformPoint (target.position);
+				angle = Vector3.Angle (targetDir, forward);
+				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
+				//Debug.Log("I'm looking left!");
+				//Debug.Log (angle);
+				yield return null;
+			}
+		}
+		
+	}
+
+	IEnumerator LookAt(Vector3 target, float rotSpeed){
+		
+		//Determines magnitude of angle between target and self
+		Vector3 targetDir = target - transform.position;
+		Vector3 forward = -transform.right;
+		float angle = Vector3.Angle (targetDir, forward);
+		
+		//determines left or right handedness of angle
+		Vector3 relative = transform.InverseTransformPoint (target);
+		float degAngle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
+		
+		
+		//Debug.Log (angle);
+		Debug.Log (degAngle);
+		
+		//if the target is to the right
+		if (degAngle > 0) {
+			while (angle > 5f) {
+				transform.Rotate(-Vector3.forward, rotSpeed*Time.deltaTime);
+				forward = -transform.right;
+				//relative = transform.InverseTransformPoint (target.position);
+				angle = Vector3.Angle (targetDir, forward);
+				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
+				//Debug.Log ("I'm looking right!");
+				//Debug.Log (angle);
+				yield return null;
+			}
+		}
+
+		
+		//if the target is to the left
+		else if (degAngle < 0) {
+			while (angle > 5f) {
+				transform.Rotate(Vector3.forward, rotSpeed*Time.deltaTime);
 				forward = -transform.right;
 				//relative = transform.InverseTransformPoint (target.position);
 				angle = Vector3.Angle (targetDir, forward);
@@ -157,16 +204,46 @@ public class EnemyPatrol : MonoBehaviour {
 
 	}
 
+	//used to track the last positions of the player backward such that the patrolling guard can return to its original patrol without crashing into walls.
+	IEnumerator ReturnToPatrol(int i, List<Vector3> positions){
+		
+		
+		for (i = (currentPosition); i > 0; i--) {
+			//	Debug.Log ("patrolling on waypoint " + i);
+			//probably want to make this a property.
+			int j = i - 1;
+			//Debug.Log(j);
+			//Debug.Log(positions[j]);
+			//yield return StartCoroutine (LookAt (positions[j], rotationSpeed));
+			yield return StartCoroutine (MoveTo (positions[j], patrolSpeed));
+
+
+		}
+		Debug.Log ("Returned to original patrol.");
+		//donePatrolling = true;
+		positions.Clear ();
+		
+	}
+
+
+
+
+
+
 	public IEnumerator TrackLastPosition(GameObject player){
 
 		suspicious = true;
 		
 		StopCoroutine ("LookAt");
 		StopCoroutine ("MoveTo");
+		StopCoroutine ("ContinuePatrol");
 		
 		
 		playerLastPosition = player.transform.position;
 		playerLastTransform = player.transform;
+		enemyLastPositions.Add (transform.position);
+
+
 		
 		Debug.Log ("Player's Last Position: " + playerLastPosition);
 		
@@ -179,10 +256,11 @@ public class EnemyPatrol : MonoBehaviour {
 		
 		suspicious = false;
 		
-		ContinuePatrol (suspicious);
+		StartCoroutine(ContinuePatrol (suspicious));
 	
 		
 	}
+
 
 
 	//used in Update to constantly check if patrol needs resetting
@@ -206,19 +284,30 @@ public class EnemyPatrol : MonoBehaviour {
 		} 
 	}
 
-	
-	public void ContinuePatrol(bool suspicious){
+
+
+
+
+	IEnumerator ContinuePatrol(bool suspicious){
 
 		if (!suspicious) {
 
 			if(isPatrollingGuard){
-				StartCoroutine (Patrol (currentWaypoint, waypoints));
+				currentPosition = enemyLastPositions.Count;
+				//Debug.Log("Current Position " + currentPosition);
+				yield return StartCoroutine(ReturnToPatrol(currentPosition, enemyLastPositions));
+				yield return StartCoroutine (Patrol (currentWaypoint, waypoints));
+				Debug.Log("patrol");
 			}
 			
 			else{
 				StartCoroutine (StationaryPosition(0));
 			}
+
+			yield return null;
 		}
+
+		yield return null;
 		
 		
 	}
