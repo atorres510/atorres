@@ -159,7 +159,7 @@ public class EnemyPatrol : MonoBehaviour {
 	IEnumerator MoveTo(Transform target, float speed){
 		
 		//Debug.Log ("Following target");
-		
+		Debug.Log ("moveto 1");
 		Vector3 targetPosition = target.position;
 		
 		
@@ -172,13 +172,15 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 
+
+
 	//Moves to a specified target
 	IEnumerator MoveTo(Vector3 target, float speed){
 		
 		//Debug.Log ("Following target");
 
 		//Vector3 targetPosition = target.position;
-
+		Debug.Log ("move to 2");
 
 		while ((transform.position - target).sqrMagnitude > 0.3f) {
 			transform.position = Vector3.MoveTowards(transform.position, target, (speed * Time.deltaTime));
@@ -234,11 +236,10 @@ public class EnemyPatrol : MonoBehaviour {
 
 		suspicious = true;
 		
-		StopCoroutine ("LookAt");
-		StopCoroutine ("MoveTo");
-		StopCoroutine ("ContinuePatrol");
-		
-		
+		StopAllCoroutines ();
+
+
+
 		playerLastPosition = player.transform.position;
 		playerLastTransform = player.transform;
 		enemyLastPositions.Add (transform.position);
