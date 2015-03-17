@@ -97,30 +97,30 @@ public class EnemyPatrol : MonoBehaviour {
 		//determines left or right handedness of angle
 		Vector3 relative = transform.InverseTransformPoint (target);
 		float degAngle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
-		
-		
-		//Debug.Log (angle);
-		//Debug.Log (degAngle);
+
+		Debug.Log (target);
+		//Debug.Log ("Angle: " + angle);
+		//.Log ("DegAngle" + degAngle);
 		
 		//if the target is to the right
 		if (degAngle > 0) {
-			while (angle > 5f) {
+			while (angle > 1f) {
 				StopCoroutine("LookAt");
 				transform.Rotate(-Vector3.forward, rotSpeed*Time.deltaTime);
 				forward = -transform.right;
-				//relative = transform.InverseTransformPoint (target.position);
 				angle = Vector3.Angle (targetDir, forward);
-				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
+
+				Debug.Log(angle);
 				//Debug.Log ("I'm looking right!");
-				//Debug.Log (angle);
+
 				yield return null;
 			}
 		}
 
-		
+
 		//if the target is to the left
 		else if (degAngle < 0) {
-			while (angle > 5f) {
+			while (angle > 1f) {
 				StopCoroutine("LookAt");
 				transform.Rotate(Vector3.forward, rotSpeed*Time.deltaTime);
 				forward = -transform.right;
@@ -128,9 +128,13 @@ public class EnemyPatrol : MonoBehaviour {
 				angle = Vector3.Angle (targetDir, forward);
 				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
 				//Debug.Log("I'm looking left!");
-				//Debug.Log (angle);
+				Debug.Log (angle);
 				yield return null;
 			}
+		}
+
+		else{
+			yield return null;
 		}
 		
 	}
@@ -141,7 +145,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 		StopCoroutine ("MoveTo");
 
-		Debug.Log ("move to 1");
+		//Debug.Log ("move to 1");
 
 		while ((transform.position - target).sqrMagnitude > 0.3f) {
 			StopCoroutine("MoveTo");
@@ -157,7 +161,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 		yield return StartCoroutine (LookAt (target, rotSpeed));
 
-		Debug.Log ("move to 2");
+		//Debug.Log ("move to 2");
 		
 		while ((transform.position - target).sqrMagnitude > 0.3f) {
 			StopCoroutine ("MoveTo");
@@ -176,7 +180,7 @@ public class EnemyPatrol : MonoBehaviour {
 			yield return StartCoroutine (LookAt (target, rotSpeed));
 			yield return new WaitForSeconds(waitTimeinSeconds);
 			
-			Debug.Log ("move to 2");
+			//Debug.Log ("move to 3");
 			
 			while ((transform.position - target).sqrMagnitude > 0.3f) {
 				StopCoroutine ("MoveTo");
@@ -192,7 +196,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 			yield return StartCoroutine (LookAt (target, rotSpeed));
 			
-			Debug.Log ("move to 2");
+			//Debug.Log ("move to 3");
 			
 			while ((transform.position - target).sqrMagnitude > 0.3f) {
 				StopCoroutine ("MoveTo");

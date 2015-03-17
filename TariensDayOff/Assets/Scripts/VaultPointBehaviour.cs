@@ -6,6 +6,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 	public BoxCollider2D vaultpointBoxCollider2D;
 	public Transform waypointA;
 	public Transform waypointB;
+	public float vaultSpeed;
 
 	private GameObject player;
 	//private BoxCollider2D boxCollider2D;
@@ -29,7 +30,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 		if (other.gameObject == player && !isJumping) {
 			if(Input.GetKeyDown(KeyCode.Space)){
 				//Debug.Log(FindFurthestWaypoint(player.transform, waypointA, waypointB));
-				StartCoroutine(MovePlayer());
+				StartCoroutine(MovePlayer(vaultSpeed));
 
 
 
@@ -82,7 +83,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 		//pythagorean theorem
 		float z = Mathf.Sqrt ((x * x) + (y * y));
 	
-		Debug.Log (z);
+		//Debug.Log (z);
 		return z;
 
 	}
@@ -91,7 +92,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 
 
 
-	IEnumerator MovePlayer(){
+	IEnumerator MovePlayer(float speed){
 
 		if (!isJumping) {
 
@@ -106,7 +107,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 
 			while (FindDistance(targetWaypoint, player.transform) > 0.15f) {
 
-				player.transform.position = Vector3.Lerp (player.transform.position, newPosition, (Time.deltaTime * 2.5f)); 
+				player.transform.position = Vector3.Lerp (player.transform.position, newPosition, (Time.deltaTime * speed)); 
 				yield return null;
 				
 			}
@@ -123,6 +124,8 @@ public class VaultPointBehaviour : MonoBehaviour {
 			}
 
 		}
+
+
 
 		if (isJumping) {
 			StopCoroutine("PlayerJump");
