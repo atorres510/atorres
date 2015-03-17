@@ -65,6 +65,7 @@ public class EnemySight : MonoBehaviour {
 								
 							//Debug.Log ("Enemy is Suspicious");
 							enemyPatrol.StopAllCoroutines();
+							//enemyPatrol.StopCoroutine("TrackLastPosition");
 							suspicious = true;
 							StartCoroutine(enemyPatrol.TrackLastPosition(player));
 							suspicious = enemyPatrol.ReturnSuspicion();
@@ -76,7 +77,7 @@ public class EnemySight : MonoBehaviour {
 							//Debug.Log(playerInSight);
 							//StopAllCoroutines();
 							enemyPatrol.StopAllCoroutines();
-
+							//enemyPatrol.StopCoroutine("TrackLastPosition");
 							if(!questionMarkInstantiated){
 								StartCoroutine(renderQuestionMark());
 							}

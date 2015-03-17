@@ -19,7 +19,9 @@ public class EnemyPatrol : MonoBehaviour {
 	private int currentWaypoint; //holds the value of the next waypoint in the list for the patrol.  allows for enemies to continue the patrol without restarting if interupted by TrackLastPosition
 	private bool donePatrolling; //to check if a patrol is finished so the patrol can reset
 
-	private bool suspicious;
+	private bool isSuspicious;
+	private bool isTracking;
+	private int trackLastCoroutineCounter; // to count the number of coroutines currently in action. used to break any pre-existing coroutines; 
 	public float suspiciousPatrolSpeed;
 	public float suspiciousRotationSpeed;
 	public float secondsSuspicious;
@@ -30,7 +32,8 @@ public class EnemyPatrol : MonoBehaviour {
 	
 
 	//Holds a list of waypoints for a patrol
-	public List<Transform> waypoints = new List<Transform>();
+	public Transform[] waypoints;
+	List<Vector3> waypointPositions = new List<Vector3>();
 	List<Vector3> enemyLastPositions = new List<Vector3>();
 
 	
@@ -40,8 +43,9 @@ public class EnemyPatrol : MonoBehaviour {
 		donePatrolling = false;
 		currentWaypoint = 0;
 		playerLastPosition = new Vector3(0,0,0);
+		ConvertWaypointsToPositions (waypoints, waypointPositions);
 		if (isPatrollingGuard) {
-			StartCoroutine (Patrol (currentWaypoint, waypoints));
+			StartCoroutine (Patrol (currentWaypoint, waypointPositions));
 		} 
 		else {
 			StartCoroutine (StationaryPosition(currentWaypoint));
@@ -62,55 +66,29 @@ public class EnemyPatrol : MonoBehaviour {
 
 	//Member Functions of Patrol Behavior//
 
+
+	//conversts the public waypoint array into positions and adds each to a list - to be called in start()
+	void ConvertWaypointsToPositions(Transform[] waypointTransformArray, List<Vector3> positionsList){
+
+		for (int i = 0; i < waypointTransformArray.Length; i++) {
+				
+			Vector3 waypointposition = waypointTransformArray[i].position;
+
+			positionsList.Add(waypointposition);
+		
+		}
 	
-	//Rotates about Z axis to look at a specificed target
-	IEnumerator LookAt(Transform target, float rotSpeed){
-		
-		//Determines magnitude of angle between target and self
-		Vector3 targetDir = target.position - transform.position;
-		Vector3 forward = -transform.right;
-		float angle = Vector3.Angle (targetDir, forward);
-		
-		//determines left or right handedness of angle
-		Vector3 relative = transform.InverseTransformPoint (target.position);
-		float degAngle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
-		
-		
-		//Debug.Log (angle);
-		//Debug.Log (degAngle);
-		
-		//if the target is to the right
-		if (degAngle > 0) {
-			while (angle > 5f) {
-				transform.Rotate(-Vector3.forward, rotSpeed*Time.deltaTime);
-				forward = -transform.right;
-				//relative = transform.InverseTransformPoint (target.position);
-				angle = Vector3.Angle (targetDir, forward);
-				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
-				//Debug.Log ("I'm looking right!");
-				//Debug.Log (angle);
-				yield return null;
-			}
-		}
-		
-		//if the target is to the left
-		else if (degAngle < 0) {
-			while (angle > 5f) {
-				transform.Rotate(Vector3.forward, rotSpeed*Time.deltaTime);
-				forward = -transform.right;
-				//relative = transform.InverseTransformPoint (target.position);
-				angle = Vector3.Angle (targetDir, forward);
-				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
-				//Debug.Log("I'm looking left!");
-				//Debug.Log (angle);
-				yield return null;
-			}
-		}
-		
 	}
 
+
+
+	
+	//Rotates about Z axis to look at a specificed target - called in patrol and tracklastposition
+
 	IEnumerator LookAt(Vector3 target, float rotSpeed){
-		
+
+		StopCoroutine ("LookAt");
+
 		//Determines magnitude of angle between target and self
 		Vector3 targetDir = target - transform.position;
 		Vector3 forward = -transform.right;
@@ -122,11 +100,12 @@ public class EnemyPatrol : MonoBehaviour {
 		
 		
 		//Debug.Log (angle);
-		Debug.Log (degAngle);
+		//Debug.Log (degAngle);
 		
 		//if the target is to the right
 		if (degAngle > 0) {
 			while (angle > 5f) {
+				StopCoroutine("LookAt");
 				transform.Rotate(-Vector3.forward, rotSpeed*Time.deltaTime);
 				forward = -transform.right;
 				//relative = transform.InverseTransformPoint (target.position);
@@ -142,6 +121,7 @@ public class EnemyPatrol : MonoBehaviour {
 		//if the target is to the left
 		else if (degAngle < 0) {
 			while (angle > 5f) {
+				StopCoroutine("LookAt");
 				transform.Rotate(Vector3.forward, rotSpeed*Time.deltaTime);
 				forward = -transform.right;
 				//relative = transform.InverseTransformPoint (target.position);
@@ -156,48 +136,88 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 
-	IEnumerator MoveTo(Transform target, float speed){
-		
-		//Debug.Log ("Following target");
-		Debug.Log ("moveto 1");
-		Vector3 targetPosition = target.position;
-		
-		
-		while ((transform.position - targetPosition).sqrMagnitude > 0.3f) {
-			transform.position = Vector3.MoveTowards(transform.position, targetPosition, (speed * Time.deltaTime));
-			yield return null;
-		}
-	}
+	//Moves to a specified target position
+	IEnumerator MoveTo(Vector3 target, float moveSpeed){
 
+		StopCoroutine ("MoveTo");
 
-
-
-
-
-	//Moves to a specified target
-	IEnumerator MoveTo(Vector3 target, float speed){
-		
-		//Debug.Log ("Following target");
-
-		//Vector3 targetPosition = target.position;
-		Debug.Log ("move to 2");
+		Debug.Log ("move to 1");
 
 		while ((transform.position - target).sqrMagnitude > 0.3f) {
-			transform.position = Vector3.MoveTowards(transform.position, target, (speed * Time.deltaTime));
+			StopCoroutine("MoveTo");
+			transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
 			yield return null;
 		}
 	}
+
+	//overload that takes lookat() parameters and executes lookat() prior to its own code.  
+	IEnumerator MoveTo(Vector3 target, float moveSpeed, float rotSpeed){
+
+		StopCoroutine ("MoveTo");
+
+		yield return StartCoroutine (LookAt (target, rotSpeed));
+
+		Debug.Log ("move to 2");
+		
+		while ((transform.position - target).sqrMagnitude > 0.3f) {
+			StopCoroutine ("MoveTo");
+			transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
+			yield return null;
+		}
+	}
+
+
+	//overload that uses lookat() and moveto() in jxn with suspicion.  to be used in tracklastposition
+	IEnumerator MoveTo(Vector3 target, float moveSpeed, float rotSpeed, bool suspicion, float waitTimeinSeconds){
+
+
+		if (suspicion) {
+				
+			yield return StartCoroutine (LookAt (target, rotSpeed));
+			yield return new WaitForSeconds(waitTimeinSeconds);
+			
+			Debug.Log ("move to 2");
+			
+			while ((transform.position - target).sqrMagnitude > 0.3f) {
+				StopCoroutine ("MoveTo");
+				transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
+				yield return null;
+			}
+
+			yield return new WaitForSeconds(waitTimeinSeconds);
+
+		}
+
+		else{
+
+			yield return StartCoroutine (LookAt (target, rotSpeed));
+			
+			Debug.Log ("move to 2");
+			
+			while ((transform.position - target).sqrMagnitude > 0.3f) {
+				StopCoroutine ("MoveTo");
+				transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
+				yield return null;
+			}
+
+		}
+
+
+
+	}
+
+
 			
 
 	//Combines LookAt and MoveTo so the enemy looks then moves to a specified waypoint.
-	IEnumerator Patrol(int i, List<Transform> waypoints){
+	IEnumerator Patrol(int i, List<Vector3> waypoints){
 
 
 		for (i = currentWaypoint; i < waypoints.Count; i++) {
 		//	Debug.Log ("patrolling on waypoint " + i);
 			 //probably want to make this a property.
-			yield return StartCoroutine (LookAt (waypoints[i], rotationSpeed));
-			yield return StartCoroutine (MoveTo (waypoints[i], patrolSpeed));
+			//yield return StartCoroutine (LookAt (waypoints[i], rotationSpeed));
+			yield return StartCoroutine (MoveTo (waypoints[i], patrolSpeed, rotationSpeed));
 			currentWaypoint++;
 			
 		}
@@ -224,6 +244,8 @@ public class EnemyPatrol : MonoBehaviour {
 		Debug.Log ("Returned to original patrol.");
 		//donePatrolling = true;
 		positions.Clear ();
+
+		yield return StartCoroutine (Patrol (currentWaypoint, waypointPositions));
 		
 	}
 
@@ -234,34 +256,85 @@ public class EnemyPatrol : MonoBehaviour {
 
 	public IEnumerator TrackLastPosition(GameObject player){
 
-		suspicious = true;
-		
-		StopAllCoroutines ();
+
+		trackLastCoroutineCounter++;
+		Debug.Log ("Counter : " + trackLastCoroutineCounter);
+
+		isSuspicious = true;
+
+		StopCoroutine ("LookAt");
+		StopCoroutine ("MoveTo");
+		StopCoroutine ("Patrol");
+		StopCoroutine ("TrackLastPosition");
+		StopCoroutine ("ReturnToPatrol");
 
 
 
 		playerLastPosition = player.transform.position;
-		playerLastTransform = player.transform;
+		//playerLastTransform = player.transform;
 		enemyLastPositions.Add (transform.position);
-
 
 		
 		Debug.Log ("Player's Last Position: " + playerLastPosition);
+
+		yield return StartCoroutine (LookAt (playerLastPosition, suspiciousRotationSpeed));
+
+		//float secondsWaited = 0.0f;
+		/*while (secondsWaited <= secondsSuspicious) {
+				
+			yield return new WaitForSeconds(0.1f);
+			secondsWaited += 0.1f;
+			yield return 0;
 		
-		yield return StartCoroutine (LookAt (playerLastTransform, suspiciousRotationSpeed));
+		}*/
+		//secondsWaited = 0.0f;
+
+
 		yield return new WaitForSeconds (secondsSuspicious);
+
+		if (trackLastCoroutineCounter > 1) {
+				
+			trackLastCoroutineCounter--;
+			Debug.Log("Break. Counter : " + trackLastCoroutineCounter);
+			yield break;
+		
+		}
+
+		else{
+			trackLastCoroutineCounter--;
+		}
+
+
+
 		yield return StartCoroutine (MoveTo (playerLastPosition, suspiciousPatrolSpeed));
+
+		//Debug.Log(StartCoroutine(MoveTo(playerLastPosition, suspiciousPatrolSpeed));
+		Debug.Log(trackLastCoroutineCounter);
+
 		yield return new WaitForSeconds (secondsSuspicious);
 		
-		//Debug.Log ("I am not suspicious anymore");
+		Debug.Log ("I am not suspicious anymore");
 		
-		suspicious = false;
+		isSuspicious = false;
+
+		currentPosition = enemyLastPositions.Count;
+		//trackLastCoroutineCounter--;
+		if (trackLastCoroutineCounter == 0) {
+				
+			yield return StartCoroutine(ReturnToPatrol(currentWaypoint, enemyLastPositions));
 		
-		StartCoroutine(ContinuePatrol (suspicious));
+		}
+
+		else{
+			yield return null;
+		}
+
+
 	
 		
 	}
 
+	//used to see if more than one of a certain coroutine is active.  if so, a break is necessary for this coroutine.
 
 
 	//used in Update to constantly check if patrol needs resetting
@@ -273,15 +346,13 @@ public class EnemyPatrol : MonoBehaviour {
 			currentWaypoint = 0;
 
 			if(isPatrollingGuard){
-				StartCoroutine (Patrol (currentWaypoint, waypoints));
+				StartCoroutine (Patrol (currentWaypoint, waypointPositions));
 			}
 
 			else{
 				StartCoroutine (StationaryPosition(0));
 			}
 
-
-		
 		} 
 	}
 
@@ -289,15 +360,15 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 
-	IEnumerator ContinuePatrol(bool suspicious){
+	/*void ContinuePatrol(bool suspicious){
 
 		if (!suspicious) {
 
 			if(isPatrollingGuard){
 				currentPosition = enemyLastPositions.Count;
 				//Debug.Log("Current Position " + currentPosition);
-				yield return StartCoroutine(ReturnToPatrol(currentPosition, enemyLastPositions));
-				yield return StartCoroutine (Patrol (currentWaypoint, waypoints));
+				StartCoroutine(ReturnToPatrol(currentPosition, enemyLastPositions));
+				//yield return StartCoroutine (Patrol (currentWaypoint, waypointPositions));
 				Debug.Log("patrol");
 			}
 			
@@ -311,15 +382,15 @@ public class EnemyPatrol : MonoBehaviour {
 		yield return null;
 		
 		
-	}
+	}*/
 
 
 	IEnumerator StationaryPosition(int i){
 
-		yield return StartCoroutine (LookAt (waypoints [i], rotationSpeed));
-		yield return StartCoroutine (MoveTo (waypoints [i], patrolSpeed));
+		yield return StartCoroutine (LookAt (waypointPositions [i], rotationSpeed));
+		yield return StartCoroutine (MoveTo (waypointPositions [i], patrolSpeed));
 		i++;
-		yield return StartCoroutine (LookAt (waypoints [i], rotationSpeed));
+		yield return StartCoroutine (LookAt (waypointPositions [i], rotationSpeed));
 
 			}
 
@@ -336,7 +407,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 	public bool ReturnSuspicion(){
 
-		return suspicious;
+		return isSuspicious;
 
 	}
 
