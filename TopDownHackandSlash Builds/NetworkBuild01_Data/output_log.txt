@@ -1,0 +1,40 @@
+Initialize engine version: 4.6.1f1 (d1db7a1b5196)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: AMD Radeon R9 255 (ID=0x6835)
+    Vendor:   ATI
+    VRAM:     2026 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.242 seconds
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\TopDownHackandSlash Builds\NetworkBuild01_Data\Managed\System.dll (this message is harmless)
+Connect
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+OnJoinedLobby
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+OnPhotonRandomJoinFailed
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+OnJoinedRoom
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+

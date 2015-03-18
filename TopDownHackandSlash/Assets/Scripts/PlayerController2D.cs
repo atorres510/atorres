@@ -12,10 +12,6 @@ public class PlayerController2D : MonoBehaviour {
 
 
 
-	
-
-
-
 	public void TogglePlayerController(){
 		
 		//reference this component
@@ -33,7 +29,6 @@ public class PlayerController2D : MonoBehaviour {
 			thisPlayerController2D.enabled = true;
 			
 		}
-
 		
 		
 	}
