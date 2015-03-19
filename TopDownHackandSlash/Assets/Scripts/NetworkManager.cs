@@ -5,7 +5,7 @@ public class NetworkManager : MonoBehaviour {
 
 	public bool isOffline;
 
-	public GameObject playerPrefab;
+
 	
 	void Start () {
 		Connect ();
@@ -20,8 +20,7 @@ public class NetworkManager : MonoBehaviour {
 
 
 	}
-
-
+	
 
 	void OnGUI(){
 
@@ -37,6 +36,8 @@ public class NetworkManager : MonoBehaviour {
 
 
 	}
+
+
 
 	void OnPhotonRandomJoinFailed(){
 		Debug.Log ("OnPhotonRandomJoinFailed");

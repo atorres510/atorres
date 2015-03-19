@@ -9,18 +9,43 @@ public class PlayerController2D : MonoBehaviour {
 	public float playerSprintSpeed;
 
 	private float playerSpeed;
+	private int direction;
+
+
+	public int Direction{
+
+		get{
+			return direction;
+		}
+
+	}
+
+
+	void Start () {
+		
+		playerSpeed = playerWalkSpeed;
+		anim = GetComponent<Animator> ();
+		
+	}
+	
+	void Update () {
+		
+		PlayerController ();
+		
+	}
 
 
 
 	public void TogglePlayerController(){
 		
-		//reference this component
+		//references this component
 		PlayerController2D thisPlayerController2D = gameObject.GetComponent<PlayerController2D> ();
 
 		if (thisPlayerController2D.enabled == true) {
 			Debug.Log("Controller Disabled");
 			thisPlayerController2D.enabled = false;
 			anim.SetInteger("direction", 0);
+			direction = 0;
 
 		}
 
@@ -33,16 +58,19 @@ public class PlayerController2D : MonoBehaviour {
 		
 	}
 
+	//recieves player's input and moves this gameobject
 	void PlayerController(){//1-left 2-right 3-up 4-daaawown
 
 		//Player movement controled with WASD
 		if (Input.GetKey(KeyCode.W)){
 			rigidbody2D.transform.position += Vector3.up * playerSpeed * Time.fixedDeltaTime;
 			anim.SetInteger("direction", 3);
+			direction = 3;
 		}
 		if (Input.GetKey(KeyCode.S)){
 			rigidbody2D.transform.position += Vector3.down * playerSpeed * Time.deltaTime;
 			anim.SetInteger("direction", 4);
+			direction = 4;
 		}
 		if (Input.GetKey(KeyCode.A)){
 			rigidbody2D.transform.position += Vector3.left * playerSpeed * Time.deltaTime;
@@ -57,6 +85,7 @@ public class PlayerController2D : MonoBehaviour {
 		if (Input.GetKeyUp (KeyCode.W) || Input.GetKeyUp (KeyCode.S) || Input.GetKeyUp (KeyCode.A) || Input.GetKeyUp (KeyCode.D)) {
 				
 			anim.SetInteger("direction", 0);
+			direction = 0;
 		
 		}
 
@@ -72,18 +101,7 @@ public class PlayerController2D : MonoBehaviour {
 
 
 
-	void Start () {
-		
-		playerSpeed = playerWalkSpeed;
-		anim = GetComponent<Animator> ();
 
-	}
-	
-	void Update () {
-		
-		PlayerController ();
-		
-	}
 
 
 
