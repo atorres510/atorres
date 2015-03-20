@@ -15,12 +15,16 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 
 	private Vector3 correctPlayerPos;
 	private Quaternion correctPlayerRot;
-	private int correctDirection; //determines direction for animator recieved from other clients
+
+	//determines direction for animator recieved from other clients
+	private int correctDirection; 
+	private float correctAnimSpeed = 0.0f; 
 
 
 	void Start(){
 
 		anim = GetComponent<Animator> ();
+		anim.SetFloat ("speed", 0.0f);
 
 		if (photonView.isMine) {
 
@@ -40,6 +44,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, lastUpdateTime);
 			//updates animators on other clients about your current animation state
 			anim.SetInteger("direction", correctDirection);
+			anim.SetFloat("speed", correctAnimSpeed);
 
 			/*if(transform.position != this.correctPlayerPos){
 
@@ -64,6 +69,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			stream.SendNext(transform.position);
 			stream.SendNext(transform.rotation);
 			stream.SendNext(playerController.Direction);
+			stream.SendNext(playerController.AnimSpeed);
 
 		}
 
@@ -73,6 +79,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			this.correctPlayerPos = (Vector3) stream.ReceiveNext();
 			this.correctPlayerRot = (Quaternion) stream.ReceiveNext();
 			this.correctDirection = (int) stream.ReceiveNext();
+			this.correctAnimSpeed = (float) stream.ReceiveNext();
 
 		}
 
