@@ -28,7 +28,9 @@ public class Sword : Weapon {
 
 	}
 
-	
+
+
+
 
 	void Start(){
 
