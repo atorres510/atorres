@@ -97,17 +97,17 @@ public class PlayerController2D : MonoBehaviour {
 		}
 		if (Input.GetKey(KeyCode.A)){
 			rigidbody2D.transform.position += Vector3.left * playerSpeed * Time.deltaTime;
-			//anim.SetInteger("direction", 1);
-			//anim.SetFloat("speed", 1.0f);
-			//direction = 1;
-			//animSpeed = 1.0f;
+			anim.SetInteger("direction", 1);
+			anim.SetFloat("speed", 1.0f);
+			direction = 1;
+			animSpeed = 1.0f;
 		}
 		if (Input.GetKey(KeyCode.D)){
 			rigidbody2D.transform.position += Vector3.right * playerSpeed * Time.deltaTime;
-			//anim.SetInteger("direction", 2);
-			//anim.SetFloat("speed", 1.0f);
-			//direction = 2;
-			//animSpeed = 1.0f;
+			anim.SetInteger("direction", 2);
+			anim.SetFloat("speed", 1.0f);
+			direction = 2;
+			animSpeed = 1.0f;
 		}
 
 		//reset direction back to 0
