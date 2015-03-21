@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Inventory : MonoBehaviour {
 
+	public Weapon primaryWeapon;
+	public Weapon secondaryWeapon;
+
+
 	// Use this for initialization
 	void Start () {
 	
@@ -12,4 +16,15 @@ public class Inventory : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+
+
+
+
+
+
+
+
 }
+

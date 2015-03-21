@@ -34,15 +34,15 @@ public class Sword : Weapon {
 
 	void Start(){
 
-		anim = GetComponent<Animator> ();
-		setAnimInteger = 0;
+		//anim = GetComponent<Animator> ();
+		//setAnimInteger = 0;
 
 
 	}
 
 	void Update(){
 
-		Attack ();
+		//Attack ();
 
 
 	}

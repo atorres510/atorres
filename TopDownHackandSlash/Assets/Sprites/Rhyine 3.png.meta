@@ -52,8 +52,8 @@ TextureImporter:
         y: 106
         width: 17
         height: 22
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .5, y: .649999976}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Rhyine 3_1
       rect:
@@ -62,8 +62,8 @@ TextureImporter:
         y: 106
         width: 17
         height: 22
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .5, y: .649999976}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

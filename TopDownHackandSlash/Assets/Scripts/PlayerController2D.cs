@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController2D : MonoBehaviour {
 
 	Animator anim;
+	Inventory inv;
 
 	public float playerWalkSpeed;
 	public float playerSprintSpeed;
@@ -13,7 +14,10 @@ public class PlayerController2D : MonoBehaviour {
 	private int direction;
 	private float animSpeed;
 
+	public bool primaryAnimComplete;
 
+
+	
 	public int Direction{
 
 		get{
@@ -27,6 +31,7 @@ public class PlayerController2D : MonoBehaviour {
 		get{
 			return animSpeed;
 		}
+
 
 
 	}
@@ -62,9 +67,9 @@ public class PlayerController2D : MonoBehaviour {
 			Debug.Log("Controller Disabled");
 			thisPlayerController2D.enabled = false;
 			anim.SetInteger("direction", 0);
-			anim.SetFloat("speed", 1.0f);
+			anim.SetFloat("speed", 0.0f);
 			direction = 0;
-			animSpeed = 1.0f;
+			animSpeed = 0.0f;
 
 		}
 
@@ -79,6 +84,11 @@ public class PlayerController2D : MonoBehaviour {
 
 	//recieves player's input and moves this gameobject
 	void PlayerController(){//0-idle 1-left 2-right 3-up 4-daaawown
+
+		//anim.SetInteger("direction", direction);
+		//anim.SetFloat("speed", animSpeed);
+		
+
 
 		//Player movement controled with WASD
 		if (Input.GetKey(KeyCode.W)){
@@ -128,7 +138,40 @@ public class PlayerController2D : MonoBehaviour {
 			playerSpeed = playerWalkSpeed;
 		}
 
+
+
+		if (Input.GetMouseButtonDown (0)) {
+				
+
+			SwingPrimaryWeapon();
+		
+
+		
+		}
+
+		if (primaryAnimComplete) {
+
+			animSpeed = 0.0f;
+			anim.SetFloat("speed", 0.0f);
+			primaryAnimComplete = false;
+		
+		
+		
+		}
+
 	}
+
+
+	void SwingPrimaryWeapon(){
+
+		anim.SetFloat ("speed", 2.0f);
+		animSpeed = 2.0f;
+		Debug.Log ("swing");
+	
+
+
+	}
+
 
 
 
