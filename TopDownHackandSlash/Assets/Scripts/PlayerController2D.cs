@@ -3,7 +3,10 @@ using System.Collections;
 
 public class PlayerController2D : MonoBehaviour {
 
-	Animator anim;
+
+	//takes player input and delegates changes to the controller listener components of the child objects
+
+	//Animator anim;
 	Inventory inv;
 
 	public float playerWalkSpeed;
@@ -13,7 +16,9 @@ public class PlayerController2D : MonoBehaviour {
 	private float playerSpeed;
 	private int direction;
 	private float animSpeed;
+	private int attack;
 
+	private bool primaryAnimInitiated;
 	public bool primaryAnimComplete;
 
 
@@ -32,8 +37,13 @@ public class PlayerController2D : MonoBehaviour {
 			return animSpeed;
 		}
 
+	}
 
+	public int Attack{
 
+		get{
+			return attack;
+		}
 	}
 
 
@@ -42,13 +52,16 @@ public class PlayerController2D : MonoBehaviour {
 	void Start () {
 		
 		playerSpeed = playerWalkSpeed;
-		anim = GetComponent<Animator> ();
-		anim.SetFloat ("speed", 0.0f);
+		//anim = GetComponent<Animator> ();
+		//anim.SetFloat ("speed", 0.0f);
+		primaryAnimComplete = false;
+		primaryAnimInitiated = false;
 	
 	}
 	
 	void Update () {
-		
+		//Debug.Log ("Initiated: " + primaryAnimInitiated);
+		//Debug.Log ("Complete: " + primaryAnimComplete);
 		PlayerController ();
 	
 
@@ -66,8 +79,8 @@ public class PlayerController2D : MonoBehaviour {
 		if (thisPlayerController2D.enabled == true) {
 			Debug.Log("Controller Disabled");
 			thisPlayerController2D.enabled = false;
-			anim.SetInteger("direction", 0);
-			anim.SetFloat("speed", 0.0f);
+			//anim.SetInteger("direction", 0);
+			//anim.SetFloat("speed", 0.0f);
 			direction = 0;
 			animSpeed = 0.0f;
 
@@ -93,38 +106,58 @@ public class PlayerController2D : MonoBehaviour {
 		//Player movement controled with WASD
 		if (Input.GetKey(KeyCode.W)){
 			rigidbody2D.transform.position += Vector3.up * playerSpeed * Time.fixedDeltaTime;
-			anim.SetInteger("direction", 3);
-			anim.SetFloat("speed", 1.0f);
+			//anim.SetInteger("direction", 3);
+			//anim.SetFloat("speed", 1.0f);
 			direction = 3;
-			animSpeed = 1.0f;
+			if(attack == 1){
+
+			}
+			else{
+				animSpeed = 1.0f;
+			}
 		}
 		if (Input.GetKey(KeyCode.S)){
 			rigidbody2D.transform.position += Vector3.down * playerSpeed * Time.deltaTime;
-			anim.SetInteger("direction", 4);
-			anim.SetFloat("speed", 1.0f);
+			//anim.SetInteger("direction", 4);
+			//anim.SetFloat("speed", 1.0f);
 			direction = 4;
-			animSpeed = 1.0f;
+			if(attack == 1){
+				
+			}
+			else{
+				animSpeed = 1.0f;
+			}
 		}
 		if (Input.GetKey(KeyCode.A)){
 			rigidbody2D.transform.position += Vector3.left * playerSpeed * Time.deltaTime;
-			anim.SetInteger("direction", 1);
-			anim.SetFloat("speed", 1.0f);
+			//anim.SetInteger("direction", 1);
+			//anim.SetFloat("speed", 1.0f);
 			direction = 1;
-			animSpeed = 1.0f;
+			if(attack == 1){
+				
+			}
+			else{
+				animSpeed = 1.0f;
+			}
 		}
 		if (Input.GetKey(KeyCode.D)){
 			rigidbody2D.transform.position += Vector3.right * playerSpeed * Time.deltaTime;
-			anim.SetInteger("direction", 2);
-			anim.SetFloat("speed", 1.0f);
+			//anim.SetInteger("direction", 2);
+			//anim.SetFloat("speed", 1.0f);
 			direction = 2;
-			animSpeed = 1.0f;
+			if(attack == 1){
+				
+			}
+			else{
+				animSpeed = 1.0f;
+			}
 		}
 
 		//reset direction back to 0
 		if (Input.GetKeyUp (KeyCode.W) || Input.GetKeyUp (KeyCode.S) || Input.GetKeyUp (KeyCode.A) || Input.GetKeyUp (KeyCode.D)) {
 				
-			anim.SetInteger("direction", 0);
-			anim.SetFloat("speed", 0.0f);
+			//anim.SetInteger("direction", 0);
+			//anim.SetFloat("speed", 0.0f);
 			direction = 0;
 			animSpeed = 0.0f;
 		
@@ -143,17 +176,31 @@ public class PlayerController2D : MonoBehaviour {
 		if (Input.GetMouseButtonDown (0)) {
 				
 
-			SwingPrimaryWeapon();
+			UsePrimaryWeapon();
 		
 
 		
 		}
 
-		if (primaryAnimComplete) {
 
+		/*if (Input.GetMouseButtonUp (0)) {
+				
 			animSpeed = 0.0f;
-			anim.SetFloat("speed", 0.0f);
+			//anim.SetFloat("speed", 0.0f);
 			primaryAnimComplete = false;
+			primaryAnimInitiated = false;
+		
+		
+		}*/
+
+		if (primaryAnimComplete /*&& primaryAnimInitiated*/) {
+
+			Debug.Log("attack1 complete");
+			//animSpeed = 0.0f;
+			//anim.SetFloat("speed", 0.0f);
+			attack = 0;
+			primaryAnimComplete = false;
+			//primaryAnimInitiated = false;
 		
 		
 		
@@ -162,11 +209,15 @@ public class PlayerController2D : MonoBehaviour {
 	}
 
 
-	void SwingPrimaryWeapon(){
 
-		anim.SetFloat ("speed", 2.0f);
-		animSpeed = 2.0f;
-		Debug.Log ("swing");
+	
+	void UsePrimaryWeapon(){
+
+		//anim.SetFloat ("speed", 2.0f);
+		//animSpeed = 2.0f;
+		attack = 1;
+		Debug.Log ("attack1");
+		primaryAnimInitiated = true;
 	
 
 

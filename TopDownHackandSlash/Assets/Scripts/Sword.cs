@@ -6,7 +6,7 @@ public class Sword : Weapon {
 	Animator anim;
 
 	public int setAnimInteger;
-	public bool animCompleted;
+	public bool animCompleted; //used in animation
 
 
 	public override void Attack(){
@@ -23,7 +23,6 @@ public class Sword : Weapon {
 			setAnimInteger = 0;
 			animCompleted = false;
 		
-		
 		}
 
 	}
@@ -34,15 +33,15 @@ public class Sword : Weapon {
 
 	void Start(){
 
-		//anim = GetComponent<Animator> ();
-		//setAnimInteger = 0;
+		anim = GetComponent<Animator> ();
+		setAnimInteger = 0;
 
 
 	}
 
 	void Update(){
 
-		//Attack ();
+		Attack ();
 
 
 	}

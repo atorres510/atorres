@@ -8,6 +8,30 @@ TextureImporter:
     21300006: Rhyine 4_3
     21300008: Rhyine 4_4
     21300010: Rhyine 4_5
+    21300012: Rhyine 4_6
+    21300014: Rhyine 4_7
+    21300016: Rhyine 4_8
+    21300018: Rhyine 4_9
+    21300020: Rhyine 4_10
+    21300022: Rhyine 4_11
+    21300024: Rhyine 4_12
+    21300026: Rhyine 4_13
+    21300028: Rhyine 4_14
+    21300030: Rhyine 4_15
+    21300032: Rhyine 4_16
+    21300034: Rhyine 4_17
+    21300036: Rhyine 4_18
+    21300038: Rhyine 4_19
+    21300040: Rhyine 4_20
+    21300042: Rhyine 4_21
+    21300044: Rhyine 4_22
+    21300046: Rhyine 4_23
+    21300048: Rhyine 4_24
+    21300050: Rhyine 4_25
+    21300052: Rhyine 4_26
+    21300054: Rhyine 4_27
+    21300056: Rhyine 4_28
+    21300058: Rhyine 4_29
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -108,6 +132,246 @@ TextureImporter:
         height: 17
       alignment: 9
       pivot: {x: .714999974, y: .529999971}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_6
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 112
+        width: 5
+        height: 4
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_7
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 112
+        width: 5
+        height: 4
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_8
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 112
+        width: 5
+        height: 4
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_9
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 116
+        width: 9
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_10
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 116
+        width: 9
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_11
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 116
+        width: 9
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_12
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 100
+        width: 9
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_13
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 96
+        width: 5
+        height: 4
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_14
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 100
+        width: 9
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_15
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 96
+        width: 5
+        height: 4
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_16
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 101
+        width: 9
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_17
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 96
+        width: 5
+        height: 5
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_18
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 83
+        width: 8
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_19
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 80
+        width: 4
+        height: 3
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_20
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 83
+        width: 8
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_21
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 80
+        width: 6
+        height: 3
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_22
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 84
+        width: 8
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_23
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 80
+        width: 6
+        height: 4
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_24
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 67
+        width: 8
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_25
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 64
+        width: 4
+        height: 3
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_26
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 67
+        width: 8
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_27
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 64
+        width: 6
+        height: 3
+      alignment: 2
+      pivot: {x: .5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_28
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 67
+        width: 8
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rhyine 4_29
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 64
+        width: 6
+        height: 3
+      alignment: 2
+      pivot: {x: .5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
