@@ -22,6 +22,10 @@ public class PlayerController2D : MonoBehaviour {
 	public bool primaryAnimComplete;
 
 
+
+
+
+
 	
 	public int Direction{
 

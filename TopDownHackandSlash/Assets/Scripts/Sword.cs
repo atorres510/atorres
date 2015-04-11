@@ -9,6 +9,8 @@ public class Sword : Weapon {
 	public bool animCompleted; //used in animation
 
 
+
+	//tells Weapon Animator to start animation
 	public override void Attack(){
 
 		anim.SetInteger ("swing", setAnimInteger);

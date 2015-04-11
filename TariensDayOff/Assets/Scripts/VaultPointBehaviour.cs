@@ -23,8 +23,6 @@ public class VaultPointBehaviour : MonoBehaviour {
 	}
 
 
-
-
 	void OnTriggerStay2D(Collider2D other){
 
 		if (other.gameObject == player && !isJumping) {
