@@ -45,6 +45,12 @@ public class ControllerListener : MonoBehaviour {
 		anim.SetInteger ("direction", listenerDirection);
 		anim.SetFloat ("speed", listenerAnimSpeed);
 		anim.SetInteger ("attack", listenerAttack);
+
+		if(listenerDirection > 0){
+
+			anim.SetInteger ("lastDirection", listenerDirection);
+
+		}
 		
 	}
 }

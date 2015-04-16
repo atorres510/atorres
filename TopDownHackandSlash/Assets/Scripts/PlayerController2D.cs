@@ -199,7 +199,7 @@ public class PlayerController2D : MonoBehaviour {
 
 		if (primaryAnimComplete /*&& primaryAnimInitiated*/) {
 
-			Debug.Log("attack1 complete");
+			//Debug.Log("attack1 complete");
 			//animSpeed = 0.0f;
 			//anim.SetFloat("speed", 0.0f);
 			attack = 0;
@@ -214,13 +214,14 @@ public class PlayerController2D : MonoBehaviour {
 
 
 
-	
+
+
 	void UsePrimaryWeapon(){
 
 		//anim.SetFloat ("speed", 2.0f);
 		//animSpeed = 2.0f;
 		attack = 1;
-		Debug.Log ("attack1");
+		//Debug.Log ("attack1");
 		primaryAnimInitiated = true;
 	
 
