@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Sword : Weapon {
+public class MeleeWeapon : Weapon {
+
 
 
 	Animator anim;
@@ -9,6 +10,7 @@ public class Sword : Weapon {
 
 
 	//int swing;
+	public bool isAttacking;
 	public bool animCompleted; //used in animation
 
 	public float hitColliderWidth;
@@ -20,16 +22,18 @@ public class Sword : Weapon {
 
 	
 	//creates a collider for weapon/enemy interaction with varied size and direction.  needs Destroy(hitcollider) for cleanup.
-	public BoxCollider2D InstantiateHitCollider(float width, float height, int currentDirection){
+	BoxCollider2D InstantiateHitCollider(float width, float height, int currentDirection){
 		
-		BoxCollider2D hitCollider = gameObject.AddComponent("BoxCollider2D") as BoxCollider2D;
+		BoxCollider2D hitCol = gameObject.AddComponent("BoxCollider2D") as BoxCollider2D;
 		
-		hitCollider.size = new Vector2(width,height);
-		hitCollider.isTrigger = true;
-		return hitCollider;
+		hitCol.size = new Vector2(width,height);
+		hitCol.isTrigger = true;
+		return hitCol;
 		
 	}
-	
+
+
+
 	
 	//tells Weapon Animator to start animation
 	public override void Attack(){
@@ -39,33 +43,33 @@ public class Sword : Weapon {
 		
 		if (Input.GetMouseButtonDown(0)) {
 			//swing = 1;
-			hitCollider = InstantiateHitCollider(hitColliderWidth, hitColliderHeight, anim.GetInteger("direction"));
-			
+
+			//Destroy(hitCollider);
+			if(!isAttacking){
+				
+				hitCollider = InstantiateHitCollider(hitColliderWidth, hitColliderHeight, anim.GetInteger("direction"));
+
+			}
+
 		}
-		
+
+	
+
+
 		if (animCompleted) {
 			Destroy(hitCollider);
 			//swing = 0;
 			animCompleted = false;
-			
 		}
 		
 	}
 
 
-	/*void setLastDirection(int direction){
-
-		if(direction > 0){
-
-			anim.SetInteger("lastDirection", direction);
-			//Debug.Log (lastDirection);
-		}
 
 
 
 
 
-	}*/
 
 
 
@@ -78,13 +82,11 @@ public class Sword : Weapon {
 
 		anim = GetComponent<Animator> ();
 		//swing = 0;
-
-
+		
 	}
 
 	void Update(){
-
-		//setLastDirection(anim.GetInteger("direction"));
+		
 		Attack ();
 
 	}

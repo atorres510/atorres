@@ -49,14 +49,14 @@ public class NetworkManager : MonoBehaviour {
 		Debug.Log ("OnJoinedRoom");
 		SpawnMyPlayer ();
 	}
-
+	
 
 	void SpawnMyPlayer(){
 
 
-		GameObject player = PhotonNetwork.Instantiate("player", Vector3.zero, Quaternion.identity, 0);
+		GameObject player = PhotonNetwork.Instantiate("player2", Vector3.zero, Quaternion.identity, 0);
 
-		player.GetComponent<PlayerController2D> ().enabled = true;
+		//player.GetComponent<PlayerController2D> ().enabled = true;
 	}
 	
 

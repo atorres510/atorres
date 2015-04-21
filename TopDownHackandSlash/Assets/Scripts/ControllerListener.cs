@@ -11,9 +11,10 @@ public class ControllerListener : MonoBehaviour {
 	public bool isAnimComplete;
 	
 	Animator anim;
-	
+
+	//values passed from the playercontroller
 	int listenerDirection;
-	float listenerAnimSpeed;
+	float listenerAnimSpeed = 0.0f;
 	int listenerAttack;
 	
 	

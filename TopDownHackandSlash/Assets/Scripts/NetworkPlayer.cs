@@ -9,7 +9,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 
 
 	private PlayerController2D playerController;
-	private Animator anim;
+	//private Animator anim;
 
 	private float lastUpdateTime = 0.1f;
 
@@ -19,18 +19,16 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 	//determines direction for animator recieved from other clients
 	private int correctDirection; 
 	private float correctAnimSpeed = 0.0f; 
+	private int correctAttack;
 
 
 	void Start(){
 
-		anim = GetComponent<Animator> ();
-		anim.SetFloat ("speed", 0.0f);
-
-		if (photonView.isMine) {
-
-			playerController = GetComponent<PlayerController2D> ();
+		//anim = GetComponent<Animator> ();
+		//anim.SetFloat ("speed", 0.0f);
+		playerController = GetComponent<PlayerController2D> ();
 		
-		}
+	
 
 	
 	}
@@ -43,9 +41,12 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, lastUpdateTime);
 			transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, lastUpdateTime);
 			//updates animators on other clients about your current animation state
-			anim.SetInteger("direction", correctDirection);
-			anim.SetFloat("speed", correctAnimSpeed);
-
+			//anim.SetInteger("direction", correctDirection);
+			//anim.SetFloat("speed", correctAnimSpeed);
+			//anim.SetInteger("attack", correctAttack);
+			playerController.Direction = correctDirection;
+			playerController.AnimSpeed = correctAnimSpeed;
+			playerController.Attack = correctAttack;
 			/*if(transform.position != this.correctPlayerPos){
 
 				Debug.Log("Transform.position: " + transform.position);
@@ -70,6 +71,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			stream.SendNext(transform.rotation);
 			stream.SendNext(playerController.Direction);
 			stream.SendNext(playerController.AnimSpeed);
+			stream.SendNext(playerController.Attack);
 
 		}
 
@@ -80,6 +82,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			this.correctPlayerRot = (Quaternion) stream.ReceiveNext();
 			this.correctDirection = (int) stream.ReceiveNext();
 			this.correctAnimSpeed = (float) stream.ReceiveNext();
+			this.correctAttack = (int) stream.ReceiveNext();
 
 		}
 

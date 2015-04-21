@@ -1,0 +1,72 @@
+Tarien's day off project notes:
+
+-====March 15,2015====-
+trying to figure out how to rework the coroutines tracklastposition and continue patrol. 
+the fact that they are coroutines has them called multiple times unintentionally and 
+should be changed.may place moveto() inside of lookat() so we do not need keep tracklast 
+and continue as coroutines.
+
+-====March 16,2015===-
+will overload moveto() to add lookat() parameters and also call lookat() prior to executing 
+its own code
+
+overload works.  testing the coroutine to void rework on patrol()
+
+can't test on patrol().  needs to be coroutine. will test on tracklast
+
+changing tracklast() to void fxn will disable the suspicious wait time between looking and 
+moving to player's last position.  
+
+changed tracklast(). does not work as expected.  player moves to waypoints instead.
+
+coroutines in tracklast are being called at the same time.  removing continuepatrol() as it 
+is redundant. trying to rework returntopatrol()
+
+added stop coroutine to the start of lookat() and moveto() to see if that fixes the issue.  
+Kept return patrol as is
+
+above solution did not work.  
+
+added stop coroutine inside while loop of moveto().  didn't work
+
+changing wait for seconds with a loop to increase the number of yields to allow for 
+more chances to stop the coroutine. this didn't work
+
+using a counter system to keep track of the # of coroutines in play and break any 
+pre existing ones
+
+counting system seems to work.  testing for bugs now
+
+-====March 17, 2015====-
+debugged multiple issue with enemy stopping if interupted while tracking and multiple move 
+coroutines firing on return patrol. things seem to work as intended.  more testing required
+
+made new lvl called testscene2.  found that enemy's won't lookat waypoints if they start 
+with a z rotation of 0.  this was due to a gap in the conditionals of lookat() handedness.
+(if > 0 and if < 0.  changed to if > 0 and if <= 0)
+
+some of the enemys begin to do a "lighthousing" effect when they spot the player running past.
+the enemy will continue to look for the next waypoint but never actually move toward it as they
+constantly spin.  may have been due to the changes in the above entry.
+
+reverted back to the if > 0.  believed to have caused the lighthouse effect.
+
+turns out that change didn't cause the effect.  still trying to pinpoint the cause.
+
+cause seems to be due to the enemy seeing the player from a distance while turning.
+
+lighthousing effect seems prominent when there are multiple guards.
+
+effect is only instigated during random playthroughs and all guards are affected in the same
+playthrough
+
+the effect is caused after using a vaultpoint. the vaultpoint was changing the players z position
+from -1 to -2 which was causing the looping "lighthousing" effect.  it has been fixed.
+
+
+-====March 29, 2015====-
+
+found a game crashing bug with the vault point.  should the player be detected while jumping 
+the game crashes.
+
+

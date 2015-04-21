@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController2D : MonoBehaviour {
+public class PlayerController2D : Photon.MonoBehaviour {
 
 
 	//takes player input and delegates changes to the controller listener components of the child objects
@@ -29,6 +29,10 @@ public class PlayerController2D : MonoBehaviour {
 	
 	public int Direction{
 
+		set{
+			direction = value;
+		}
+
 		get{
 			return direction;
 		}
@@ -36,6 +40,10 @@ public class PlayerController2D : MonoBehaviour {
 	}
 
 	public float AnimSpeed{
+
+		set{
+			animSpeed = value;
+		}
 
 		get{
 			return animSpeed;
@@ -45,11 +53,14 @@ public class PlayerController2D : MonoBehaviour {
 
 	public int Attack{
 
+		set{
+			attack = value;
+		}
+
 		get{
 			return attack;
 		}
 	}
-
 
 
 
@@ -66,10 +77,10 @@ public class PlayerController2D : MonoBehaviour {
 	void Update () {
 		//Debug.Log ("Initiated: " + primaryAnimInitiated);
 		//Debug.Log ("Complete: " + primaryAnimComplete);
-		PlayerController ();
+		if (photonView.isMine) {
+			PlayerController ();
 	
-
-		
+		}
 		
 	}
 

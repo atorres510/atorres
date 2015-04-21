@@ -1,0 +1,69 @@
+MultiplayerTopDown
+
+
+-====March 18, 2015====-
+Beginning work on a multiplayer topdown hack 'n slash game.  These notes will be not be concerned
+with design aspects but rather focus on programming.  this is to help evaluate problem solving, 
+estimates, and archive changes throughout development.
+
+
+Adding photon unity network (PUN) assets to the project.  created network manager to manage
+connecting/connection to photon cloud server.  
+
+lobby and room connectivity achieved.  beginning work on instantiating an avatar for each player
+with photonnetwork.instantiate.
+
+instantiation and movement working as intended.  need to smooth movement between clients.
+
+added networkplayer script to hold all things needing to be tracked for photonview.  this may be
+obsolete as photonview observes multiple components now.
+
+added lerping to the network player to smooth.  currently the updatetime is at 0.1f, but the result 
+is not as desirable.  movement is smooth, but too slow.  
+
+attempted to fix the updatetime, but increasing the time or changing to time.deltatime didn't 
+help.  the 0.1f update time works best for the moment.
+
+-====March 19, 2015====-
+
+added caches for components in networkplayer and added reference to currentDirection for animator
+works well enough, but the animator stops just short of reaching the destination.  this furthers
+the "sliding" effect that the lerping has on the players from other clients.
+
+beginning work on persistent direction so that players continue to look in the direction they
+were last moving toward.
+
+found the answer for persistent direction through animation.  used blender trees to transition 
+between an idlestate and runningstate. add an additional variable to be passed called speed, 
+which was used to determine blending the animations.
+
+starting to work on making the attack colliders
+
+-====March 20, 2015====-
+
+created new animations for moving up,down,left,right and created rough forward swing animation
+"Sword.cs" holds the animation information currently, but I may make a PlayerInventory script 
+to hold a weapon's values to pass to the player controller.
+
+forward swing works, but weapon is swung while mouse button is pressed down.  need to work on a 
+"cooldown" to prevent it.
+
+added animations for attacking in all directions with a one handed weapon.  rough "cooldown"
+added.
+
+looking into creating layers for animation 
+
+layers seem to be a 3D feature more than a 2D one.  Ill needto look into other tools for blending
+sprite animations
+
+found a bug in the animation.  swingcomplete is being called causing the animation to reset speed 
+to 0.0f
+
+using seperate game objects to create layers for the animations 
+
+-====April 10, 2015====-
+adding more animations for the lower body and changing animation keys.
+
+Removed Blendtree states from animator.  The blend tree was interferring with the fluidity of the 
+animations.
+animations between the weapon and  torso are still not completely in sync.
