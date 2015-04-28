@@ -157,8 +157,8 @@ public class f_Castle : f_Tile {
 		boxCollider = gameObject.GetComponent<BoxCollider2D>();
 		f_gameManagerObject = GameObject.FindGameObjectWithTag ("f_GameManager");
 		f_gameManager = f_gameManagerObject.GetComponent<f_GameManager> ();
-		mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
-		mainCamera = mainCameraObject.GetComponent<Camera> ();
+		//mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
+		//mainCamera = mainCameraObject.GetComponent<Camera> ();
 
 	}
 

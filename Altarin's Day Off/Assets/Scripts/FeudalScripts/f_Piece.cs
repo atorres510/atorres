@@ -15,7 +15,9 @@ public abstract class f_Piece : MonoBehaviour {
 	public int y;
 	
 	public int pieceDesignator;
-
+	//pieceID assigns a unique ID number given to each piece.  Used to identified which pieces need to be destroyed in gamemanagers
+	//updatePieceSet()
+	public int pieceID; 
 
 	public f_Tile occupiedTile;
 	public f_Tile lastOccupiedTile;
@@ -83,11 +85,13 @@ public abstract class f_Piece : MonoBehaviour {
 
 			}
 
+
+
 			else{
 
 				occupiedTile = tile;
 				occupiedTile.isOccupied = true;
-				f_gameManager.UpdateCoordinates(x, y, tile.x, tile.y, pieceDesignator);
+				f_gameManager.photonView.RPC("UpdateCoordinates", PhotonTargets.Others, x, y, tile.x, tile.y, pieceDesignator);
 				x = tile.x;
 				y = tile.y;
 

@@ -17,16 +17,12 @@ Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Buil
 Loading C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.225 seconds
+- Completed reload, in  0.083 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\System.dll (this message is harmless)
-Player1 (Player)
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
 IndexOutOfRangeException: Array index is out of range.
   at f_GameManager.Awake () [0x00000] in <filename unknown>:0 
  
@@ -44,11 +40,27 @@ Number of players connected: 1
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
+setup begins
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+Looking for MyPlayer
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+Looking for MyPlayer
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+MyPlayer found.
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
 iswhite: False
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-f_NormalTile(Clone) (UnityEngine.GameObject)
+Online: Network Manager Found
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
@@ -107,4 +119,33 @@ f_NormalTile(Clone) (UnityEngine.GameObject)
 f_NormalTile(Clone) (UnityEngine.GameObject)
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+f_NormalTile(Clone) (UnityEngine.GameObject)
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+f_Castle(B) (UnityEngine.GameObject) is selected.
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at f_SetUpManager.DropPiece () [0x00000] in <filename unknown>:0 
+  at f_SetUpManager.MouseControls (Boolean placingCastle) [0x00000] in <filename unknown>:0 
+  at f_SetUpManager.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at f_SetUpManager.DropPiece () [0x00000] in <filename unknown>:0 
+  at f_SetUpManager.MouseControls (Boolean placingCastle) [0x00000] in <filename unknown>:0 
+  at f_SetUpManager.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at f_SetUpManager.DropPiece () [0x00000] in <filename unknown>:0 
+  at f_SetUpManager.MouseControls (Boolean placingCastle) [0x00000] in <filename unknown>:0 
+  at f_SetUpManager.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
 

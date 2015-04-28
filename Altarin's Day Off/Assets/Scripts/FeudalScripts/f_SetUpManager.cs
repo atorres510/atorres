@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,7 +10,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject trayObject;
 
 
-	Player player;
+	Player myPlayer;
 	Camera playerCamera;
 	GameObject selectedObject;
 	Vector2 selectedObjectPosOld;
@@ -34,15 +34,17 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		NetworkManager networkManager = FindObjectOfType<NetworkManager> ();
 		
-		if (networkManager == null) {
+		if (networkManager != null) {
 			
-			isOffline = true;
+			isOffline = false;
+			Debug.Log("Online: Network Manager Found");
 			
 		}
 		
 		else{
 			
-			isOffline = false;
+			isOffline = true;
+			Debug.Log("Offline: Network Manager Not Found");
 			
 		}
 		
@@ -698,11 +700,14 @@ public class f_SetUpManager : MonoBehaviour {
 
 				//float aspectRatio = fov / oldFov;
 				//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
-				pieces[j].transform.position = p.occupiedTile.transform.position;
+				Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
+				pieces[j].transform.position = adjustedPos;
 
 			}
 
 		
+
+
 		
 		
 		}
@@ -925,7 +930,7 @@ public class f_SetUpManager : MonoBehaviour {
 					//StartCoroutine(f_gameManager.Game());
 					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 					c.isSetup = false;
-					player.isReady = true;
+					myPlayer.isReady = true;
 					isSetUp = false;
 					
 					
@@ -979,16 +984,18 @@ public class f_SetUpManager : MonoBehaviour {
 					
 				}
 
+				if (myPlayer.isReady && !f_gameManager.gameOn) {
+					
+					GUI.TextField(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 150, 25), "Player is ready!");
+					
+					
+				}
+
 			}
 
 		}
 
-		if (player.isReady && !f_gameManager.gameOn) {
-				
-			GUI.TextField(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 150, 25), "Player is ready!");
-		
-		
-		}
+
 	
 	}
 
@@ -1001,12 +1008,23 @@ public class f_SetUpManager : MonoBehaviour {
 
 	public void InitiateSetup(){
 
+		Player[] players = FindObjectsOfType<Player> ();
+
+		for (int i = 0; i < players.Length; i++) {
+			Debug.Log("Looking for MyPlayer");
+			if(players[i].isMyPlayer){
+
+				myPlayer = players[i];
+				Debug.Log("MyPlayer found.");
+			}
 		
-		player = FindObjectOfType<Player> ();
-		playerCamera = player.gameObject.GetComponent<Camera> ();
+		}
+		
+		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
 		//Debug.Log (player);
+		trayObject.SetActive(true);
 		
-		if (player.isWhite) {
+		if (myPlayer.isWhite) {
 			
 			isWhiteSetUp = true;
 			
@@ -1018,7 +1036,7 @@ public class f_SetUpManager : MonoBehaviour {
 			
 		}
 		
-		Debug.Log ("iswhite: " + player.isWhite);
+		Debug.Log ("iswhite: " + myPlayer.isWhite);
 		
 		isSetUp = true;
 		isPlacingCastle = true;
@@ -1042,6 +1060,9 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	
 	}
+
+
+
 
 
 
@@ -1087,6 +1108,8 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 	
+
+
 
 
 

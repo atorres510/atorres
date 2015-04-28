@@ -3,10 +3,33 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
 
+	bool beginSetup = false;
 
 	void Start(){
 
 		Connect ();
+	
+	}
+
+	void Update(){
+
+		BeginSetup ();
+	
+	}
+
+
+	void BeginSetup(){
+
+
+		if (PhotonNetwork.otherPlayers.Length == 1 && !beginSetup) {
+			Debug.Log("setup begins");
+		
+			beginSetup = true;
+			f_SetUpManager setUpManager = FindObjectOfType<f_SetUpManager> ();
+			setUpManager.InitiateSetup ();
+		
+		}
+	
 	
 	}
 
@@ -39,24 +62,31 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 
+
+
 	void OnJoinedRoom(){
 		Debug.Log ("OnJoinedRoom");
-		//GameObject myPlayer = PhotonNetwork.Instantiate ("Player", Vector3.zero, Quaternion.identity, 0);
-		Player p = FindObjectOfType<Player> ();
+		Vector3 myVector = new Vector3 (8.71f, 6.59f, -11.0f);
+		GameObject myPlayer = PhotonNetwork.Instantiate ("Player", myVector, Quaternion.identity, 0);
+		Player p = myPlayer.GetComponent<Player> ();
 		PhotonPlayer[] players = PhotonNetwork.otherPlayers;
 
 		if (players.Length > 0) {
 				
 			Debug.Log("Number of players connected: " + players.Length);
+			//p.isMyPlayer = true;
 			p.isWhite = false;
 			p.playerNumber = PhotonNetwork.playerList.Length;
 
 		}
 
-		else Debug.Log("No other players connected.");
+		else {
+			Debug.Log("No other players connected.");
+			p.isWhite = true;
+			p.playerNumber = PhotonNetwork.playerList.Length + 1;
 
-		f_SetUpManager setUpManager = FindObjectOfType<f_SetUpManager> ();
-		setUpManager.InitiateSetup ();
+
+		}
 
 	}
 

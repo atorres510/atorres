@@ -20,9 +20,10 @@ public class f_GameManager : Photon.MonoBehaviour {
 	public int[] whiteRoyalties;
 	public int[] blackRoyalties;
 	
-	public int[,] coordinates; //holds all the coordinates of the pieces
+	public int[,] coordinates; //holds state of the board within it all the coordinates of the pieces
 	public GameObject[,] tileCoordinates; //holds all tiles
-	
+
+
 	public f_Piece[] whitePieces;
 	public f_Piece[] blackPieces;
 
@@ -361,7 +362,7 @@ public class f_GameManager : Photon.MonoBehaviour {
 	
 	}
 
-	[RPC]
+
 	public void UpdateCoordinates(int oldX, int oldY, int newX, int newY, int pieceID){
 		
 		coordinates[oldX, oldY] = 0;
@@ -376,11 +377,11 @@ public class f_GameManager : Photon.MonoBehaviour {
 		
 		}
 
-		if (photonView.isMine) {
+		//if (photonView.isMine) {
 				
-			photonView.RPC("UpdateCoordinates", PhotonTargets.All, oldX, oldY, newX, newY, pieceID);
+			//photonView.RPC("UpdateCoordinates", PhotonTargets.All, oldX, oldY, newX, newY, pieceID);
 		
-		}
+		//}
 
 	}
 
@@ -483,7 +484,7 @@ public class f_GameManager : Photon.MonoBehaviour {
 	}
 
 
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info){
+	/*void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info){
 
 		if (stream.isWriting == true) {
 
@@ -506,12 +507,14 @@ public class f_GameManager : Photon.MonoBehaviour {
 		}
 	
 	
-	}
+	}*/
 
 
 	Player[] players;
 	
 	void ArePlayersReady(){
+
+
 
 		int[] playersReady = new int[players.Length];
 		
@@ -544,8 +547,49 @@ public class f_GameManager : Photon.MonoBehaviour {
     
 	}
 
+	//updates coordinates[,] for the opposing client
+
+	void UpdateBoardState(int[,] c){
+
+		for(int i = 0; i < 24; i++){
+			for(int j = 0; j <24; j++){
+
+				c[i,j]
 
 
+			}
+
+
+
+		}
+
+		
+	
+	
+	}
+
+	//takes piece designator P and passes its value to the recieving coordinate grid at position i,j
+	[RPC]
+	int UpdateCoordinates(int p, int x, int y){
+
+		coordinates [x, y] = p;
+
+	}
+
+
+	void UpdatePieceSet(){
+
+
+	}
+
+
+	//updates the piece sets 
+	[RPC]
+	void UpdatePiece(){
+
+	
+	
+	}
 
 
 
@@ -575,9 +619,9 @@ public class f_GameManager : Photon.MonoBehaviour {
 		isTurnPassed = false;
 		gameOn = false;
 
-		players = FindObjectsOfType<Player> ();
-		Debug.Log ("Player " + players[0].playerNumber);
-		Debug.Log ("Player " + players [1].playerNumber);
+		//players = FindObjectsOfType<Player> ();
+		//Debug.Log ("Player " + players[0].playerNumber);
+		//Debug.Log ("Player " + players [1].playerNumber);
 		//FindNetworkManager ();
 
 		//toggleTileGUI = false;
@@ -599,6 +643,7 @@ public class f_GameManager : Photon.MonoBehaviour {
 		
 		
 		}
+		
 		//selectedPiece.occupiedTile.gameObject.transform.renderer.material.color = Color.red;
 	
 		

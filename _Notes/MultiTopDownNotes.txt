@@ -67,3 +67,10 @@ adding more animations for the lower body and changing animation keys.
 Removed Blendtree states from animator.  The blend tree was interferring with the fluidity of the 
 animations.
 animations between the weapon and  torso are still not completely in sync.
+
+-====April 25, 2015====-
+back logged: synced the torso and weapon animations.  changed "sword.cs" to "meleeweapon.cs"
+
+
+added a condition to meleeweapon.Attack() that avoids the duplication of box colliders.  Checks
+to make sure the hitcollider is null before proceeding to create a new collider.

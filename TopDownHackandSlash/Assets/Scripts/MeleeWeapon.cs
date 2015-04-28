@@ -46,14 +46,32 @@ public class MeleeWeapon : Weapon {
 
 			//Destroy(hitCollider);
 			if(!isAttacking){
-				
-				hitCollider = InstantiateHitCollider(hitColliderWidth, hitColliderHeight, anim.GetInteger("direction"));
+
+				if(hitCollider != null){
+
+					Debug.Log("hit collider not null");
+
+
+				}
+
+				else {
+
+					hitCollider = InstantiateHitCollider(hitColliderWidth, hitColliderHeight, anim.GetInteger("direction"));
+
+				}
+
+
+
+
 
 			}
 
 		}
-
 	
+
+
+
+
 
 
 		if (animCompleted) {
