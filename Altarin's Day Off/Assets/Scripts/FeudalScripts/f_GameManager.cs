@@ -31,9 +31,13 @@ public class f_GameManager : Photon.MonoBehaviour {
 
 	public bool gameOn;
 	public bool isOffline;
+	public PhotonView myPhotonView;
+	public Player myPlayer;
 
+	//Sets up the board at the beginning of the game.  Called by ArePlayersReady in setup manager.
 	public void SetUpBoard(){
-
+		Debug.Log ("Setup board");
+	
 		gameOn = true;
 		GameObject[] tiles = new GameObject[576];
 		//GameObject[] tiles = new GameObject[169];
@@ -82,10 +86,32 @@ public class f_GameManager : Photon.MonoBehaviour {
 
 		}
 
-		whiteCastle.ReplaceOccupiedTile (whiteCastle.castleGreens);
-		whiteCastle.ReplaceOccupiedTile (whiteCastle);
-		blackCastle.ReplaceOccupiedTile (blackCastle.castleGreens);
-		blackCastle.ReplaceOccupiedTile (blackCastle);
+		if (isOffline) {
+			whiteCastle.ReplaceOccupiedTile (whiteCastle.castleGreens);
+			whiteCastle.ReplaceOccupiedTile (whiteCastle);
+			blackCastle.ReplaceOccupiedTile (blackCastle.castleGreens);
+			blackCastle.ReplaceOccupiedTile (blackCastle);
+		}
+
+		else{
+
+			if(myPlayer.isWhite){
+
+				whiteCastle.ReplaceOccupiedTile (whiteCastle.castleGreens);
+				whiteCastle.ReplaceOccupiedTile (whiteCastle);
+
+			}
+
+			else{
+
+				blackCastle.ReplaceOccupiedTile (blackCastle.castleGreens);
+				blackCastle.ReplaceOccupiedTile (blackCastle);
+
+			}
+
+
+		}
+
 
 		
 		int j = 0;
@@ -97,40 +123,123 @@ public class f_GameManager : Photon.MonoBehaviour {
 		GameObject[] pieces = new GameObject[26];
 		
 		pieces = GameObject.FindGameObjectsWithTag("f_Piece");
+
+
+		if (isOffline) {
+			for(int i = 0; i < pieces.Length; i++){
+				
+				f_Piece p = pieces[i].GetComponent<f_Piece>();
+				
+				coordinates[p.x, p.y] = p.pieceDesignator; // 0 Null; 1 B.Pawn; 2 B.Rook; etc;
+				p.startTile = tileCoordinates[p.x, p.y];
+				p.StartPosition();
+				if(p.isWhite){
+					whitePieces[j] = p;
+					//Debug.Log(p);
+					j++;
+					
+					if(p.isRoyalty){
+						
+						whiteRoyalties[l] = p.pieceDesignator;
+						l++;
+					}
+				}
+				
+				if(!p.isWhite){
+					blackPieces[k] = p;
+					k++;
+					
+					if(p.isRoyalty){
+						
+						blackRoyalties[m] = p.pieceDesignator;
+						m++;
+					}
+					
+				}
+				
+				
+			}	
 		
-		for(int i = 0; i < pieces.Length; i++){
-			
-			f_Piece p = pieces[i].GetComponent<f_Piece>();
-			
-			coordinates[p.x, p.y] = p.pieceDesignator; // 0 Null; 1 B.Pawn; 2 B.Rook; etc;
-			p.startTile = tileCoordinates[p.x, p.y];
-			p.StartPosition();
-			if(p.isWhite){
-				whitePieces[j] = p;
-				//Debug.Log(p);
-				j++;
-
-				if(p.isRoyalty){
-					
-					whiteRoyalties[l] = p.pieceDesignator;
-					l++;
-				}
-			}
-			
-			if(!p.isWhite){
-				blackPieces[k] = p;
-				k++;
-
-				if(p.isRoyalty){
-					
-					blackRoyalties[m] = p.pieceDesignator;
-					m++;
-				}
-
-			}
-
-			
+		
 		}
+
+		//sets up your own pieces first and relays your piece info to the other client
+		else{
+			for(int i = 0; i < pieces.Length; i++){
+
+				f_Piece p = pieces[i].GetComponent<f_Piece>();
+				
+				if(p.isWhite && myPlayer.isWhite){
+					coordinates[p.x, p.y] = p.pieceDesignator; // 0 Null; 1 B.Pawn; 2 B.Rook; etc;
+					p.startTile = tileCoordinates[p.x, p.y];
+					p.StartPosition();
+					whitePieces[j] = p;
+					//Debug.Log(p);
+					j++;
+
+					this.myPhotonView.RPC("UpdatePiece", PhotonTargets.Others, p.transform.position, 
+					                      p.x, p.y, true, p.pieceID);
+
+					
+					if(p.isRoyalty){
+						
+						whiteRoyalties[l] = p.pieceDesignator;
+						l++;
+					}
+					
+					
+				}
+
+				else{
+
+					blackPieces[k] = p;
+					k++;
+					if(p.isRoyalty){
+						
+						blackRoyalties[m] = p.pieceDesignator;
+						m++;
+					}
+
+
+				}
+
+				if(!p.isWhite && !myPlayer.isWhite){
+					coordinates[p.x, p.y] = p.pieceDesignator; // 0 Null; 1 B.Pawn; 2 B.Rook; etc;
+					p.startTile = tileCoordinates[p.x, p.y];
+					p.StartPosition();
+					blackPieces[k] = p;
+					k++;
+
+					this.myPhotonView.RPC("UpdatePiece", PhotonTargets.Others, p.transform.position, 
+					                      p.x, p.y, false, p.pieceID);
+					
+					if(p.isRoyalty){
+						
+						blackRoyalties[m] = p.pieceDesignator;
+						m++;
+					}
+					
+				}
+
+				else{
+
+					whitePieces[j] = p;
+					//Debug.Log(p);
+					j++;
+					if(p.isRoyalty){
+						
+						blackRoyalties[m] = p.pieceDesignator;
+						m++;
+					}
+
+
+				}
+
+			}
+
+		}
+
+		
 
 
 	}
@@ -426,7 +535,9 @@ public class f_GameManager : Photon.MonoBehaviour {
 
 
 	}
-	
+
+
+
 
 	void OnGUI(){
 
@@ -510,9 +621,9 @@ public class f_GameManager : Photon.MonoBehaviour {
 	}*/
 
 
-	Player[] players;
+	//public Player[] players;
 	
-	void ArePlayersReady(){
+	/*void ArePlayersReady(){
 
 
 
@@ -545,7 +656,7 @@ public class f_GameManager : Photon.MonoBehaviour {
 		
 		}
     
-	}
+	}*/
 
 	//updates coordinates[,] for the opposing client
 
@@ -554,41 +665,86 @@ public class f_GameManager : Photon.MonoBehaviour {
 		for(int i = 0; i < 24; i++){
 			for(int j = 0; j <24; j++){
 
-				c[i,j]
-
+				this.myPhotonView.RPC("UpdateCoordinates", PhotonTargets.Others, c[i,j], i, j);
 
 			}
 
-
-
 		}
 
-		
+		//UpdatePieceSet ();
 	
+
 	
 	}
 
 	//takes piece designator P and passes its value to the recieving coordinate grid at position i,j
 	[RPC]
-	int UpdateCoordinates(int p, int x, int y){
+	void UpdateCoordinates(int p, int x, int y){
 
 		coordinates [x, y] = p;
 
 	}
 
 
-	void UpdatePieceSet(){
+
+
+	void UpdatePieceSet(f_Piece[] pieceSet, bool isSetWhite){
+
+		for (int i = 0; i < pieceSet.Length; i++) {
+				
+			this.photonView.RPC("UpdatePiece", PhotonTargets.Others, pieceSet[i].transform.position, 
+				pieceSet[i].x, pieceSet[i].y, isSetWhite, pieceSet[i].pieceID);
+		
+		}
+
 
 
 	}
 
 
-	//updates the piece sets 
+	//updates the piece sets for the opposing piece sets. 
 	[RPC]
-	void UpdatePiece(){
+	void UpdatePiece(Vector3 newPosition, int newX, int newY, bool isSetWhite, int pieceID){
 
-	
-	
+		//f_Piece[] pieces = FindObjectsOfType (f_Piece);
+
+
+		if (isSetWhite) {
+				
+			for (int i = 0; i < whitePieces.Length; i++) {
+
+				if(whitePieces[i].pieceID == pieceID){
+
+					whitePieces[i].transform.position = newPosition;
+					whitePieces[i].x = newX;
+					whitePieces[i].y = newY;
+
+				}
+			
+			}
+		
+		}
+
+		else{
+			for (int i = 0; i < blackPieces.Length; i++) {
+				
+				if(blackPieces[i].pieceID == pieceID){
+					
+					blackPieces[i].transform.position = newPosition;
+					blackPieces[i].x = newX;
+					blackPieces[i].y = newY;
+					
+				}
+
+			}
+
+		}
+
+
+
+
+
+
 	}
 
 
@@ -619,6 +775,13 @@ public class f_GameManager : Photon.MonoBehaviour {
 		isTurnPassed = false;
 		gameOn = false;
 
+		if (!isOffline) {
+				
+			myPhotonView = GetComponent<PhotonView>();
+		
+		
+		}
+
 		//players = FindObjectsOfType<Player> ();
 		//Debug.Log ("Player " + players[0].playerNumber);
 		//Debug.Log ("Player " + players [1].playerNumber);
@@ -639,7 +802,7 @@ public class f_GameManager : Photon.MonoBehaviour {
 
 		if (!gameOn) {
 				
-			ArePlayersReady();
+			//ArePlayersReady();
 		
 		
 		}

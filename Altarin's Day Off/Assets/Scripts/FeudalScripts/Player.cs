@@ -10,6 +10,7 @@ public class Player : Photon.MonoBehaviour {
 
 	bool correctedIsWhite;
 	bool correctedIsReady;
+	int correctedPlayerNumber;
 
 
 	Camera playerCamera;
@@ -47,6 +48,8 @@ public class Player : Photon.MonoBehaviour {
 				
 			isWhite = correctedIsWhite;
 			isReady = correctedIsReady;
+			playerNumber = correctedPlayerNumber;
+
 		
 		}
 	
@@ -60,6 +63,7 @@ public class Player : Photon.MonoBehaviour {
 				
 			stream.SendNext(isWhite);
 			stream.SendNext(isReady);
+			stream.SendNext(playerNumber);
 		
 		}
 
@@ -68,6 +72,7 @@ public class Player : Photon.MonoBehaviour {
 
 			this.correctedIsWhite = (bool) stream.ReceiveNext();
 			this.correctedIsReady = (bool) stream.ReceiveNext();
+			this.correctedPlayerNumber = (int) stream.ReceiveNext();
 
 		}
 

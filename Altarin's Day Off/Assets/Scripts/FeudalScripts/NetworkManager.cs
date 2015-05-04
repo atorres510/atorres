@@ -83,7 +83,7 @@ public class NetworkManager : MonoBehaviour {
 		else {
 			Debug.Log("No other players connected.");
 			p.isWhite = true;
-			p.playerNumber = PhotonNetwork.playerList.Length + 1;
+			p.playerNumber = (PhotonNetwork.playerList.Length);
 
 
 		}

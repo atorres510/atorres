@@ -579,7 +579,7 @@ public class f_SetUpManager : MonoBehaviour {
 				adjustedPos.z = -9.0f;
 				//Vector3 adjustedPos = new Vector3(convertedPos.x, convertedPos.y, 1.0f);
 				GameObject g = Instantiate(emptyTile, adjustedPos, Quaternion.identity) as GameObject;
-				Debug.Log(g);
+				//Debug.Log(g);
 				//g.AddComponent<UI_Element>();
 				slots[i] = g.GetComponent<f_Tile>();
 
@@ -923,22 +923,25 @@ public class f_SetUpManager : MonoBehaviour {
 
 			else{
 
-				if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {	
-					
-					
-					//f_gameManager.SetUpBoard();
-					//StartCoroutine(f_gameManager.Game());
-					f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-					c.isSetup = false;
-					myPlayer.isReady = true;
-					isSetUp = false;
-					
-					
-					//isWhiteSetUp = false;
-					//isPlacingCastle = true;
-					//FillTray();
-					
+				if(!myPlayer.isReady){
+					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning") ) {	
+						
+						
+						//f_gameManager.SetUpBoard();
+						//StartCoroutine(f_gameManager.Game());
+						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+						c.isSetup = false;
+						myPlayer.isReady = true;
+						//isSetUp = false;
+						
+						
+						//isWhiteSetUp = false;
+						//isPlacingCastle = true;
+						//FillTray();
+						
+					}
 				}
+
 
 
 
@@ -987,7 +990,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if (myPlayer.isReady && !f_gameManager.gameOn) {
 					
 					GUI.TextField(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 150, 25), "Player is ready!");
-					
+					Debug.Log("My player is ready.");
 					
 				}
 
@@ -1004,12 +1007,13 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 
-
+	Player[] players;
 
 	public void InitiateSetup(){
+		Debug.Log ("Initiate Setup");
+		players = FindObjectsOfType<Player> ();
 
-		Player[] players = FindObjectsOfType<Player> ();
-
+		Debug.Log ("player list length " + players.Length);
 		for (int i = 0; i < players.Length; i++) {
 			Debug.Log("Looking for MyPlayer");
 			if(players[i].isMyPlayer){
@@ -1017,8 +1021,12 @@ public class f_SetUpManager : MonoBehaviour {
 				myPlayer = players[i];
 				Debug.Log("MyPlayer found.");
 			}
+
+			Debug.Log("Player " + players[i].playerNumber);
 		
 		}
+
+
 		
 		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
 		//Debug.Log (player);
@@ -1059,6 +1067,47 @@ public class f_SetUpManager : MonoBehaviour {
 		
 	
 	
+	}
+
+
+
+	void ArePlayersReady(){
+
+		int[] playersReady = new int[players.Length];
+		
+		for (int i = 0; i < players.Length; i++) {
+			
+			if(players[i].isReady){
+				
+				playersReady[i] = 1;
+				
+			}
+			
+		}
+
+		int readyTotal = 0;
+
+		for (int i = 0; i < playersReady.Length; i++) {
+			
+			readyTotal += playersReady[i];
+			
+		}
+
+		Debug.Log ("Ready Total: " + readyTotal);
+
+		if (readyTotal == players.Length) {
+
+			isSetUp = false;
+
+
+
+
+			f_gameManager.myPlayer = myPlayer;
+			f_gameManager.gameOn = true;
+			f_gameManager.SetUpBoard();
+			
+		}
+		
 	}
 
 
@@ -1120,6 +1169,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 			MouseControls (isPlacingCastle);
 			SyncTrayAssets();
+			ArePlayersReady();
 		}
 		
 
