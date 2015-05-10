@@ -4,6 +4,7 @@ using System.Collections;
 public class NetworkManager : MonoBehaviour {
 
 	bool beginSetup = false;
+	int numberOfPlayers = 1;
 
 	void Start(){
 
@@ -13,24 +14,35 @@ public class NetworkManager : MonoBehaviour {
 
 	void Update(){
 
-		BeginSetup ();
+		CheckForSetup ();
 	
 	}
 
+	//checks if all of the players have connected to the room.  initiates SetUp();
+	void CheckForSetup(){
 
-	void BeginSetup(){
 
+		if (PhotonNetwork.otherPlayers.Length == numberOfPlayers && !beginSetup) {
 
-		if (PhotonNetwork.otherPlayers.Length == 1 && !beginSetup) {
 			Debug.Log("setup begins");
 		
 			beginSetup = true;
-			f_SetUpManager setUpManager = FindObjectOfType<f_SetUpManager> ();
-			setUpManager.InitiateSetup ();
+			StartCoroutine("BeginSetup", 2f);
+
 		
 		}
 	
 	
+	}
+
+	//initiates setup for SetUpManager.  Waits for a few seconds to give the setupManagers time to recognize both players.   
+	IEnumerator BeginSetup(float secondsToWait){
+
+		Debug.Log ("Waiting for " + secondsToWait + " seconds.");
+		f_SetUpManager setUpManager = FindObjectOfType<f_SetUpManager> ();
+		yield return new WaitForSeconds(secondsToWait);
+		setUpManager.InitiateSetup ();
+
 	}
 
 
@@ -45,6 +57,7 @@ public class NetworkManager : MonoBehaviour {
 
 
 		GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
+
 
 	}
 	
@@ -63,7 +76,7 @@ public class NetworkManager : MonoBehaviour {
 
 
 
-
+	//joins the room and checks if the player is the first to connect.  if so, that player is player 1(white).
 	void OnJoinedRoom(){
 		Debug.Log ("OnJoinedRoom");
 		Vector3 myVector = new Vector3 (8.71f, 6.59f, -11.0f);
@@ -73,7 +86,7 @@ public class NetworkManager : MonoBehaviour {
 
 		if (players.Length > 0) {
 				
-			Debug.Log("Number of players connected: " + players.Length);
+			Debug.Log("Number of players currently connected: " + players.Length);
 			//p.isMyPlayer = true;
 			p.isWhite = false;
 			p.playerNumber = PhotonNetwork.playerList.Length;
@@ -81,7 +94,7 @@ public class NetworkManager : MonoBehaviour {
 		}
 
 		else {
-			Debug.Log("No other players connected.");
+			Debug.Log("No other players currently connected.");
 			p.isWhite = true;
 			p.playerNumber = (PhotonNetwork.playerList.Length);
 

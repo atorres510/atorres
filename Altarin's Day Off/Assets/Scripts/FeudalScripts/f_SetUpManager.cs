@@ -22,7 +22,7 @@ public class f_SetUpManager : MonoBehaviour {
 	bool isPlacingCastle;
 	public bool isWhiteSetUp;
 	bool isSetUp;
-	bool isOffline;
+	bool isOffline = false;
 
 
 
@@ -370,8 +370,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 		//if player tries to place an archer on his own castle
 		else if(p.pieceDesignator == 5 || p.pieceDesignator == 13){
-			Debug.Log("hi");
-			Debug.Log(t);
+			//Debug.Log("hi");
+			//Debug.Log(t);
 
 			int layerMask = 1 << LayerMask.NameToLayer("Castle");
 			RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
@@ -678,102 +678,115 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void SyncTrayAssets(){
 
-		float fov = playerCamera.orthographicSize;
-		Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
-
-		for(int i = 0; i < slots.Length; i++){
-
-			//float aspectRatio = fov / oldFov;
-			//slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
-			slots[i].transform.position += dPosition;
 
 
-		}
-
-		
-		for (int j = 0; j < pieces.Length; j++) {
+		if (trayObject == null) {
 				
-			f_Piece p = pieces[j].GetComponent<f_Piece>();
-
-			if(p.occupiedTile != null){
-
-
-				//float aspectRatio = fov / oldFov;
-				//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
-				Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
-				pieces[j].transform.position = adjustedPos;
-
-			}
-
-		
-
-
-		
+			//pass
 		
 		}
 
-		f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
-		if (c.occupiedTile != null) {
-				
-			//float aspectRatio = fov / oldFov;
-			//currentCastleBeingPlaced.transform.localScale = currentCastleBeingPlaced.transform.localScale * aspectRatio;
-			currentCastleBeingPlaced.transform.position = c.occupiedTile.transform.position; 
-		}
-		
-		oldTrayPosition = trayObject.transform.position;
-		oldFov = fov;
 
-		
-		/*//check if any piece in the tray is not in the list and add them
-		for (int i = 0; i < pieces.Length; i++) {
+		else{
 
-			f_Piece p = pieces[i].GetComponent<f_Piece>();
-
-			for(int j = 0; j < slots.Length; j++){
-
-				if(p.occupiedTile == slots[j] && !piecesInTray.Contains(pieces[i])){
-					
-					piecesInTray.Add(pieces[i]);
-					
-				}
-
-				else{}
-
-			}
-
-
-		}
-
-
-
-
-
-
-		//check if any piece from the tray have left the tray
-		foreach (GameObject element in piecesInTray) {
-			
-			f_Piece p = element.GetComponent<f_Piece>();
+			float fov = playerCamera.orthographicSize;
+			Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
 			
 			for(int i = 0; i < slots.Length; i++){
 				
-				if(p.occupiedTile != slots[i]){
+				//float aspectRatio = fov / oldFov;
+				//slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
+				slots[i].transform.position += dPosition;
+				
+				
+			}
+			
+			
+			for (int j = 0; j < pieces.Length; j++) {
+				
+				f_Piece p = pieces[j].GetComponent<f_Piece>();
+				
+				if(p.occupiedTile != null){
 					
-					piecesInTray.Remove(element);
+					
+					//float aspectRatio = fov / oldFov;
+					//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
+					Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
+					pieces[j].transform.position = adjustedPos;
 					
 				}
 				
-				else{}
-
-				slots[i].transform.position += dPosition;
-
+				
+				
+				
+				
+				
 			}
+			
+			f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
+			if (c.occupiedTile != null) {
+				
+				//float aspectRatio = fov / oldFov;
+				//currentCastleBeingPlaced.transform.localScale = currentCastleBeingPlaced.transform.localScale * aspectRatio;
+				currentCastleBeingPlaced.transform.position = c.occupiedTile.transform.position; 
+			}
+			
+			oldTrayPosition = trayObject.transform.position;
+			oldFov = fov;
+			
+			
+			/*//check if any piece in the tray is not in the list and add them
+			for (int i = 0; i < pieces.Length; i++) {
+				
+				f_Piece p = pieces[i].GetComponent<f_Piece>();
+				
+				for(int j = 0; j < slots.Length; j++){
+					
+					if(p.occupiedTile == slots[j] && !piecesInTray.Contains(pieces[i])){
+						
+						piecesInTray.Add(pieces[i]);
+						
+					}
+					
+					else{}
+					
+				}
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			//check if any piece from the tray have left the tray
+			foreach (GameObject element in piecesInTray) {
+				
+				f_Piece p = element.GetComponent<f_Piece>();
+				
+				for(int i = 0; i < slots.Length; i++){
+					
+					if(p.occupiedTile != slots[i]){
+						
+						piecesInTray.Remove(element);
+						
+					}
+					
+					else{}
+					
+					slots[i].transform.position += dPosition;
+					
+				}
+				
+				
+				element.transform.position += dPosition;
+				
+			}*/
+				
 
 
-			element.transform.position += dPosition;
-
-		}*/
-
-
+		}
 	}
 
 	//Destroys tray and the tiles within slots[]
@@ -929,9 +942,11 @@ public class f_SetUpManager : MonoBehaviour {
 						
 						//f_gameManager.SetUpBoard();
 						//StartCoroutine(f_gameManager.Game());
+						DestroyTray();
 						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 						c.isSetup = false;
 						myPlayer.isReady = true;
+
 						//isSetUp = false;
 						
 						
@@ -1010,7 +1025,9 @@ public class f_SetUpManager : MonoBehaviour {
 	Player[] players;
 
 	public void InitiateSetup(){
+		
 		Debug.Log ("Initiate Setup");
+
 		players = FindObjectsOfType<Player> ();
 
 		Debug.Log ("player list length " + players.Length);
@@ -1044,7 +1061,7 @@ public class f_SetUpManager : MonoBehaviour {
 			
 		}
 		
-		Debug.Log ("iswhite: " + myPlayer.isWhite);
+		Debug.Log ("is MyPlayer white: " + myPlayer.isWhite);
 		
 		isSetUp = true;
 		isPlacingCastle = true;
@@ -1100,7 +1117,7 @@ public class f_SetUpManager : MonoBehaviour {
 			isSetUp = false;
 
 
-
+			//StartCoroutine("GameManagerSetUp");
 
 			f_gameManager.myPlayer = myPlayer;
 			f_gameManager.gameOn = true;
@@ -1111,7 +1128,33 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 
 
+	IEnumerator GameManagerSetUp(){
 
+	
+		if (myPlayer.isWhite) {
+			Debug.Log("Starting GameManager SetUp");
+			f_gameManager.myPlayer = myPlayer;
+			f_gameManager.gameOn = true;
+			f_gameManager.SetUpBoard();
+			yield return null;
+		
+		}
+
+		else{
+
+			Debug.Log("Waiting for other players.");
+			yield return new WaitForSeconds(2f);
+			Debug.Log("Starting GameManager SetUp");
+			f_gameManager.myPlayer = myPlayer;
+			f_gameManager.gameOn = true;
+			f_gameManager.SetUpBoard();
+			yield return null;
+
+		}
+	
+	
+	
+	}
 
 
 

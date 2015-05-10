@@ -91,7 +91,7 @@ public abstract class f_Piece : MonoBehaviour {
 
 				occupiedTile = tile;
 				occupiedTile.isOccupied = true;
-				f_gameManager.photonView.RPC("UpdateCoordinates", PhotonTargets.Others, x, y, tile.x, tile.y, pieceDesignator);
+				f_gameManager.myPhotonView.RPC("UpdateCoordinates", PhotonTargets.Others, x, y, tile.x, tile.y, pieceDesignator);
 				x = tile.x;
 				y = tile.y;
 
