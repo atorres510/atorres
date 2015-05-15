@@ -7,10 +7,12 @@ public class Player : Photon.MonoBehaviour {
 	public bool isMyPlayer;
 	public bool isWhite;
 	public bool isReady;
+	public bool isSecondaryReady; //for testing purposes.  should be removed.
 
 	bool correctedIsWhite;
 	bool correctedIsReady;
 	int correctedPlayerNumber;
+	bool correctedIsSecondaryReady;
 
 
 	Camera playerCamera;
@@ -18,6 +20,8 @@ public class Player : Photon.MonoBehaviour {
 
 	void SetUpPlayer(){
 
+		isReady = false;
+		isSecondaryReady = false;
 		playerCamera = gameObject.GetComponent<Camera> ();
 		playerCameraController = gameObject.GetComponent<CameraController> ();
 		GameObject borderOriginObject = GameObject.FindGameObjectWithTag ("Origin");
@@ -37,7 +41,7 @@ public class Player : Photon.MonoBehaviour {
 	void Awake(){
 
 		//isWhite = true;
-		isReady = false;
+	
 		SetUpPlayer ();
 
 	}
@@ -49,6 +53,7 @@ public class Player : Photon.MonoBehaviour {
 			isWhite = correctedIsWhite;
 			isReady = correctedIsReady;
 			playerNumber = correctedPlayerNumber;
+			isSecondaryReady = correctedIsSecondaryReady;
 
 		
 		}
@@ -64,6 +69,7 @@ public class Player : Photon.MonoBehaviour {
 			stream.SendNext(isWhite);
 			stream.SendNext(isReady);
 			stream.SendNext(playerNumber);
+			stream.SendNext(isSecondaryReady);
 		
 		}
 
@@ -73,6 +79,7 @@ public class Player : Photon.MonoBehaviour {
 			this.correctedIsWhite = (bool) stream.ReceiveNext();
 			this.correctedIsReady = (bool) stream.ReceiveNext();
 			this.correctedPlayerNumber = (int) stream.ReceiveNext();
+			this.correctedIsSecondaryReady = (bool) stream.ReceiveNext();
 
 		}
 

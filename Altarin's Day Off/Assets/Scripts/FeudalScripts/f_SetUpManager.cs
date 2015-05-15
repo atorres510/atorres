@@ -317,9 +317,14 @@ public class f_SetUpManager : MonoBehaviour {
 				//selectedObject.transform.position = selectedObjectPosOld;
 				//selectedObjectPosOld = Vector2.zero;
 				f_Piece p = selectedObject.GetComponent<f_Piece>();
-				p.transform.position = p.lastOccupiedTile.transform.position;
-				p.occupiedTile = p.lastOccupiedTile;
-				selectedObject = emptyObject;
+				if(p != null){
+
+					p.transform.position = p.lastOccupiedTile.transform.position;
+					p.occupiedTile = p.lastOccupiedTile;
+					selectedObject = emptyObject;
+
+				}
+		
 				
 			}
 
@@ -725,10 +730,11 @@ public class f_SetUpManager : MonoBehaviour {
 			
 			f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
 			if (c.occupiedTile != null) {
-				
+
 				//float aspectRatio = fov / oldFov;
 				//currentCastleBeingPlaced.transform.localScale = currentCastleBeingPlaced.transform.localScale * aspectRatio;
-				currentCastleBeingPlaced.transform.position = c.occupiedTile.transform.position; 
+				Vector3 adjustedPos = new Vector3 (c.occupiedTile.transform.position.x, c.occupiedTile.transform.position.y, -10.0f);
+				currentCastleBeingPlaced.transform.position = adjustedPos; 
 			}
 			
 			oldTrayPosition = trayObject.transform.position;
@@ -1036,6 +1042,7 @@ public class f_SetUpManager : MonoBehaviour {
 			if(players[i].isMyPlayer){
 
 				myPlayer = players[i];
+				f_gameManager.myPlayer = myPlayer;
 				Debug.Log("MyPlayer found.");
 			}
 
@@ -1114,13 +1121,16 @@ public class f_SetUpManager : MonoBehaviour {
 
 		if (readyTotal == players.Length) {
 
+			//myPlayer.isReady = false;
+
 			isSetUp = false;
 
 
 			//StartCoroutine("GameManagerSetUp");
 
 			f_gameManager.myPlayer = myPlayer;
-			f_gameManager.gameOn = true;
+			f_gameManager.players = players;
+			//f_gameManager.gameOn = true;
 			f_gameManager.SetUpBoard();
 			
 		}

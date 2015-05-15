@@ -20,7 +20,7 @@ public abstract class f_Piece : MonoBehaviour {
 	public int pieceID; 
 
 	public f_Tile occupiedTile;
-	public f_Tile lastOccupiedTile;
+	public f_Tile lastOccupiedTile; // used in setupManager
 	public GameObject f_gameManagerObject;
 	public f_GameManager f_gameManager;
 
@@ -89,11 +89,22 @@ public abstract class f_Piece : MonoBehaviour {
 
 			else{
 
+
+				occupiedTile.isOccupied = false;
+				f_gameManager.coordinates[x,y] = 0;
+				
+				transform.position = tile.transform.position;
 				occupiedTile = tile;
 				occupiedTile.isOccupied = true;
-				f_gameManager.myPhotonView.RPC("UpdateCoordinates", PhotonTargets.Others, x, y, tile.x, tile.y, pieceDesignator);
-				x = tile.x;
-				y = tile.y;
+				UpdateCoordinates(tile.x, tile.y);
+
+
+				//occupiedTile = tile;
+				//occupiedTile.isOccupied = true;
+				//f_gameManager.myPhotonView.RPC("UpdateCoordinates", PhotonTargets.Others, x, y, tile.x, tile.y, pieceDesignator);
+				///UpdateCoordinates(tile.x, tile.y);
+				//x = tile.x;
+				//y = tile.y;
 
 
 			}
@@ -133,11 +144,17 @@ public abstract class f_Piece : MonoBehaviour {
 			}
 
 			else{
+
+				occupiedTile.isOccupied = false;
 				occupiedTile = piece.occupiedTile;
-				f_gameManager.UpdateCoordinates(x, y, piece.x, piece.y, pieceDesignator);
-				x = piece.x;
-				y = piece.y;
-				PhotonNetwork.Destroy(piece.gameObject);
+				occupiedTile.isOccupied = true;
+				UpdateCoordinates(piece.x, piece.y);
+				DestroyTargetPiece(piece);
+				//occupiedTile = piece.occupiedTile;
+				//f_gameManager.UpdateCoordinates(x, y, piece.x, piece.y, pieceDesignator);
+				// x = piece.x;
+				//y = piece.y;
+				//PhotonNetwork.Destroy(piece.gameObject);
 			}
 			
 		
@@ -436,7 +453,8 @@ public abstract class f_Piece : MonoBehaviour {
 					if(f_gameManager.selectedPiece == f_gameManager.emptyPiece){
 						
 						
-						if(f_gameManager.isPlayer1Turn == this.isWhite){
+						if(f_gameManager.isPlayer1Turn == this.isWhite && f_gameManager.isOffline || f_gameManager.myPlayer.isWhite == this.isWhite && 
+						   	f_gameManager.myPlayer.isWhite == f_gameManager.isPlayer1Turn){
 							//Debug.Log("3");
 				
 							f_gameManager.selectedPiece = gameObject.GetComponent<f_Piece>();
