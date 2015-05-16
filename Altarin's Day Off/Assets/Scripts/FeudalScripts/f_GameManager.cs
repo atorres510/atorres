@@ -412,13 +412,13 @@ public class f_GameManager : MonoBehaviour {
 
 		if (!isOffline) {
 				
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 			UpdateBoardState (coordinates, tileCoordinates);
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 			UpdatePieceSet (whitePieces, true);
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 			UpdatePieceSet (blackPieces, false);
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 		
 		}
 
@@ -474,13 +474,13 @@ public class f_GameManager : MonoBehaviour {
 
 		if (!isOffline) {
 				
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 			UpdateBoardState (coordinates, tileCoordinates);
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 			UpdatePieceSet (whitePieces, true);
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 			UpdatePieceSet (blackPieces, false);
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (2.0f);
 		
 		}
 	
@@ -900,7 +900,7 @@ public class f_GameManager : MonoBehaviour {
 
 
 
-		Debug.Log (gameObject);
+		//Debug.Log (gameObject);
 		//f_Piece[] pieces = FindObjectsOfType (f_Piece);
 
 		//Debug.Log("piece ID: " + pieceID);

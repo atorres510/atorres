@@ -256,13 +256,19 @@ public class f_SetUpManager : MonoBehaviour {
 				
 				else{
 
+					if(p != null){
+
+						//selectedObject.transform.position = selectedObjectPosOld;
+						//selectedObjectPosOld = Vector2.zero;
+						
+						p.transform.position = p.lastOccupiedTile.transform.position;
+						p.occupiedTile = p.lastOccupiedTile;
+						selectedObject = emptyObject;
+
+
+					}
 					
-					//selectedObject.transform.position = selectedObjectPosOld;
-					//selectedObjectPosOld = Vector2.zero;
-					
-					p.transform.position = p.lastOccupiedTile.transform.position;
-					p.occupiedTile = p.lastOccupiedTile;
-					selectedObject = emptyObject;
+
 					
 				}
 				
