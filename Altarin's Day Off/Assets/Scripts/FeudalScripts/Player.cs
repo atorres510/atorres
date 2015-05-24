@@ -17,6 +17,7 @@ public class Player : Photon.MonoBehaviour {
 
 	Camera playerCamera;
 	CameraController playerCameraController;
+	AudioListener playerAudioListener;
 
 	void SetUpPlayer(){
 
@@ -24,6 +25,7 @@ public class Player : Photon.MonoBehaviour {
 		isSecondaryReady = false;
 		playerCamera = gameObject.GetComponent<Camera> ();
 		playerCameraController = gameObject.GetComponent<CameraController> ();
+		playerAudioListener = gameObject.GetComponent<AudioListener> ();
 		GameObject borderOriginObject = GameObject.FindGameObjectWithTag ("Origin");
 		Transform origin = borderOriginObject.transform;
 		playerCameraController.origin = origin;
@@ -32,6 +34,16 @@ public class Player : Photon.MonoBehaviour {
 		//playerCameraController = gameObject.GetComponent<CameraController> ();
 		//GameObject origin = GameObject.FindGameObjectWithTag ("Origin");
 		//playerCameraController.origin = origin.transform;
+		if (!photonView.isMine) {
+				
+			playerCamera.enabled = false;
+			playerCameraController.enabled = false;
+			playerAudioListener.enabled = false;
+
+		
+		
+		
+		}
 
 	}
 

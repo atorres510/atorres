@@ -582,7 +582,7 @@ public class f_GameManager : MonoBehaviour {
 	}
 
 
-	public void UpdateCoordinates(int oldX, int oldY, int newX, int newY, int pieceID){
+	/*public void UpdateCoordinates(int oldX, int oldY, int newX, int newY, int pieceID){
 		
 		coordinates[oldX, oldY] = 0;
 		f_Tile t = tileCoordinates [oldX, oldY].GetComponent<f_Tile> ();
@@ -602,7 +602,7 @@ public class f_GameManager : MonoBehaviour {
 		
 		//}
 
-	}
+	}*/
 
 
 
@@ -802,6 +802,7 @@ public class f_GameManager : MonoBehaviour {
 		coordinates [x, y] = p;
 		f_Tile t = tileCoordinates [x, y].GetComponent<f_Tile> ();
 		t.isOccupied = isOccupied;
+		Debug.Log ("updating coordinates");
 
 
 	}
