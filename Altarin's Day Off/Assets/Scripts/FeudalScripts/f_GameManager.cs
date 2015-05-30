@@ -29,6 +29,7 @@ public class f_GameManager : MonoBehaviour {
 
 	public bool toggleTileGUI;
 
+	//networking membervariables.  these should not affect the local multiplayer.
 	public bool gameOn;
 	public bool isOffline;
 	public PhotonView myPhotonView;
@@ -411,14 +412,18 @@ public class f_GameManager : MonoBehaviour {
 		}
 
 		if (!isOffline) {
-				
-			yield return new WaitForSeconds (2.0f);
-			UpdateBoardState (coordinates, tileCoordinates);
-			yield return new WaitForSeconds (2.0f);
-			UpdatePieceSet (whitePieces, true);
-			yield return new WaitForSeconds (2.0f);
-			UpdatePieceSet (blackPieces, false);
-			yield return new WaitForSeconds (2.0f);
+
+
+			if(myPlayer.isWhite){
+				//yield return new WaitForSeconds (2.0f);
+				UpdateBoardState (coordinates, tileCoordinates);
+				//yield return new WaitForSeconds (2.0f);
+				UpdatePieceSet (whitePieces, true);
+				//yield return new WaitForSeconds (2.0f);
+				UpdatePieceSet (blackPieces, false);
+				//yield return new WaitForSeconds (2.0f);
+			}
+
 		
 		}
 
@@ -474,13 +479,19 @@ public class f_GameManager : MonoBehaviour {
 
 		if (!isOffline) {
 				
-			yield return new WaitForSeconds (2.0f);
-			UpdateBoardState (coordinates, tileCoordinates);
-			yield return new WaitForSeconds (2.0f);
-			UpdatePieceSet (whitePieces, true);
-			yield return new WaitForSeconds (2.0f);
-			UpdatePieceSet (blackPieces, false);
-			yield return new WaitForSeconds (2.0f);
+
+			if(!myPlayer.isWhite){
+
+				//yield return new WaitForSeconds (2.0f);
+				UpdateBoardState (coordinates, tileCoordinates);
+				//yield return new WaitForSeconds (2.0f);
+				UpdatePieceSet (whitePieces, true);
+				//yield return new WaitForSeconds (2.0f);
+				UpdatePieceSet (blackPieces, false);
+				//yield return new WaitForSeconds (2.0f);
+
+			} 
+
 		
 		}
 	
@@ -894,7 +905,7 @@ public class f_GameManager : MonoBehaviour {
 	}
 
 
-	//updates the piece sets for the opposing piece sets. 
+	//is called on the opponent to update a specific piece.  
 	[RPC]
 	void UpdatePiece(Vector3 newPosition, int newX, int newY, bool isSetWhite, int pieceID){
 
