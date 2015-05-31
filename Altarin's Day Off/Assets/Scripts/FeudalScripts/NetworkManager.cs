@@ -90,6 +90,8 @@ public class NetworkManager : MonoBehaviour {
 			//p.isMyPlayer = true;
 			p.isWhite = false;
 			p.playerNumber = PhotonNetwork.playerList.Length;
+			CameraController c = p.GetComponent<CameraController>();
+			c.enabled = false;
 
 		}
 
@@ -97,7 +99,8 @@ public class NetworkManager : MonoBehaviour {
 			Debug.Log("No other players currently connected.");
 			p.isWhite = true;
 			p.playerNumber = (PhotonNetwork.playerList.Length);
-
+			CameraController c = p.GetComponent<CameraController>();
+			c.enabled = false;
 
 		}
 

@@ -13,7 +13,7 @@ public class f_GameManager : MonoBehaviour {
 	bool isTurnPassed;
 
 	//victory conditions and variables
-	bool isGameOver;
+	public bool isGameOver;
 	bool didWhiteWin;
 	f_Castle whiteCastle;
 	f_Castle blackCastle;
@@ -375,7 +375,12 @@ public class f_GameManager : MonoBehaviour {
 		
 		isTurnOver = false;
 		isPlayer1Turn = true;
-		
+
+		int[] preTurnPieces;
+
+		preTurnPieces = ReturnCurrentPieceArray ();
+
+
 		while(!isTurnOver) {
 
 			if(isOffline){
@@ -405,16 +410,30 @@ public class f_GameManager : MonoBehaviour {
 		
 		ResetTurn (whitePieces);
 
+
 		if (CheckVictoryConditions ()) {
-				
+			if(!isOffline){
+				if(myPlayer.isWhite){
+
+					this.myPhotonView.RPC("UpdateVictory", PhotonTargets.Others, isGameOver, didWhiteWin);
+
+				}
+
+			}	
 			DisableAllPieceColliders();
 		
 		}
 
+		//sync's boards for other players using RPCs
 		if (!isOffline) {
-
-
+	
 			if(myPlayer.isWhite){
+				
+				int[] destroyedPieceIDs;
+				
+				destroyedPieceIDs = ReturnDestoryedPieceArray(preTurnPieces, ReturnCurrentPieceArray ());
+				
+				UpdateDestroyedPieces(destroyedPieceIDs);
 				//yield return new WaitForSeconds (2.0f);
 				UpdateBoardState (coordinates, tileCoordinates);
 				//yield return new WaitForSeconds (2.0f);
@@ -423,23 +442,33 @@ public class f_GameManager : MonoBehaviour {
 				UpdatePieceSet (blackPieces, false);
 				//yield return new WaitForSeconds (2.0f);
 			}
-
-		
+			
+			
 		}
 
-		//Update pieces and coordinates
+
+
+
+
 		
 		yield return null;
 		
 		
 		
 	}
+
+
+
 	
 	IEnumerator Player2Turn(){
 		Debug.Log ("Player 2 Turn");
 		
 		isPlayer1Turn = false;
 		isTurnOver = false;
+
+		int[] preTurnPieces;
+		
+		preTurnPieces = ReturnCurrentPieceArray ();
 		
 		while(!isTurnOver) {
 			
@@ -470,6 +499,15 @@ public class f_GameManager : MonoBehaviour {
 		ResetTurn (blackPieces);
 
 		if (CheckVictoryConditions ()) {
+
+			if(!isOffline){
+				if(!myPlayer.isWhite){
+
+					this.myPhotonView.RPC("UpdateVictory", PhotonTargets.Others, isGameOver, didWhiteWin);
+
+				}
+	
+			}
 				
 			DisableAllPieceColliders();
 		
@@ -482,6 +520,11 @@ public class f_GameManager : MonoBehaviour {
 
 			if(!myPlayer.isWhite){
 
+				int[] destroyedPieceIDs;
+				
+				destroyedPieceIDs = ReturnDestoryedPieceArray(preTurnPieces, ReturnCurrentPieceArray ());
+				
+				UpdateDestroyedPieces(destroyedPieceIDs);
 				//yield return new WaitForSeconds (2.0f);
 				UpdateBoardState (coordinates, tileCoordinates);
 				//yield return new WaitForSeconds (2.0f);
@@ -617,10 +660,10 @@ public class f_GameManager : MonoBehaviour {
 
 
 
-
+	//[RPC]
 	void DisableAllPieceColliders(){
 
-		for(int i = 0; i < whitePieces.Length; i++){
+		/*for(int i = 0; i < whitePieces.Length; i++){
 
 			if(whitePieces[i] != null){
 				BoxCollider2D b = whitePieces[i].GetComponent<BoxCollider2D>();
@@ -630,16 +673,30 @@ public class f_GameManager : MonoBehaviour {
 		}
 
 
-		for(int i = 0; i < blackPieces.Length; i++){
+		for(int j = 0; j < blackPieces.Length; j++){
 
-			if(blackPieces[i]){
-				BoxCollider2D b = blackPieces[i].GetComponent<BoxCollider2D>();
+			if(blackPieces[j] != null){
+				BoxCollider2D b = blackPieces[j].GetComponent<BoxCollider2D>();
 				b.enabled = false;
 			}
 
 
+		}*/
+
+
+		GameObject[] pieces = GameObject.FindGameObjectsWithTag ("f_Piece");
+
+
+		for (int i = 0; i < pieces.Length; i++) {
+				
+			Debug.Log("Disabling piece collider for: " + pieces[i]);
+			BoxCollider2D b = pieces[i].GetComponent<BoxCollider2D>();
+
+			b.enabled = false;
+		
+		
 		}
-		Debug.Log ("all piece colliders disabled");
+		Debug.Log ("All piece colliders disabled.");
 	}
 
 	
@@ -680,7 +737,12 @@ public class f_GameManager : MonoBehaviour {
 		while(!isGameOver){
 			
 			yield return StartCoroutine(Player1Turn());
+			yield return new WaitForSeconds(1f);
+			if(isGameOver){
+				break;
+			}
 			yield return StartCoroutine(Player2Turn());
+			yield return new WaitForSeconds(1f);
 			
 		}
 
@@ -729,11 +791,29 @@ public class f_GameManager : MonoBehaviour {
 				if(GUI.Button(new Rect(10, 70, 150, 20), "Finish Turn")){
 
 					isTurnPassed = true;
-					Debug.Log("Turn passed: " + isTurnPassed);
+					//Debug.Log("Turn passed: " + isTurnPassed);
 
 				}
 
 			}
+
+			/*if(GUI.Button(new Rect(10, Screen.height - 20, 150, 20), "Debug Piece Set")){
+
+				for(int i = 0; i < whitePieces.Length; i++){
+
+					Debug.Log(whitePieces[i] + " debug");
+
+				}
+
+				for(int i = 0; i < blackPieces.Length; i++){
+					
+					Debug.Log(blackPieces[i] + " debug");
+					
+				}
+
+
+
+			}*/
 			
 			//toggleTileGUI = GUI.Toggle (new Rect (10, 40, 125, 20), toggleTileGUI, "Toggle Tile GUI");
 			
@@ -776,7 +856,7 @@ public class f_GameManager : MonoBehaviour {
 
 		}
 
-		Debug.Log ("ready total: " + readyTotal);
+		//Debug.Log ("ready total: " + readyTotal);
 		if (readyTotal == players.Length) {
 				
 			//myPlayer.isSecondaryReady = false;
@@ -813,7 +893,7 @@ public class f_GameManager : MonoBehaviour {
 		coordinates [x, y] = p;
 		f_Tile t = tileCoordinates [x, y].GetComponent<f_Tile> ();
 		t.isOccupied = isOccupied;
-		Debug.Log ("updating coordinates");
+		//Debug.Log ("updating coordinates");
 
 
 	}
@@ -829,6 +909,33 @@ public class f_GameManager : MonoBehaviour {
 			whiteCastle.y = y;
 			whiteCastle.isOccupied = isOccupied;
 			whiteCastle.rotation = rotation;
+		
+			switch(rotation)
+			{
+
+				case 0:
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 90f);
+					break;
+
+				case 1:
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 180f);
+					break;
+
+				case 2:
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+					break;
+
+				case 3:
+					//whiteCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+					break;
+
+				default:
+					break;
+
+
+
+
+			}
 
 
 			whiteCastle.UpdateCastleGreensPos();
@@ -849,6 +956,34 @@ public class f_GameManager : MonoBehaviour {
 			blackCastle.ReplaceOccupiedTile (blackCastle.castleGreens);
 			blackCastle.ReplaceOccupiedTile (blackCastle);
 
+			switch(rotation)
+			{
+				
+			case 0:
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 90f);
+				break;
+				
+			case 1:
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 180f);
+				break;
+				
+			case 2:
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+				break;
+				
+			case 3:
+				//blackCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+				break;
+				
+			default:
+				break;
+				
+				
+				
+				
+			}
+
+
 		}
 	
 	
@@ -860,11 +995,22 @@ public class f_GameManager : MonoBehaviour {
 
 	void UpdatePieceSet(f_Piece[] pieceSet, bool isSetWhite){
 
+
 		for (int i = 0; i < pieceSet.Length; i++) {
+
+			if(pieceSet[i] != null){
+
+				this.myPhotonView.RPC("UpdatePiece", PhotonTargets.Others, pieceSet[i].transform.position, 
+				                      pieceSet[i].x, pieceSet[i].y, isSetWhite, pieceSet[i].pieceID);
+
+			}
+
+			else{
+
+
+			}
 				
-			this.myPhotonView.RPC("UpdatePiece", PhotonTargets.Others, pieceSet[i].transform.position, 
-				pieceSet[i].x, pieceSet[i].y, isSetWhite, pieceSet[i].pieceID);
-		
+
 		}
 
 
@@ -924,7 +1070,7 @@ public class f_GameManager : MonoBehaviour {
 				if(whitePieces[i] == null){
 					Debug.Log("White Piece Missing: Null Reference Exception!");
 
-					break;
+
 
 				}
 
@@ -953,7 +1099,7 @@ public class f_GameManager : MonoBehaviour {
 
 				if(blackPieces[i] == null){
 					Debug.Log("Black Piece Missing: Null Reference Exception!");
-					break;
+
 
 				}
 				
@@ -972,6 +1118,205 @@ public class f_GameManager : MonoBehaviour {
 
 		}
 		
+	}
+
+
+
+	void UpdateDestroyedPieces(int[] destroyedPieceIDs){
+
+
+		for (int i = 0; i < destroyedPieceIDs.Length; i++) {
+				
+			if(destroyedPieceIDs[i] == 0){
+
+				break;
+
+			}
+
+			else{
+
+				this.myPhotonView.RPC("DestroyPiece", PhotonTargets.Others, destroyedPieceIDs[i]);
+
+			}
+		
+		
+		
+		}
+
+
+
+	
+	
+	
+	
+	}
+
+	[RPC]
+	void DestroyPiece(int destroyedPieceID){
+
+		for (int i = 0; i < whitePieces.Length; i++) {
+
+			if(whitePieces[i] == null){}
+			//else if(blackPieces[i] == null){}
+
+			else if(whitePieces[i].pieceID == destroyedPieceID){
+
+				Debug.Log("PieceID: " + whitePieces[i].pieceID + " was destroyed.");
+				Destroy(whitePieces[i].gameObject);
+				break;
+			}
+
+			/*else if(blackPieces[i].pieceID == destroyedPieceID){
+
+				Debug.Log("PieceID: " + blackPieces[i].pieceID + " was destroyed.");
+				Destroy(blackPieces[i].gameObject);
+				break;
+			}
+
+			else{}*/
+			
+		}
+
+
+		for (int j = 0; j <blackPieces.Length; j++) {
+
+			if(blackPieces[j] == null){}
+
+			else if(blackPieces[j].pieceID == destroyedPieceID){
+				
+				Destroy(blackPieces[j].gameObject);
+				break;
+			}
+
+			else{}
+			
+		}
+
+	}
+
+
+	//returns an array of pieces currently on the board as integers.  used to determine pieces that have been destroyed
+	int[] ReturnCurrentPieceArray(){
+
+		//instantiates an array that can hold over then expected number of pieces
+		int[] currentPieceArray = new int[30];
+		int m = 0;
+
+		f_Piece[] currentPieceArrayObjects  = FindObjectsOfType(typeof(f_Piece)) as f_Piece[];
+			//GameObject.FindGameObjectsWithTag ("f_Piece");
+
+		for(int i = 0; i < currentPieceArrayObjects.Length; i++){
+
+			currentPieceArray[m] = currentPieceArrayObjects[i].pieceID;
+			m++;
+		}
+
+		return currentPieceArray;
+	
+	
+	}
+
+	int[] ReturnDestoryedPieceArray(int[] preTurnSet, int[] postTurnSet){
+
+		//instantiates an array that can hold over then expected number of pieces
+		int[] destroyedPieceArray = new int[15];
+
+		int m = 0;
+
+
+		for (int i = 0; i < preTurnSet.Length; i++) {
+				
+			bool survived = false;
+			int preTurnPieceID = preTurnSet[i];
+
+			if(preTurnPieceID == 0){
+
+				break;
+
+			}
+
+			for(int j = 0; j < postTurnSet.Length; j++){
+
+				int postTurnPieceID = postTurnSet[j];
+
+				if(postTurnPieceID == 0){}
+
+				else if(preTurnPieceID == postTurnPieceID){
+
+					survived = true;
+					break;
+
+				}
+
+				else{};
+
+
+			}
+
+			if(!survived){
+
+				destroyedPieceArray[m] = preTurnPieceID;
+				m++;
+
+			}
+		
+		
+		}
+
+
+
+	
+		//for debugging
+		/*for(int x = 0; x < destroyedPieceArray.Length; x++) {
+				
+
+			if(destroyedPieceArray[x] != 0){
+				Debug.Log("PieceID: " + destroyedPieceArray[x] + " was destroyed.");
+			}
+
+			else{
+				break;
+			}
+
+		
+		}*/
+
+
+		return destroyedPieceArray;
+	
+	
+	}
+
+
+
+	void DebugPieceArray(){
+
+		int[] a = ReturnCurrentPieceArray ();
+
+		for (int i = 0; i < a.Length; i++) {
+				
+			Debug.Log("PieceAdded");
+		
+		
+		}
+	
+	
+	
+	}
+
+
+	//replaces call for victory for networked game
+	[RPC]
+	void UpdateVictory(bool IsGameOver, bool IsWhiteWinner){
+
+	
+		isGameOver = IsGameOver;
+		didWhiteWin = IsWhiteWinner;
+
+		DisableAllPieceColliders ();
+
+	
+	
 	}
 
 

@@ -47,8 +47,19 @@ public abstract class f_Piece : MonoBehaviour {
 
 	public void TogglePieceCollider(bool usedTurn){
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
+		if (!f_gameManager.isGameOver) {
+				
 
-		collider.enabled = !usedTurn;
+			
+			collider.enabled = !usedTurn;
+		
+		}
+
+		else{
+
+			collider.enabled = false;
+
+		}
 
 	}
 	

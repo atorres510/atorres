@@ -1049,6 +1049,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 				myPlayer = players[i];
 				f_gameManager.myPlayer = myPlayer;
+
 				Debug.Log("MyPlayer found.");
 			}
 
@@ -1059,7 +1060,9 @@ public class f_SetUpManager : MonoBehaviour {
 
 		
 		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
-		//Debug.Log (player);
+		CameraController c = myPlayer.GetComponent<CameraController>();
+		c.enabled = true;
+
 		trayObject.SetActive(true);
 		
 		if (myPlayer.isWhite) {
@@ -1123,7 +1126,7 @@ public class f_SetUpManager : MonoBehaviour {
 			
 		}
 
-		Debug.Log ("Ready Total: " + readyTotal);
+		//Debug.Log ("Ready Total: " + readyTotal);
 
 		if (readyTotal == players.Length) {
 
