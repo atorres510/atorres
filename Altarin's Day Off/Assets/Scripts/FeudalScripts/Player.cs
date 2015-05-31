@@ -8,6 +8,8 @@ public class Player : Photon.MonoBehaviour {
 	public bool isWhite;
 	public bool isReady;
 	public bool isSecondaryReady; //for testing purposes.  should be removed.
+	public AudioClip music1;
+	public AudioClip music2;
 
 	bool correctedIsWhite;
 	bool correctedIsReady;
@@ -18,6 +20,7 @@ public class Player : Photon.MonoBehaviour {
 	Camera playerCamera;
 	CameraController playerCameraController;
 	AudioListener playerAudioListener;
+	AudioSource audioSource;
 
 	void SetUpPlayer(){
 
@@ -26,6 +29,7 @@ public class Player : Photon.MonoBehaviour {
 		playerCamera = gameObject.GetComponent<Camera> ();
 		playerCameraController = gameObject.GetComponent<CameraController> ();
 		playerAudioListener = gameObject.GetComponent<AudioListener> ();
+		audioSource = FindObjectOfType(typeof(AudioSource)) as AudioSource;
 		GameObject borderOriginObject = GameObject.FindGameObjectWithTag ("Origin");
 		Transform origin = borderOriginObject.transform;
 		playerCameraController.origin = origin;
@@ -44,10 +48,36 @@ public class Player : Photon.MonoBehaviour {
 		
 		
 		}
+	
 
 	}
 
+	public void SetUpAudio(){
 
+		//AudioClip music;
+
+
+
+		if (isWhite) {
+				
+			//music = Resources.Load("Audio/ShockDrop&Roll") as AudioClip;
+			audioSource.clip = music1;
+		
+		}
+
+
+		else{
+
+
+			//music = Resources.Load("Audio/TheBattalionAdvances") as AudioClip;
+			audioSource.clip = music2;
+		}
+
+
+		audioSource.enabled = true;
+
+
+	}
 
 
 	void Awake(){
@@ -55,6 +85,7 @@ public class Player : Photon.MonoBehaviour {
 		//isWhite = true;
 	
 		SetUpPlayer ();
+		//SetUpAudio ();
 
 	}
 

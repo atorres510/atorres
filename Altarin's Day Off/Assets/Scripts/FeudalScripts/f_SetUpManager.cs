@@ -1062,6 +1062,7 @@ public class f_SetUpManager : MonoBehaviour {
 		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
 		CameraController c = myPlayer.GetComponent<CameraController>();
 		c.enabled = true;
+		myPlayer.SetUpAudio ();
 
 		trayObject.SetActive(true);
 		
