@@ -396,7 +396,7 @@ public abstract class f_Piece : MonoBehaviour {
 									
 								}
 								//allow any piece on the castle greens to take the piece occupying the castle
-								else if ((this.occupiedTile.tileType == 5) && (f_gameManager.selectedPiece.occupiedTile.tileType != 4)){
+								else if ((this.occupiedTile.tileType == 5) && (f_gameManager.selectedPiece.occupiedTile.tileType == 4)){
 									//checks if the selected piece is an archer, and if so allows the target to be taken without moving
 									if(f_gameManager.selectedPiece.pieceDesignator == 5 || f_gameManager.selectedPiece.pieceDesignator == 13){
 										Debug.Log(f_gameManager.selectedPiece + " has taken " + this);
