@@ -393,15 +393,22 @@ public class f_Archer : f_Piece {
 	
 	}
 
+
+
 	
 	public override bool isTileOccupied (f_Tile t){
-		
+
+		//represents tile in question
 		f_Tile i = f_gameManager.tileCoordinates [t.x, t.y].GetComponent<f_Tile> ();
+
+		//represents currently occupied tile of the selected piece (this piece)
 		f_Tile j = f_gameManager.tileCoordinates [x, y].GetComponent<f_Tile> ();
+
+
 		//if selected piece occupies the greens
 		if (j.tileType == 4) {
 			
-			if (i.tileType == 2 || i.tileType == 3 || i.isOccupied) {
+			if (i.tileType == 3 || i.isOccupied) {
 				
 				return true;
 				
@@ -452,24 +459,40 @@ public class f_Archer : f_Piece {
 
 	public override bool isValidMove (f_Tile t){
 
+		//represents currently occupied tile by this piece
 		f_Tile i = f_gameManager.tileCoordinates [x, y].GetComponent<f_Tile> ();
-		
+
+
 		if (this.isWhite) {
 			if (f_gameManager.coordinates[t.x,t.y] > 8 || f_gameManager.coordinates[t.x,t.y] == 0){
 				//if this piece occupies the greens
 				if(i.tileType == 4){
 
-					f_Castle c = t.GetComponent<f_Castle>();
-					//if the castle is the same color as archer, do not allow in
-					if(c.isWhite){
-						
-						return false;
-						
+					//determine if the castle is friendly or not and allow movement accordingly
+					if(t.tileType == 5){
+
+						f_Castle c = t.GetComponent<f_Castle>();
+						//if the castle is the same color as archer, do not allow in
+						if(c.isWhite){
+							
+							return false;
+							
+						}
+
+						else{
+
+							return true;
+
+						}
+
 					}
 
+
+
+					//allow the piece to move anywhere else
 					else {
 
-						if(t.tileType == 4 || t.tileType == 5 || t.tileType == 0 || t.tileType == 2) {
+						if(t.tileType == 4 || t.tileType == 0 || t.tileType == 2) {
 							return true;
 						}
 						
@@ -477,12 +500,16 @@ public class f_Archer : f_Piece {
 							return false;
 						}
 
-
 					}
 
+
+
 				}
+
+
+
 				
-				//if this piece occupies the castle, only allow movement to the greens
+				//if this piece occupies the castle, only allow movement to the greens.  Archer should not require this
 				else if(i.tileType == 5){
 
 					if(t.tileType == 4) {
@@ -516,6 +543,81 @@ public class f_Archer : f_Piece {
 		
 		else {
 			if (f_gameManager.coordinates[t.x,t.y] < 9 || f_gameManager.coordinates[t.x,t.y] == 0){
+
+				//if this piece occupies the greens
+				if(i.tileType == 4){
+					
+					//determine if the castle is friendly or not and allow movement accordingly
+					if(t.tileType == 5){
+						
+						f_Castle c = t.GetComponent<f_Castle>();
+						//if the castle is the same color as archer, do not allow in
+						if(!c.isWhite){
+							
+							return false;
+							
+						}
+						
+						else{
+							
+							return true;
+							
+						}
+						
+					}
+					
+					
+					
+					//allow the piece to move anywhere else
+					else {
+						
+						if(t.tileType == 4 || t.tileType == 0 || t.tileType == 2) {
+							return true;
+						}
+						
+						else{
+							return false;
+						}
+						
+					}
+					
+					
+					
+				}
+				
+				
+				
+				
+				//if this piece occupies the castle, only allow movement to the greens.  Archer should not require this
+				else if(i.tileType == 5){
+					
+					if(t.tileType == 4) {
+						return true;
+					}
+					
+					else{
+						
+						return false;
+					}
+					
+				}
+				
+				
+				//if not occupying castle or greens
+				else if(t.tileType == 4 || t.tileType == 0 ||t.tileType == 2) {
+					return true;
+				}
+				
+				else{
+					return false;
+				}
+			}
+			
+			else {
+				return false;
+			}	
+
+				/*
 				//if this piece occupies the greens
 				if(i.tileType == 4){
 					
@@ -553,7 +655,7 @@ public class f_Archer : f_Piece {
 			
 			else {
 				return false;
-			}	
+			}*/	
 			
 		}
 		
