@@ -5,12 +5,11 @@ using UnityEngine.UI;
 public class InteractableObject : MonoBehaviour {
 
 
+
+	public TextAsset text;
+	public Textbox textBoxPrefab;
+
 	Light simpleHighlightEffect;
-	public Text hoverOverText;
-
-	public string test;
-
-
 
 
 
@@ -18,6 +17,15 @@ public class InteractableObject : MonoBehaviour {
 	
 	
 		simpleHighlightEffect.enabled = true;
+
+		if (Input.GetMouseButton (0)) {
+		
+		
+		
+		
+		
+		
+		}
 	
 	
 	
@@ -36,19 +44,25 @@ public class InteractableObject : MonoBehaviour {
 
 
 
-
-
-
-	void SetupObject(){
+	void InstantiateTextBox(TextAsset textFile){
 	
+		Canvas canvas = FindObjectOfType <Canvas>();
 
+		Textbox textBox = Instantiate (textBoxPrefab, transform.position, Quaternion.identity) as Textbox;
 
+		textBox.transform.SetParent (gameObject.transform);
+
+		//textBox.transform.position = gameObject.transform.position;
+
+		RectTransform rect = textBox.GetComponent<RectTransform> ();
+
+		rect.anchoredPosition = new Vector2(transform.position.x, transform.position.y);
+
+		textBox.TextFile = textFile;
+	
 	
 	
 	}
-
-
-
 
 
 
@@ -56,10 +70,10 @@ public class InteractableObject : MonoBehaviour {
 
 		simpleHighlightEffect = gameObject.GetComponent<Light> ();
 		simpleHighlightEffect.enabled = false;
+		InstantiateTextBox (text);
 
-		int stringLength = test.Length;
 
-		Debug.Log (stringLength);
+
 
 	
 	}

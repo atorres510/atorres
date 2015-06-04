@@ -10,6 +10,7 @@ public class Door : MonoBehaviour {
 	void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
+
 	}
 
 	void OnMouseOver()
@@ -20,7 +21,7 @@ public class Door : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D bcoll)
+	void OnTriggerStay2D(Collider2D bcoll)
 	{
 		if(bcoll.gameObject == player)
 		{
@@ -34,6 +35,7 @@ public class Door : MonoBehaviour {
 		if(bcoll.gameObject == player)
 		{
 			isColliding = false;
+			Debug.Log("NO LONGER COLLIDING.");
 		}
 	}
 

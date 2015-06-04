@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.IO;
 
 public class Textbox : MonoBehaviour {
 
 	public Text UIText;
-	public GameObject UIPanel;
+	public RectTransform UIPanel;
 
+	TextAsset textFile;
 	string text;
 	string[] lines;
 
@@ -15,13 +17,23 @@ public class Textbox : MonoBehaviour {
 	float unitPerChar = 6;
 
 
+	public TextAsset TextFile{
 
+		set{
+
+			textFile = value;
+
+		}
+
+
+
+	}
 
 
 
 	string[] CutIntoLines(string text){
 
-		string[] cutLines = text.Split (new char[] {'\n'}, System.StringSplitOptions.RemoveEmptyEntries);
+		string[] cutLines = text.Split (new char[] {'\n'});
 
 
 		for (int i = 0; i < cutLines.Length; i++) {
@@ -93,7 +105,12 @@ public class Textbox : MonoBehaviour {
 		//fids the right heigth of by finding number of lines
 		float rectHeigth = numberOfLines * unitPerLine;
 
-		rectTransform.sizeDelta = (new Vector2(rectWidth, rectHeigth));
+		Vector2 adjustedSize = new Vector2 (rectWidth, rectHeigth);
+
+
+		UIText.rectTransform.sizeDelta = (adjustedSize);
+
+		UIPanel.sizeDelta = (adjustedSize);
 
 
 
@@ -105,7 +122,9 @@ public class Textbox : MonoBehaviour {
 
 	void Start(){
 
-
+		//text = UIText.text;
+		text = textFile.text;
+		UIText.text = text;
 		rectTransform = gameObject.GetComponent<RectTransform> ();
 		lines = CutIntoLines (text);
 		FormatTextBoxSize(rectTransform, ReturnLongestLineLength(lines), CountLines(lines));
