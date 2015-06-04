@@ -833,7 +833,7 @@ public class f_SetUpManager : MonoBehaviour {
 		f_Tile t = c.castleGreens;
 
 		//holds length of board and needs definition outside of this fxn
-		int boardLength = 24;
+		int boardLength = 23;
 
 		//if greens are out of bounds return false
 		if (t.x < 0 || t.y < 0 || t.x > boardLength || t.y > boardLength) {

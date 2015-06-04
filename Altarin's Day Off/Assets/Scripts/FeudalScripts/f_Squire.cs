@@ -77,7 +77,7 @@ public class f_Squire : f_Piece {
 		//if selected piece occupies the greens
 		if (j.tileType == 4) {
 			
-			if (i.tileType == 2 || i.tileType == 3) {
+			if (i.tileType == 3 || i.isOccupied) {
 				
 				return true;
 				
@@ -178,7 +178,7 @@ public class f_Squire : f_Piece {
 				//if this piece occupies the greens
 				if(i.tileType == 4){
 					
-					if(t.tileType == 4 || t.tileType == 5 || t.tileType == 0 || t.tileType == 2) {
+					if(t.tileType == 4 || t.tileType == 5 || t.tileType == 0) {
 						return true;
 					}
 					
