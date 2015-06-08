@@ -743,8 +743,8 @@ public class f_SetUpManager : MonoBehaviour {
 			
 			for(int i = 0; i < slots.Length; i++){
 				
-				//float aspectRatio = fov / oldFov;
-				//slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
+				float aspectRatio = fov / oldFov;
+				slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
 				slots[i].transform.position += dPosition;
 				
 				
@@ -758,7 +758,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if(p.occupiedTile != null){
 					
 					
-					//float aspectRatio = fov / oldFov;
+					//float aspectRatio = oldFov/fov;
 					//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
 					Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
 					pieces[j].transform.position = adjustedPos;
