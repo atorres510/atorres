@@ -25,6 +25,7 @@ public class f_Archer : f_Piece {
 			
 			int i = x + 1;
 			int j = y + 1;
+
 			
 			while (i < (x + 4) && j < (y + 4)) {
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
@@ -34,7 +35,8 @@ public class f_Archer : f_Piece {
 				else{
 					
 					f_Tile t = f_gameManager.tileCoordinates[i,j].GetComponent<f_Tile>();
-					
+
+					//if tile in question is the castle, add it and then stop 
 					if(t.tileType == 5){
 						
 						MovementTiles.Add(t);
@@ -42,6 +44,33 @@ public class f_Archer : f_Piece {
 						break;
 						
 						
+					}
+
+					//if tile in question is the greens, 
+					else if(t.tileType == 4){
+
+						//adds the greens to movement tiles
+
+						MovementTiles.Add (t);
+
+						//check all tiles after the greens if they are occupied
+
+						for(int a = i; a < (x + 4); a++){
+
+							for(int b = j; b < (y + 4); b++){
+								t = f_gameManager.tileCoordinates[a,b].GetComponent<f_Tile>();
+								if(t.isOccupied){
+									//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+									MovementTiles.Add(t);
+									break;
+
+								}
+
+							}
+
+						} 
+
+						break;
 					}
 					
 					else {
@@ -90,6 +119,33 @@ public class f_Archer : f_Piece {
 						
 						
 					}
+
+					//if tile in question is the greens, 
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+						
+						for(int a = i; a < (x + 4); a++){
+							
+							for(int b = j; b > (y - 4); b--){
+								t = f_gameManager.tileCoordinates[a,b].GetComponent<f_Tile>();
+								if(t.isOccupied){
+									//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+									MovementTiles.Add(t);
+									break;
+									
+								}
+								
+							}
+							
+						} 
+						
+						break;
+					}
 					
 					else {
 						
@@ -136,6 +192,33 @@ public class f_Archer : f_Piece {
 						
 						
 					}
+
+					//if tile in question is the greens, 
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+						
+						for(int a = i; a > (x - 4); a++){
+							
+							for(int b = j; b > (y - 4); b--){
+								t = f_gameManager.tileCoordinates[a,b].GetComponent<f_Tile>();
+								if(t.isOccupied){
+									//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+									MovementTiles.Add(t);
+									break;
+									
+								}
+								
+							}
+							
+						} 
+						
+						break;
+					}
 					
 					else {
 						
@@ -181,6 +264,34 @@ public class f_Archer : f_Piece {
 						
 						
 					}
+
+					//if tile in question is the greens, 
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+						
+						for(int a = i; a > (x - 4); a--){
+							
+							for(int b = j; b < (y + 4); b++){
+								t = f_gameManager.tileCoordinates[a,b].GetComponent<f_Tile>();
+								if(t.isOccupied){
+									//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+									MovementTiles.Add(t);
+									break;
+									
+								}
+								
+							}
+							
+						} 
+						
+						break;
+					}
+
 					
 					else {
 						
@@ -226,6 +337,29 @@ public class f_Archer : f_Piece {
 						break;
 						
 						
+					}
+
+					//if tile in question is the greens, 
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+
+							for(int b = j; b < (y + 4); b++){
+								t = f_gameManager.tileCoordinates[x,b].GetComponent<f_Tile>();
+								if(t.isOccupied){
+									//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+									MovementTiles.Add(t);
+									break;
+									
+								}
+								
+							}
+
+						break;
 					}
 					
 					else {
@@ -275,6 +409,32 @@ public class f_Archer : f_Piece {
 						
 						
 					}
+
+					//if tile in question is the greens, 
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+						
+						for(int a = i; a < (x + 4); a++){
+						
+							t = f_gameManager.tileCoordinates[a,j].GetComponent<f_Tile>();
+							if(t.isOccupied){
+								//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+								MovementTiles.Add(t);
+								break;
+								
+							}
+								
+
+							
+						} 
+						
+						break;
+					}
 					
 					else {
 						
@@ -305,6 +465,7 @@ public class f_Archer : f_Piece {
 			j = y - 1;
 			
 			while (j > (y - 4)) {
+				//if out of bounds
 				if(i < 0 || j < 0 || i >= boardLength || j >= boardLength){
 					break;
 				}
@@ -321,6 +482,32 @@ public class f_Archer : f_Piece {
 						
 						
 					}
+
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+						
+						for(int b = j; b < (y - 4); b--){
+							
+							t = f_gameManager.tileCoordinates[x,j].GetComponent<f_Tile>();
+							if(t.isOccupied){
+								//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+								MovementTiles.Add(t);
+								break;
+								
+							}
+							
+							
+							
+						} 
+						
+						break;
+						
+					} 
 					
 					else {
 						
@@ -366,6 +553,31 @@ public class f_Archer : f_Piece {
 						break;
 						
 						
+					}
+
+					else if(t.tileType == 4){
+						
+						//adds the greens to movement tiles
+						
+						MovementTiles.Add (t);
+						
+						//check all tiles after the greens if they are occupied
+						
+						for(int a = i; a > (x - 4); a--){
+							
+							t = f_gameManager.tileCoordinates[a,j].GetComponent<f_Tile>();
+							if(t.isOccupied){
+								//if a tile that is occupied by a piece is found, add the tile to movement tiles and break the loop
+								MovementTiles.Add(t);
+								break;
+								
+							}
+							
+							
+							
+						} 
+						
+						break;
 					}
 					
 					else {
@@ -539,7 +751,11 @@ public class f_Archer : f_Piece {
 			}	
 		}
 		
-		
+
+
+
+
+
 		
 		else {
 			if (f_gameManager.coordinates[t.x,t.y] < 9 || f_gameManager.coordinates[t.x,t.y] == 0){

@@ -9,46 +9,12 @@ public class MapGenerator : MonoBehaviour {
 	public int mapSize;
 	public f_Tile[] specialTiles; // holds tile types of special tiles to replace tiles with.
 
-	//NetworkManager networkManager;
-	//bool isOffline;
-
-
-	/*void FindNetworkManager(){
-
-		networkManager = FindObjectOfType<NetworkManager> ();
-
-		if (networkManager == null) {
-				
-			isOffline = true;
-		
-		}
-
-		else{
-
-			isOffline = false;
-
-		}
-	
-	
-	}*/
-
 
 	
 	void InstantiateTile(int x, int y, Vector3 position, GameObject prefab){
 
 		GameObject tile;
 
-
-		/*if (!isOffline) {
-			tile = PhotonNetwork.Instantiate (prefab, position, Quaternion.identity) as GameObject;
-			tile.AddComponent<PhotonView>();
-			
-		}*/
-
-
-
-
-	
 		tile = Instantiate (prefab, position, Quaternion.identity) as GameObject;
 
 		f_Tile t = tile.GetComponent<f_Tile> ();
@@ -83,11 +49,7 @@ public class MapGenerator : MonoBehaviour {
 
 						specialTiles[i].transform.position = tilePos;
 						isSpecialUsed = true;
-					/*	if(!isOffline){
-
-							specialTiles[i].gameObject.AddComponent<PhotonView>();
-
-						}*/
+					
 						break;
 					}
 
@@ -113,7 +75,7 @@ public class MapGenerator : MonoBehaviour {
 
 	void Awake () {
 	
-		//FindNetworkManager ();
+
 		GenerateMap (mapSize);
 
 

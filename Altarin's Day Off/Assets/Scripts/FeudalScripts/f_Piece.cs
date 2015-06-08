@@ -23,6 +23,7 @@ public abstract class f_Piece : MonoBehaviour {
 	public f_Tile lastOccupiedTile; // used in setupManager
 	public GameObject f_gameManagerObject;
 	public f_GameManager f_gameManager;
+	public SpriteRenderer spriteRenderer;
 
 	public List<f_Tile> MovementTiles = new List<f_Tile>();
 	
@@ -42,9 +43,11 @@ public abstract class f_Piece : MonoBehaviour {
 		
 		f_gameManagerObject = GameObject.FindGameObjectWithTag ("f_GameManager");
 		f_gameManager = f_gameManagerObject.GetComponent<f_GameManager> ();
+		spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
 
 	}
 
+	//toggles collider to prevent player interaction once a piece has used its move
 	public void TogglePieceCollider(bool usedTurn){
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
 		if (!f_gameManager.isGameOver) {
@@ -52,6 +55,7 @@ public abstract class f_Piece : MonoBehaviour {
 
 			
 			collider.enabled = !usedTurn;
+			ToggleGrayScale(usedTurn);
 		
 		}
 
@@ -62,6 +66,29 @@ public abstract class f_Piece : MonoBehaviour {
 		}
 
 	}
+
+
+
+	//called in toggle piece collider.  toggles spriterenderer color to communicate a piece has used up its move.
+	public void ToggleGrayScale(bool toggleOn){
+
+
+		if(toggleOn){
+
+			spriteRenderer.color = Color.grey;
+
+		}
+
+		else{
+
+			spriteRenderer.color = Color.white;
+
+		}
+	
+	
+	}
+
+
 	
 	
 	public void StartPosition(){
@@ -109,15 +136,6 @@ public abstract class f_Piece : MonoBehaviour {
 				occupiedTile.isOccupied = true;
 				UpdateCoordinates(tile.x, tile.y);
 
-
-				//occupiedTile = tile;
-				//occupiedTile.isOccupied = true;
-				//f_gameManager.myPhotonView.RPC("UpdateCoordinates", PhotonTargets.Others, x, y, tile.x, tile.y, pieceDesignator);
-				///UpdateCoordinates(tile.x, tile.y);
-				//x = tile.x;
-				//y = tile.y;
-
-
 			}
 
 
@@ -161,11 +179,7 @@ public abstract class f_Piece : MonoBehaviour {
 				occupiedTile.isOccupied = true;
 				UpdateCoordinates(piece.x, piece.y);
 				DestroyTargetPiece(piece);
-				//occupiedTile = piece.occupiedTile;
-				//f_gameManager.UpdateCoordinates(x, y, piece.x, piece.y, pieceDesignator);
-				// x = piece.x;
-				//y = piece.y;
-				//PhotonNetwork.Destroy(piece.gameObject);
+
 			}
 			
 		

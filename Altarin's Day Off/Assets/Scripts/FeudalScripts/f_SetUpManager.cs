@@ -8,6 +8,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject emptyObject;
 	public GameObject emptyTile;
 	public GameObject trayObject;
+	public GameObject screenObject;
 
 
 	Player myPlayer;
@@ -108,8 +109,25 @@ public class f_SetUpManager : MonoBehaviour {
 		int layerMask = 1 << LayerMask.NameToLayer("Tile");
 		RaycastHit2D hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
 		
-		
-		if (hit.collider != null && hit.collider.tag == "f_Tile") {
+		if(hit.collider != null && hit.collider.tag == "f_ScreenObject"){
+			
+			Debug.Log("screenobject");
+			f_Tile t = selectedObject.GetComponent<f_Tile>();
+			if(t != null){
+
+				//f_Castle c = selectedObject.GetComponent<f_Castle>();
+
+				selectedObject.transform.position = selectedObjectPosOld;
+				selectedObjectPosOld = Vector2.zero;
+				selectedObject = emptyObject;
+			
+				
+			}
+			
+		}
+
+
+		else if (hit.collider != null && hit.collider.tag == "f_Tile") {
 
 
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
@@ -233,9 +251,28 @@ public class f_SetUpManager : MonoBehaviour {
 			layerMask = 1 << LayerMask.NameToLayer("Tile");
 			hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
 			
-			
-			if (hit.collider != null && hit.collider.tag == "f_Tile") {
+
+			if(hit.collider != null && hit.collider.tag == "f_ScreenObject"){
+
+				Debug.Log("screenobject");
+				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				if(p != null){
+					
+					p.transform.position = p.lastOccupiedTile.transform.position;
+					p.occupiedTile = p.lastOccupiedTile;
+					selectedObject = emptyObject;
+					
+				}
 				
+			}
+
+
+
+
+
+			else if (hit.collider != null && hit.collider.tag == "f_Tile") {
+
+				Debug.Log("tile");
 				f_Tile t = hit.collider.GetComponent<f_Tile>();
 				//Debug.Log(t);
 				f_Piece p = selectedObject.GetComponent<f_Piece>();
@@ -317,6 +354,7 @@ public class f_SetUpManager : MonoBehaviour {
 				}
 				
 			}
+
 
 			else{
 				
@@ -955,6 +993,7 @@ public class f_SetUpManager : MonoBehaviour {
 						//f_gameManager.SetUpBoard();
 						//StartCoroutine(f_gameManager.Game());
 						DestroyTray();
+						Destroy(screenObject);
 						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 						c.isSetup = false;
 						myPlayer.isReady = true;
@@ -1031,6 +1070,32 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 
+	f_Tile FindAnchorTile(int x, int y){
+
+
+		f_Tile anchorTile = null;
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("f_Tile");
+	
+		for (int i = 0; i < tiles.Length; i++) {
+				
+			f_Tile tile = tiles[i].GetComponent<f_Tile>();
+
+			if(tile.x == x && tile.y == y){
+
+				anchorTile = tile;
+				break;
+			}
+
+		
+		}
+
+		return anchorTile;
+	
+	
+	}
+
+
+
 
 
 
@@ -1054,6 +1119,32 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 
 			Debug.Log("Player " + players[i].playerNumber);
+		
+		}
+
+		if (screenObject != null) {
+				
+			ScreenBehavior screen = screenObject.GetComponent<ScreenBehavior>();
+
+			screen.myPlayer = myPlayer;
+
+			if(myPlayer.isWhite){
+
+				screen.SetUpPosition(FindAnchorTile(11,11));
+
+			}
+
+
+			else{
+
+				screen.SetUpPosition(FindAnchorTile(11,12));
+
+
+			}
+
+
+
+
 		
 		}
 
