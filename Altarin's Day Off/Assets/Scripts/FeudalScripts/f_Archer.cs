@@ -893,11 +893,21 @@ public class f_Archer : f_Piece {
 
 	}
 
+
+
 	void Update(){
 		
 		if (f_gameManager.gameOn) {
 			TogglePieceCollider (turnTurner);
 		}
+
+		/*else{
+
+			SyncToTray(occupiedTile);
+
+		}*/
+
+	
 
 		
 	}

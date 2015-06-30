@@ -11,6 +11,7 @@ public class UI_Element : MonoBehaviour {
 
 	Vector3 screenPosition;
 	Vector3 worldPointPosition;
+	public Vector3 dPosition;
 
 	Vector3 oldCameraPosition;
 	float cameraFov;
@@ -20,12 +21,14 @@ public class UI_Element : MonoBehaviour {
 
 
 	public void SetUpElement(){
+
+		mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
+		mainCamera = mainCameraObject.GetComponent<Camera> ();
+		cameraFov = mainCamera.orthographicSize;
+		oldcameraFov = cameraFov;
+		oldCameraPosition = mainCamera.transform.position;
 	
-		screenPosition.x = Screen.width * xRatio;
-		screenPosition.y = Screen.height * yRatio;
-		screenPosition.z = 1;
-		worldPointPosition = mainCamera.ScreenToWorldPoint(screenPosition);
-		transform.position = worldPointPosition;
+		Resize ();
 	
 
 
@@ -34,8 +37,14 @@ public class UI_Element : MonoBehaviour {
 	public void Resize(){
 
 		float aspectRatio = cameraFov / oldcameraFov;
-		
+
 		gameObject.transform.localScale = gameObject.transform.localScale * aspectRatio;
+
+		screenPosition.x = Screen.width * xRatio;
+		screenPosition.y = Screen.height * yRatio;
+		screenPosition.z = 1;
+		worldPointPosition = mainCamera.ScreenToWorldPoint(screenPosition);
+		transform.position = worldPointPosition;
 		
 
 	}
@@ -49,7 +58,7 @@ public class UI_Element : MonoBehaviour {
 		if (cameraFov != oldcameraFov) {
 
 			Resize();
-			SetUpElement();
+			//SetUpElement();
 			oldcameraFov = cameraFov;
 			//Debug.Log("HI");
 
@@ -58,7 +67,7 @@ public class UI_Element : MonoBehaviour {
 
 		else{
 			
-			Vector3 dPosition = mainCamera.transform.position - oldCameraPosition;
+			dPosition = mainCamera.transform.position - oldCameraPosition;
 			
 			transform.position += dPosition;
 	
@@ -71,18 +80,18 @@ public class UI_Element : MonoBehaviour {
 
 
 	void Start () {
-
-		mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
+		//Debug.Log ("UIELEMENT START");
+		/*mainCameraObject = GameObject.FindGameObjectWithTag ("MainCamera");
 		mainCamera = mainCameraObject.GetComponent<Camera> ();
 		cameraFov = mainCamera.orthographicSize;
 		oldcameraFov = cameraFov;
-		oldCameraPosition = mainCamera.transform.position;
+		oldCameraPosition = mainCamera.transform.position;*/
 		SetUpElement();
 	
 	}
 	
 
-	void Update () {
+	void FixedUpdate () {
 
 
 		UpdateElementPosition();

@@ -254,7 +254,25 @@ public abstract class f_Piece : MonoBehaviour {
 		
 	}
 
+	/*public void SyncToTray(f_Tile tile){
 
+		//is tray tile
+		if (tile.tileType == 6) {
+
+			UI_Element tileUIElement = tile.GetComponent<UI_Element>();
+			transform.position += tileUIElement.dPosition;
+
+		}
+
+	
+	
+	
+	}*/
+
+
+
+
+	//highlights possible moves for a piece
 	public void HighlightMovementTiles(List<f_Tile> l, bool isHighlight){
 
 		foreach (f_Tile t in l){
@@ -526,17 +544,6 @@ public abstract class f_Piece : MonoBehaviour {
 	
 	}
 
-
-
-
-
-
-
-	
-	void Update(){
-		
-
-	}
 	
 	
 	

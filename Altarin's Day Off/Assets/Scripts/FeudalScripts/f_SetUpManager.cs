@@ -611,7 +611,11 @@ public class f_SetUpManager : MonoBehaviour {
 		//trayPos.z = 2.0f;
 		//trayObject.transform.position = trayPos;
 
+		//UI_Element trayUIElement = trayObject.GetComponent<UI_Element> ();
 
+		//values found using trial and error.  Fuck it.
+		float xRatioOrigin = 0.785f;
+		float yRatioOrigin = 0.85f;
 
 
 		for(int y = 0; y < rows; y++){
@@ -632,7 +636,19 @@ public class f_SetUpManager : MonoBehaviour {
 				//g.AddComponent<UI_Element>();
 				slots[i] = g.GetComponent<f_Tile>();
 
+
+				UI_Element slotUIElement = g.AddComponent("UI_Element") as UI_Element;
+				//Vector3 slotScreenPoint = playerCamera.WorldToScreenPoint(adjustedPos);
+				//slotUIElement.xRatio = slotScreenPoint.x/Screen.width;
+				//slotUIElement.yRatio = slotScreenPoint.y/Screen.height;
+				//slotUIElement.SetUpElement();
+
+				slotUIElement.xRatio = xRatioOrigin + (0.074f * (x));
+				slotUIElement.yRatio = yRatioOrigin - (0.1f * (y));
+				slotUIElement.SetUpElement();
+
 				g.tag = "Untagged";
+				//slots[i].tileType = 6;
 
 				SpriteRenderer r = g.GetComponent<SpriteRenderer>();
 				r.enabled = false;
@@ -669,7 +685,10 @@ public class f_SetUpManager : MonoBehaviour {
 			if(isWhiteSetUp == p.isWhite){
 
 
-				p.transform.position = slots[j].gameObject.transform.position;
+				p.transform.position = new Vector3(slots[j].gameObject.transform.position.x,
+						slots[j].gameObject.transform.position.y, -10.0f);
+				//p.transform.position = slots[j].transform.position;
+
 				slots[j].isOccupied = true;
 				p.occupiedTile = slots[j];
 				//piecesInTray.Add(p.gameObject);
@@ -740,16 +759,18 @@ public class f_SetUpManager : MonoBehaviour {
 
 			float fov = playerCamera.orthographicSize;
 			Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
-			
-			for(int i = 0; i < slots.Length; i++){
+
+
+			//for(int i = 0; i < slots.Length; i++){
 				
-				float aspectRatio = fov / oldFov;
-				slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
-				slots[i].transform.position += dPosition;
+				//float aspectRatio = fov / oldFov;
+				//slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
+				//slots[i].transform.position += dPosition;
+
 				
 				
-			}
-			
+			//}
+
 			
 			for (int j = 0; j < pieces.Length; j++) {
 				
@@ -758,10 +779,20 @@ public class f_SetUpManager : MonoBehaviour {
 				if(p.occupiedTile != null){
 					
 					
-					//float aspectRatio = oldFov/fov;
-					//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
+					float aspectRatio = fov/oldFov;
+					pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
+
 					Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
 					pieces[j].transform.position = adjustedPos;
+
+					//if(pieces[j].transform.position != adjustedPos){
+					
+					//	pieces[j].transform.position = adjustedPos;
+					
+					//}
+
+					//Vector3 adjustedPos = new Vector3 (dPosition.x, dPosition.y, 0);
+					//pieces[j].transform.position += adjustedPos;
 					
 				}
 				
@@ -1322,12 +1353,22 @@ public class f_SetUpManager : MonoBehaviour {
 		if(isSetUp){
 
 			MouseControls (isPlacingCastle);
-			SyncTrayAssets();
+
 			ArePlayersReady();
 		}
 		
 
 		//ClickandDrag (selectedObject);
 	
+	}
+
+	void FixedUpdate(){
+
+		if (isSetUp) {
+				
+			SyncTrayAssets();
+		
+		}
+
 	}
 }
