@@ -69,10 +69,10 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-	Vector2 MousePosition(){
+	Vector3 MousePosition(){
 
 		Vector3 v3Pos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
-		Vector2 mousePos = new Vector2(v3Pos.x, v3Pos.y);
+		Vector3 mousePos = new Vector3(v3Pos.x, v3Pos.y, -10.0f);
 		return mousePos;
 
 	}
@@ -135,8 +135,19 @@ public class f_SetUpManager : MonoBehaviour {
 			if(selectedObject != emptyObject){
 
 				f_Castle c = selectedObject.GetComponent<f_Castle>();
+				UI_Element castleUIElement = selectedObject.GetComponent<UI_Element>();
+				UI_Element greensUIElement = c.castleGreens.GetComponent<UI_Element>();
+				castleUIElement.enabled = false;
+				greensUIElement.enabled = false;
+
+
+				c.gameObject.transform.localScale = Vector3.one;
+				c.castleGreens.gameObject.transform.localScale = Vector3.one;
+
+
 
 				c.transform.position = t.transform.position;
+				c.castleGreens.transform.position = t.transform.position;
 				c.x = t.x;
 				c.y = t.y;
 				c.occupiedTile = t;
@@ -177,6 +188,12 @@ public class f_SetUpManager : MonoBehaviour {
 
 				if(p.occupiedTile != null){
 
+					UI_Element pieceUIelement = p.GetComponent<UI_Element>();
+					pieceUIelement.enabled = true;
+
+
+
+
 					p.occupiedTile.isOccupied = false;
 					p.lastOccupiedTile = p.occupiedTile;
 					p.occupiedTile = null;
@@ -215,10 +232,12 @@ public class f_SetUpManager : MonoBehaviour {
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
 			//Debug.Log(t);
 			f_Piece p = selectedObject.GetComponent<f_Piece>();
+			UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
 			
 			if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 				
-
+				pieceUIElement.enabled = false;
+				selectedObject.transform.localScale = Vector3.one;
 				
 				p.transform.position = t.transform.position;
 				p.x = t.x;
@@ -276,9 +295,11 @@ public class f_SetUpManager : MonoBehaviour {
 				f_Tile t = hit.collider.GetComponent<f_Tile>();
 				//Debug.Log(t);
 				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
 				if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 					
-
+					pieceUIElement.enabled = false;
+					selectedObject.transform.localScale = Vector3.one;
 					
 					p.transform.position = t.transform.position;
 					p.x = t.x;
@@ -324,8 +345,15 @@ public class f_SetUpManager : MonoBehaviour {
 						if(!slots[i].isOccupied){
 							
 							f_Piece p = selectedObject.GetComponent<f_Piece>();
+							UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
 							f_Tile t = slots[i];
-							
+							UI_Element slotUIelement = slots[i].GetComponent<UI_Element>();
+
+							pieceUIElement.enabled = true;
+							pieceUIElement.xRatio = slotUIelement.xRatio;
+							pieceUIElement.yRatio = slotUIelement.yRatio;
+							pieceUIElement.SetUpElement();
+
 							
 							p.transform.position = t.transform.position;
 							p.x = t.x;
@@ -589,6 +617,7 @@ public class f_SetUpManager : MonoBehaviour {
 	f_Tile[] slots;
 	Vector3 oldTrayPosition;
 	float oldFov;
+	Vector3 oldCameraPosition;
 
 	//create tray with slots
 	void CreateTray(GameObject trayObject){
@@ -596,6 +625,7 @@ public class f_SetUpManager : MonoBehaviour {
 		Vector3 tray = trayObject.transform.position;
 		oldTrayPosition = tray;
 		oldFov = playerCamera.orthographicSize;
+		oldCameraPosition = playerCamera.transform.position;
 
 		slots = new f_Tile[15];
 		int i = 0;
@@ -691,6 +721,13 @@ public class f_SetUpManager : MonoBehaviour {
 
 				slots[j].isOccupied = true;
 				p.occupiedTile = slots[j];
+
+				//adds UI element script to piece and has it sync to its assigned slot on the tray.
+				UI_Element slotUIelement = slots[j].GetComponent<UI_Element>();
+				UI_Element pieceUIElement = p.gameObject.AddComponent("UI_Element") as UI_Element;
+				pieceUIElement.xRatio = slotUIelement.xRatio;
+				pieceUIElement.yRatio = slotUIelement.yRatio;
+				pieceUIElement.SetUpElement();
 				//piecesInTray.Add(p.gameObject);
 				j++;
 
@@ -715,6 +752,20 @@ public class f_SetUpManager : MonoBehaviour {
 				f_Castle c = tiles[i].GetComponent<f_Castle>();
 
 				if(isWhiteSetUp == c.isWhite){
+
+					UI_Element castleUIElement = c.gameObject.AddComponent("UI_Element") as UI_Element;
+					UI_Element slotUIElement = slots[j].GetComponent<UI_Element>();
+
+					castleUIElement.xRatio = slotUIElement.xRatio;
+					castleUIElement.yRatio = slotUIElement.yRatio;
+					castleUIElement.SetUpElement();
+
+					f_Tile greens = c.castleGreens;
+
+					UI_Element greensUIElement = greens.gameObject.AddComponent("UI_Element") as UI_Element;
+					greensUIElement.xRatio = slotUIElement.xRatio;
+					greensUIElement.yRatio = slotUIElement.yRatio;
+					greensUIElement.SetUpElement();
 					
 					c.transform.position = slots[j].gameObject.transform.position;
 					slots[j].isOccupied = true;
@@ -758,7 +809,8 @@ public class f_SetUpManager : MonoBehaviour {
 		else{
 
 			float fov = playerCamera.orthographicSize;
-			Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
+			//Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
+			Vector3 dPosition = playerCamera.transform.position - oldCameraPosition;
 
 
 			//for(int i = 0; i < slots.Length; i++){
@@ -772,18 +824,18 @@ public class f_SetUpManager : MonoBehaviour {
 			//}
 
 			
-			for (int j = 0; j < pieces.Length; j++) {
+			/*for (int j = 0; j < pieces.Length; j++) {
 				
 				f_Piece p = pieces[j].GetComponent<f_Piece>();
 				
 				if(p.occupiedTile != null){
 					
 					
-					float aspectRatio = fov/oldFov;
-					pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
+					//float aspectRatio = fov/oldFov;
+					//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
 
-					Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
-					pieces[j].transform.position = adjustedPos;
+					//Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
+					//pieces[j].transform.position = adjustedPos;
 
 					//if(pieces[j].transform.position != adjustedPos){
 					
@@ -801,18 +853,19 @@ public class f_SetUpManager : MonoBehaviour {
 				
 				
 				
-			}
+			}*/
 			
-			f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
+			/*f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
 			if (c.occupiedTile != null) {
 
 				//float aspectRatio = fov / oldFov;
 				//currentCastleBeingPlaced.transform.localScale = currentCastleBeingPlaced.transform.localScale * aspectRatio;
 				Vector3 adjustedPos = new Vector3 (c.occupiedTile.transform.position.x, c.occupiedTile.transform.position.y, -10.0f);
 				currentCastleBeingPlaced.transform.position = adjustedPos; 
-			}
+			}*/
 			
 			oldTrayPosition = trayObject.transform.position;
+			oldCameraPosition = playerCamera.transform.position;
 			oldFov = fov;
 			
 			

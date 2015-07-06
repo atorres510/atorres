@@ -22,9 +22,7 @@ public class f_Castle : f_Tile {
 			//Debug.Log(g.x + ", " + g.y);
 			if(t.isOccupied){
 				g.isOccupied = t.isOccupied;
-				
-				
-				
+
 				
 			}
 			Destroy (f_gameManager.tileCoordinates [g.x, g.y]);
@@ -67,8 +65,15 @@ public class f_Castle : f_Tile {
 		}
 
 		else if(rotation == 3){
+
+
 			
-			Vector3 pos = new Vector3(this.transform.position.x + 1.06f, this.transform.position.y, -10.0f);
+			//Vector3 pos = new Vector3(this.transform.position.x + 1.06f, this.transform.position.y, -10.0f);
+
+			float normalizedXPosition = ((1.06f * (transform.localScale.x)) - 1.06f);
+
+			Vector3 pos = new Vector3((this.transform.position.x + normalizedXPosition + 1.06f), this.transform.position.y, -10.0f);
+
 			castleGreens.transform.position = pos;
 			castleGreens.x = x + 1;
 			castleGreens.y = y;
