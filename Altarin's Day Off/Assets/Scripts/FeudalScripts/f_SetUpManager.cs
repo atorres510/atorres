@@ -190,6 +190,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 					UI_Element pieceUIelement = p.GetComponent<UI_Element>();
 					pieceUIelement.enabled = true;
+					pieceUIelement.SetUpElement();
 
 
 

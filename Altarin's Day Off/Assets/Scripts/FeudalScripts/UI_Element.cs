@@ -47,6 +47,7 @@ public class UI_Element : MonoBehaviour {
 		transform.position = worldPointPosition;
 		
 
+
 	}
 
 
