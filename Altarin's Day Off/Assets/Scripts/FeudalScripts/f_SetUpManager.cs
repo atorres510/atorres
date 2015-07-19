@@ -189,6 +189,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if(p.occupiedTile != null){
 
 					UI_Element pieceUIelement = p.GetComponent<UI_Element>();
+					p.transform.localScale = currentLocalScale;
 					pieceUIelement.enabled = true;
 					pieceUIelement.SetUpElement();
 
@@ -349,6 +350,8 @@ public class f_SetUpManager : MonoBehaviour {
 							UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
 							f_Tile t = slots[i];
 							UI_Element slotUIelement = slots[i].GetComponent<UI_Element>();
+
+							p.transform.localScale = currentLocalScale;
 
 							pieceUIElement.enabled = true;
 							pieceUIElement.xRatio = slotUIelement.xRatio;
@@ -796,6 +799,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
+	Vector3 currentLocalScale;
+
 	void SyncTrayAssets(){
 
 
@@ -809,9 +814,19 @@ public class f_SetUpManager : MonoBehaviour {
 
 		else{
 
+			//takes the first slot on the tray and returns its local scale for the pieces;
+			currentLocalScale = slots[0].transform.localScale;
+
+
+
+
+
+
 			float fov = playerCamera.orthographicSize;
 			//Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
 			Vector3 dPosition = playerCamera.transform.position - oldCameraPosition;
+
+
 
 
 			//for(int i = 0; i < slots.Length; i++){
