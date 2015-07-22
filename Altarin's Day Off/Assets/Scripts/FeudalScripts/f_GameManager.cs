@@ -764,14 +764,20 @@ public class f_GameManager : MonoBehaviour {
 			string gameOverWhiteWin = " White wins!";
 			string gameOverBlackWin = " Black wins!";
 			string selectedPieceString = selectedPiece + " is selected.";
+			string isOpponentTurn = " Please Wait!"; 
 			
 			if (!isGameOver) {
 				if (isPlayer1Turn) {
 					player1Turn = GUI.TextField (new Rect (10, 20, 125, 20), player1Turn, 25);
+
 				}
 				
 				if (!isPlayer1Turn) {
 					player2Turn = GUI.TextField (new Rect (10, 20, 125, 20), player2Turn, 25);
+				}
+
+				if(isPlayer1Turn != myPlayer.isWhite){
+					isOpponentTurn = GUI.TextField(new Rect(Screen.width * 0.4f, Screen.height * 0.5f, 150, 25), isOpponentTurn, 25);
 				}
 			}
 			

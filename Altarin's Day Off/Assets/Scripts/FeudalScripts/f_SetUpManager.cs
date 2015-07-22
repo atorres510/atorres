@@ -20,6 +20,7 @@ public class f_SetUpManager : MonoBehaviour {
 	GameObject currentCastleBeingPlaced;
 	//GameObject castleBlack;
 
+	bool isPlacingPieces;
 	bool isPlacingCastle;
 	public bool isWhiteSetUp;
 	bool isSetUp;
@@ -253,13 +254,15 @@ public class f_SetUpManager : MonoBehaviour {
 			
 			
 			else{
-				
+
+				ReturnToLastOccupiedTile(selectedObject);
+
 				//selectedObject.transform.position = selectedObjectPosOld;
 				//selectedObjectPosOld = Vector2.zero;
 
-				p.transform.position = p.lastOccupiedTile.transform.position;
-				p.occupiedTile = p.lastOccupiedTile;
-				selectedObject = emptyObject;
+				//p.transform.position = p.lastOccupiedTile.transform.position;
+				//p.occupiedTile = p.lastOccupiedTile;
+				//selectedObject = emptyObject;
 				
 			}
 
@@ -276,14 +279,15 @@ public class f_SetUpManager : MonoBehaviour {
 			if(hit.collider != null && hit.collider.tag == "f_ScreenObject"){
 
 				Debug.Log("screenobject");
-				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				ReturnToLastOccupiedTile(selectedObject);
+				/*f_Piece p = selectedObject.GetComponent<f_Piece>();
 				if(p != null){
 					
 					p.transform.position = p.lastOccupiedTile.transform.position;
 					p.occupiedTile = p.lastOccupiedTile;
 					selectedObject = emptyObject;
 					
-				}
+				}*/
 				
 			}
 
@@ -316,17 +320,20 @@ public class f_SetUpManager : MonoBehaviour {
 				
 				else{
 
-					if(p != null){
+					ReturnToLastOccupiedTile(selectedObject);
+
+
+					//if(p != null){
 
 						//selectedObject.transform.position = selectedObjectPosOld;
 						//selectedObjectPosOld = Vector2.zero;
 						
-						p.transform.position = p.lastOccupiedTile.transform.position;
-						p.occupiedTile = p.lastOccupiedTile;
-						selectedObject = emptyObject;
+						//p.transform.position = p.lastOccupiedTile.transform.position;
+						//p.occupiedTile = p.lastOccupiedTile;
+						//selectedObject = emptyObject;
 
 
-					}
+					//}
 					
 
 					
@@ -342,41 +349,44 @@ public class f_SetUpManager : MonoBehaviour {
 			else if(hit.collider != null && hit.collider.tag == "f_TrayObject"){
 				if(selectedObject != emptyObject){
 					
-					for(int i = 0; i < slots.Length; i++){
+					//for(int i = 0; i < slots.Length; i++){
 						
-						if(!slots[i].isOccupied){
+						//if(!slots[i].isOccupied){
 							
-							f_Piece p = selectedObject.GetComponent<f_Piece>();
-							UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
-							f_Tile t = slots[i];
-							UI_Element slotUIelement = slots[i].GetComponent<UI_Element>();
+					f_Piece p = selectedObject.GetComponent<f_Piece>();
+					UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
+					//f_Tile t = slots[i];
 
-							p.transform.localScale = currentLocalScale;
+					f_Tile t = nextAvailableTraySlot;
 
-							pieceUIElement.enabled = true;
-							pieceUIElement.xRatio = slotUIelement.xRatio;
-							pieceUIElement.yRatio = slotUIelement.yRatio;
-							pieceUIElement.SetUpElement();
+					UI_Element slotUIelement = t.GetComponent<UI_Element>();
 
+					p.transform.localScale = currentLocalScale;
+
+					pieceUIElement.enabled = true;
+					pieceUIElement.xRatio = slotUIelement.xRatio;
+					pieceUIElement.yRatio = slotUIelement.yRatio;
+					pieceUIElement.SetUpElement();
+
+					
+					p.transform.position = t.transform.position;
+					p.x = t.x;
+					p.y = t.y;
+					p.occupiedTile = t;
+					t.isOccupied = true;
+					selectedObjectPosOld = Vector2.zero;
+					selectedObject = emptyObject;
+					//break;
 							
-							p.transform.position = t.transform.position;
-							p.x = t.x;
-							p.y = t.y;
-							p.occupiedTile = t;
-							t.isOccupied = true;
-							selectedObjectPosOld = Vector2.zero;
-							selectedObject = emptyObject;
-							break;
-							
-						}
+					//	}
 						
-						else{
-							//pass
-						}
+						//else{
+						//	//pass
+					//	}
 						
 						
 						
-					}
+					//}
 					
 				
 				}
@@ -389,17 +399,19 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 			else{
-				
+
+				ReturnToLastOccupiedTile(selectedObject);
 				//selectedObject.transform.position = selectedObjectPosOld;
 				//selectedObjectPosOld = Vector2.zero;
-				f_Piece p = selectedObject.GetComponent<f_Piece>();
+				/*f_Piece p = selectedObject.GetComponent<f_Piece>();
 				if(p != null){
+
 
 					p.transform.position = p.lastOccupiedTile.transform.position;
 					p.occupiedTile = p.lastOccupiedTile;
 					selectedObject = emptyObject;
 
-				}
+				}*/
 		
 				
 			}
@@ -407,6 +419,74 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 
 
+	}
+
+
+	void ReturnToLastOccupiedTile(GameObject piece){
+
+		if (piece.tag == "f_Piece") {
+				
+			Debug.Log("ReturnToLastOccupiedTile");
+
+			f_Piece p = piece.GetComponent<f_Piece>();
+
+			if(p != null){
+
+				//if the last occupied tile returns a tile on the game board.
+				if(p.lastOccupiedTile.tag == "f_Tile"){
+
+					UI_Element pieceUIElement = p.GetComponent<UI_Element>();
+
+					pieceUIElement.enabled = false;
+					selectedObject.transform.localScale = Vector3.one;
+
+					p.transform.position = p.lastOccupiedTile.transform.position;
+					p.occupiedTile = p.lastOccupiedTile;
+					selectedObject = emptyObject;
+
+
+
+				}
+
+				//if the last occupied tile is untagged (a tray slot tile).
+				else{
+					UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
+					//f_Tile t = slots[i];
+					
+					f_Tile t = nextAvailableTraySlot;
+					
+					UI_Element slotUIelement = t.GetComponent<UI_Element>();
+					
+					p.transform.localScale = currentLocalScale;
+					
+					pieceUIElement.enabled = true;
+					pieceUIElement.xRatio = slotUIelement.xRatio;
+					pieceUIElement.yRatio = slotUIelement.yRatio;
+					pieceUIElement.SetUpElement();
+					
+					
+					p.transform.position = t.transform.position;
+					p.x = t.x;
+					p.y = t.y;
+					p.occupiedTile = t;
+					t.isOccupied = true;
+					selectedObjectPosOld = Vector2.zero;
+					selectedObject = emptyObject;
+					//break;
+
+				}
+
+
+				
+
+				
+			}
+		
+		
+		
+		}
+
+	
 	}
 
 
@@ -695,6 +775,8 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 
 		}
+
+		//nextAvailableTraySlot = slots [i];
 			
 	}
 
@@ -797,9 +879,12 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		}
 
+		nextAvailableTraySlot = slots [j];
+
 	}
 
 	Vector3 currentLocalScale;
+	f_Tile nextAvailableTraySlot; //passes the next available slot to DropPiece;
 
 	void SyncTrayAssets(){
 
@@ -816,6 +901,24 @@ public class f_SetUpManager : MonoBehaviour {
 
 			//takes the first slot on the tray and returns its local scale for the pieces;
 			currentLocalScale = slots[0].transform.localScale;
+
+			//checks if the next available slot has been used and if so, find a new one
+			//if(nextAvailableTraySlot.isOccupied){
+
+				for(int i = 0; i < slots.Length; i++){
+					
+					if(!slots[i].isOccupied){
+						
+						nextAvailableTraySlot = slots[i];
+						
+					}
+					
+					
+				}
+
+			//}
+
+
 
 
 
@@ -1084,19 +1187,35 @@ public class f_SetUpManager : MonoBehaviour {
 				
 			}
 
+			//online play
 			else{
 
 				if(!myPlayer.isReady){
-					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning") ) {	
-						
+					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {	
+
+						if(IsTrayClear(slots)){
+
+							DestroyTray();
+							Destroy(screenObject);
+							f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+							//isSetUp = false;
+							c.isSetup = false;
+							myPlayer.isReady = true;
+							isPlacingPieces = false;
+
+
+						}
+
+						else{
+
+							Debug.Log("Must finish placing all units");
+
+
+						}
 						
 						//f_gameManager.SetUpBoard();
 						//StartCoroutine(f_gameManager.Game());
-						DestroyTray();
-						Destroy(screenObject);
-						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-						c.isSetup = false;
-						myPlayer.isReady = true;
+
 
 						//isSetUp = false;
 						
@@ -1125,6 +1244,7 @@ public class f_SetUpManager : MonoBehaviour {
 							c.occupiedTile = null;
 							
 							isPlacingCastle = false;
+							//isPlacingPieces = true;
 							
 							//c.isSetup = false;
 							//c.SetUpCastleGreens(c.castleGreens);
@@ -1165,6 +1285,28 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 
 
+	
+	}
+
+	bool IsTrayClear(f_Tile[] slots){
+
+	
+		for (int i = 0; i < slots.Length; i++) {
+
+			if(slots[i].isOccupied){
+
+				return false;
+
+
+			}
+				
+		
+		
+		}
+
+		return true;
+	
+	
 	
 	}
 
@@ -1272,6 +1414,7 @@ public class f_SetUpManager : MonoBehaviour {
 		Debug.Log ("is MyPlayer white: " + myPlayer.isWhite);
 		
 		isSetUp = true;
+		isPlacingPieces = true;
 		isPlacingCastle = true;
 		FindNetworkManager ();
 		if (isOffline) {
@@ -1421,7 +1564,13 @@ public class f_SetUpManager : MonoBehaviour {
 
 		if(isSetUp){
 
-			MouseControls (isPlacingCastle);
+			if(isPlacingPieces){
+
+				MouseControls (isPlacingCastle);
+
+			}
+
+
 
 			ArePlayersReady();
 		}
@@ -1433,7 +1582,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void FixedUpdate(){
 
-		if (isSetUp) {
+		if (isPlacingPieces) {
 				
 			SyncTrayAssets();
 		

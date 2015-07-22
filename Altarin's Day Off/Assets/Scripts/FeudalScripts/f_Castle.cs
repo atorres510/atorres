@@ -34,8 +34,8 @@ public class f_Castle : f_Tile {
 	public void UpdateCastleGreensPos(){
 
 		if(rotation == 0){
-
-			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1.06f, -10.0f);
+			//z used to equal -10.0f
+			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1.06f, this.transform.position.z);
 			castleGreens.transform.position = pos;
 			castleGreens.x = x;
 			castleGreens.y = y + 1;
@@ -44,7 +44,7 @@ public class f_Castle : f_Tile {
 
 		else if(rotation == 1){
 
-			Vector3 pos = new Vector3(this.transform.position.x - 1.06f, this.transform.position.y, -10.0f);
+			Vector3 pos = new Vector3(this.transform.position.x - 1.06f, this.transform.position.y, this.transform.position.z);
 			castleGreens.transform.position = pos;
 			
 			castleGreens.x = x - 1;
@@ -56,7 +56,7 @@ public class f_Castle : f_Tile {
 
 		else if(rotation == 2){
 			
-			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y - 1.06f, -10.0f);
+			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y - 1.06f, this.transform.position.z);
 			castleGreens.transform.position = pos;
 			castleGreens.x = x;
 			castleGreens.y = y - 1;
@@ -72,7 +72,7 @@ public class f_Castle : f_Tile {
 
 			float normalizedXPosition = ((1.06f * (transform.localScale.x)) - 1.06f);
 
-			Vector3 pos = new Vector3((this.transform.position.x + normalizedXPosition + 1.06f), this.transform.position.y, -10.0f);
+			Vector3 pos = new Vector3((this.transform.position.x + normalizedXPosition + 1.06f), this.transform.position.y, this.transform.position.z);
 
 			castleGreens.transform.position = pos;
 			castleGreens.x = x + 1;
