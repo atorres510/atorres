@@ -75,6 +75,8 @@ public class Player : Photon.MonoBehaviour {
 
 
 		audioSource.enabled = true;
+		audioSource.enabled = false;
+		audioSource.enabled = true;
 
 
 	}

@@ -1356,6 +1356,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 				myPlayer = players[i];
 				f_gameManager.myPlayer = myPlayer;
+				myPlayer.SetUpAudio();
 
 				Debug.Log("MyPlayer found.");
 			}
