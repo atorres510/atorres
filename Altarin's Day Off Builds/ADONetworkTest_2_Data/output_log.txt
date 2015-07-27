@@ -17,7 +17,7 @@ Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Buil
 Loading C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\Photon3Unity3D.dll (this message is harmless)
 Loading C:\Users\Andrew Torres\Desktop\atorres\Altarin's Day Off Builds\ADONetworkTest_2_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
-- Completed reload, in  0.079 seconds
+- Completed reload, in  0.082 seconds
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at -1920,0
 <RI> Initializing input.
 <RI> Input initialized.
@@ -27,15 +27,11 @@ OnJoinedLobby
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-OnPhotonRandomJoinFailed()
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
 OnJoinedRoom
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-No other players currently connected.
+Number of players currently connected: 1
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
@@ -59,7 +55,7 @@ Looking for MyPlayer
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Player 2
+Player 1
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
@@ -71,11 +67,11 @@ MyPlayer found.
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Player 1
+Player 2
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-is MyPlayer white: True
+is MyPlayer white: False
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 

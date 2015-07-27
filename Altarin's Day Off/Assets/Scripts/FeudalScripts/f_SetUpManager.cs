@@ -1276,7 +1276,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if (myPlayer.isReady && !f_gameManager.gameOn) {
 					
 					GUI.TextField(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 150, 25), "Player is ready!");
-					Debug.Log("My player is ready.");
+					//Debug.Log("My player is ready.");
 					
 				}
 
