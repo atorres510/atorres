@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour {
 		if (Input.GetKey(KeyCode.W) && isWithinBorder(transform, 0)){
 			rigidbody2D.transform.position += Vector3.up * cameraSpeed * Time.fixedDeltaTime;
 		}
+
 		if (Input.GetKey(KeyCode.S) && isWithinBorder(transform, 1)){
 			rigidbody2D.transform.position += Vector3.down * cameraSpeed * Time.fixedDeltaTime;
 		}
@@ -48,6 +49,7 @@ public class CameraController : MonoBehaviour {
 		fov -= Input.GetAxis ("Mouse ScrollWheel") * zoomSensitivity;
 		fov = Mathf.Clamp (fov, minFov, maxFov);
 		thisCamera.orthographicSize = fov;
+		CorrectCameraPosition ();
 		//Debug.Log (thisCamera.fieldOfView);
 
 		//else {}
@@ -55,8 +57,52 @@ public class CameraController : MonoBehaviour {
 
 	}
 
-	//corrects the camera's transform to keep the FOV within the boarders of the map
+	//corrects the camera's transform to keep the FOV within the borders of the map
 	void CorrectCameraPosition(){
+
+		if (!isWithinBorder (transform, 0)) {
+				
+			//if contacting top border, move down 
+			while(!isWithinBorder(transform,0)){
+
+				rigidbody2D.transform.position += Vector3.down * cameraSpeed * Time.fixedDeltaTime;
+
+			}
+		
+		}
+
+		if (!isWithinBorder (transform, 1)) {
+			
+			//if contacting bottom border, move up
+			while(!isWithinBorder(transform,1)){
+				
+				rigidbody2D.transform.position += Vector3.up * cameraSpeed * Time.fixedDeltaTime;
+				
+			}
+			
+		}
+
+		if (!isWithinBorder (transform, 2)) {
+			
+			//if contacting left border, move right
+			while(!isWithinBorder(transform,2)){
+				
+				rigidbody2D.transform.position += Vector3.right * cameraSpeed * Time.fixedDeltaTime;
+				
+			}
+			
+		}
+
+		if (!isWithinBorder (transform, 3)) {
+			
+			//if contacting rightside border, move left 
+			while(!isWithinBorder(transform,3)){
+				
+				rigidbody2D.transform.position += Vector3.left * cameraSpeed * Time.fixedDeltaTime;
+				
+			}
+			
+		}
 
 	
 	
