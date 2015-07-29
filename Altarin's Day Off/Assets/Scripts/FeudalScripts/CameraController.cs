@@ -92,6 +92,7 @@ public class CameraController : MonoBehaviour {
 			}
 			
 		}
+		
 
 		if (!isWithinBorder (transform, 3)) {
 			
@@ -104,7 +105,6 @@ public class CameraController : MonoBehaviour {
 			
 		}
 
-	
 	
 	}
 

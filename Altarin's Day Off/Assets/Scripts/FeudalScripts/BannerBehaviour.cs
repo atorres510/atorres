@@ -15,7 +15,13 @@ public class BannerBehaviour : MonoBehaviour {
 
 	void UpdateImage(){
 
-		if (!f_gameManager.gameOn) {
+		if (!f_setUpManager.isSetUp) {
+				
+			ChangeImage(0);
+		
+		}
+
+		else if (!f_gameManager.gameOn) {
 				
 			if (f_setUpManager.isWhiteSetUp) {
 				

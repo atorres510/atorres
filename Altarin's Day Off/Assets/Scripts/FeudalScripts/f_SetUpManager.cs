@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections.Generic;
 
 public class f_SetUpManager : MonoBehaviour {
@@ -23,7 +25,7 @@ public class f_SetUpManager : MonoBehaviour {
 	bool isPlacingPieces;
 	bool isPlacingCastle;
 	public bool isWhiteSetUp;
-	bool isSetUp;
+	public bool isSetUp;
 	bool isOffline = false;
 
 
@@ -731,6 +733,8 @@ public class f_SetUpManager : MonoBehaviour {
 		float xRatioOrigin = 0.785f;
 		float yRatioOrigin = 0.85f;
 
+		//float xRatioOrigin = 0f;
+		//float yRatioOrigin = 0.85f;
 
 		for(int y = 0; y < rows; y++){
 			float yAdjust = ((- 2f) * y);
@@ -752,7 +756,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 				UI_Element slotUIElement = g.AddComponent("UI_Element") as UI_Element;
-				//Vector3 slotScreenPoint = playerCamera.WorldToScreenPoint(adjustedPos);
+				Vector3 slotScreenPoint = playerCamera.WorldToScreenPoint(adjustedPos);
 				//slotUIElement.xRatio = slotScreenPoint.x/Screen.width;
 				//slotUIElement.yRatio = slotScreenPoint.y/Screen.height;
 				//slotUIElement.SetUpElement();
@@ -788,6 +792,12 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void FillTray(){
 
+		//for new ui stuff
+		//TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour> ();
+		//slots = tray.slots;
+
+		//slots = new f_Tile[15];
+
 		pieces = GameObject.FindGameObjectsWithTag("f_Piece");
 
 
@@ -803,7 +813,10 @@ public class f_SetUpManager : MonoBehaviour {
 
 				p.transform.position = new Vector3(slots[j].gameObject.transform.position.x,
 						slots[j].gameObject.transform.position.y, -10.0f);
-				//p.transform.position = slots[j].transform.position;
+
+				//for new UI tray
+				//RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
+				//p.transform.position = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
 
 				slots[j].isOccupied = true;
 				p.occupiedTile = slots[j];
@@ -814,6 +827,7 @@ public class f_SetUpManager : MonoBehaviour {
 				pieceUIElement.xRatio = slotUIelement.xRatio;
 				pieceUIElement.yRatio = slotUIelement.yRatio;
 				pieceUIElement.SetUpElement();
+
 				//piecesInTray.Add(p.gameObject);
 				j++;
 
@@ -852,8 +866,14 @@ public class f_SetUpManager : MonoBehaviour {
 					greensUIElement.xRatio = slotUIElement.xRatio;
 					greensUIElement.yRatio = slotUIElement.yRatio;
 					greensUIElement.SetUpElement();
-					
+
+
+					//for new UI stuff
+					//RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
+					//c.transform.position = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
+
 					c.transform.position = slots[j].gameObject.transform.position;
+
 					slots[j].isOccupied = true;
 					c.rotation = 3;
 					c.occupiedTile = slots[j];
@@ -901,6 +921,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 			//takes the first slot on the tray and returns its local scale for the pieces;
 			currentLocalScale = slots[0].transform.localScale;
+
+			//currentLocalScale = slots[0].
 
 			//checks if the next available slot has been used and if so, find a new one
 			//if(nextAvailableTraySlot.isOccupied){
