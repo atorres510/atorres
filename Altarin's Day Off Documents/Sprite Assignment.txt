@@ -29,21 +29,21 @@ Feudal Mix:
 
 King - Altarin Alnasi
 Prince - Zasho 
-Duke - 
+Duke - Giriggs
 Knight - Generic Mounted Paladin
 Archer(Mage) - Mahdii
 Sergeant - Generic Paladin Footmen 
-Pikeman - 
-Squire - Holy Infiltrator
+Pikeman - Generic Paladin Spearman
+Squire - Holy Infiltrator (Rogue)
 
 
 Clan Zabbers - Red
 
 King - Rhyine Zabbers
-Prince - Kyliern 
+Prince - Kyliern Methon
 Duke - Saffira
 Knight - Generic Horseman
-Archer(Mage) - Vergent 
-Sergeant - Lyndarious
+Archer(Mage) - Vergent Methon
+Sergeant - Lyndarious Nym
 Pikeman - Sarah
 Squire - Tarien Zabbers

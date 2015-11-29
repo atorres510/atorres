@@ -20,4 +20,13 @@ Black Pieces
 13 black archer/mage;
 14 black sergeant;
 15 black pikeman;
-16 black squire
+16 black squire;
+
+
+
+Faction Designators:
+
+0 null;
+
+1 Clan Zabbers (Red);
+2 18th Holy Battalion (Blue);

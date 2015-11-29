@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -54,6 +55,11 @@ public class TrayBehaviour : MonoBehaviour {
 
 		int [] spriteOrder = {6, 6, 6, 6, 7, 7, 5, 4, 4, 8, 2, 3, 1};
 
+		Sprite newSprite = Resources.Load<Sprite>("Sprites/FeudalSprites/FactionSprites/Battalion/Altarin");
+
+		Debug.Log (newSprite);
+
+		buttons [0].image.sprite = newSprite;
 
 	
 	}
