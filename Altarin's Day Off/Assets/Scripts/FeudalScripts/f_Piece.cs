@@ -19,6 +19,9 @@ public abstract class f_Piece : MonoBehaviour {
 	//updatePieceSet()
 	public int pieceID; 
 
+	public enum Faction {CLAN, BATTALION, NONE};
+	public Faction faction;
+
 	public f_Tile occupiedTile;
 	public f_Tile lastOccupiedTile; // used in setupManager
 	public GameObject f_gameManagerObject;

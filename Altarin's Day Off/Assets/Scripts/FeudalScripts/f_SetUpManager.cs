@@ -11,6 +11,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject emptyTile;
 	public GameObject trayObject;
 	public GameObject screenObject;
+	public Canvas canvas;
 
 
 	Player myPlayer;
@@ -792,9 +793,14 @@ public class f_SetUpManager : MonoBehaviour {
 
 	void FillTray(){
 
+
+
+
+		/*
+
 		//for new ui stuff
-		//TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour> ();
-		//slots = tray.slots;
+		TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour> ();
+		slots = tray.slots;
 
 		//slots = new f_Tile[15];
 
@@ -811,21 +817,39 @@ public class f_SetUpManager : MonoBehaviour {
 			if(isWhiteSetUp == p.isWhite){
 
 
-				p.transform.position = new Vector3(slots[j].gameObject.transform.position.x,
-						slots[j].gameObject.transform.position.y, -10.0f);
+				//p.transform.position = new Vector3(slots[j].gameObject.transform.position.x,
+						//slots[j].gameObject.transform.position.y, -10.0f);
 
 				//for new UI tray
-				//RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
+				RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
 				//p.transform.position = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
+				//Vector3 newPiecePosition = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
+				//newPiecePosition.z = -10.0f;
+
+				Vector3 newPiecePosition = transform.TransformPoint(slotRectTransform.position);
+				newPiecePosition.z = -10.0f;
+
+				p.transform.position = newPiecePosition;
 
 				slots[j].isOccupied = true;
 				p.occupiedTile = slots[j];
 
+				//provides an x or y ratio for the piece's UI element script
+				float slotXRatio = newPiecePosition.x/Screen.width;
+				float slotYRatio = newPiecePosition.y/Screen.height;
+
 				//adds UI element script to piece and has it sync to its assigned slot on the tray.
 				UI_Element slotUIelement = slots[j].GetComponent<UI_Element>();
 				UI_Element pieceUIElement = p.gameObject.AddComponent("UI_Element") as UI_Element;
-				pieceUIElement.xRatio = slotUIelement.xRatio;
+
+
+				/*pieceUIElement.xRatio = slotUIelement.xRatio;
 				pieceUIElement.yRatio = slotUIelement.yRatio;
+
+				pieceUIElement.xRatio = slotXRatio;
+				pieceUIElement.yRatio = slotYRatio;
+
+
 				pieceUIElement.SetUpElement();
 
 				//piecesInTray.Add(p.gameObject);
@@ -853,18 +877,42 @@ public class f_SetUpManager : MonoBehaviour {
 
 				if(isWhiteSetUp == c.isWhite){
 
-					UI_Element castleUIElement = c.gameObject.AddComponent("UI_Element") as UI_Element;
-					UI_Element slotUIElement = slots[j].GetComponent<UI_Element>();
+					//for new ui stsuff
+					RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
+					Vector3 newPiecePosition = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
+					newPiecePosition.z = -10.0f;
 
-					castleUIElement.xRatio = slotUIElement.xRatio;
+
+					UI_Element castleUIElement = c.gameObject.AddComponent("UI_Element") as UI_Element;
+
+					//old
+					//UI_Element slotUIElement = slots[j].GetComponent<UI_Element>();
+					/*castleUIElement.xRatio = slotUIElement.xRatio;
 					castleUIElement.yRatio = slotUIElement.yRatio;
+
+					//for new ui stuff
+					float slotXRatio = newPiecePosition.x/Screen.width;
+					float slotYRatio = newPiecePosition.y/Screen.height;
+
+					castleUIElement.xRatio = slotXRatio;
+					castleUIElement.yRatio = slotYRatio;
+
+
 					castleUIElement.SetUpElement();
 
 					f_Tile greens = c.castleGreens;
 
 					UI_Element greensUIElement = greens.gameObject.AddComponent("UI_Element") as UI_Element;
-					greensUIElement.xRatio = slotUIElement.xRatio;
-					greensUIElement.yRatio = slotUIElement.yRatio;
+
+					//old
+					/*greensUIElement.xRatio = slotUIElement.xRatio;
+					greensUIElement.yRatio = slotUIElement.yRatio;*
+
+					//for new ui stuff
+					greensUIElement.xRatio = slotXRatio;
+					greensUIElement.yRatio = slotYRatio;
+
+
 					greensUIElement.SetUpElement();
 
 
@@ -872,7 +920,7 @@ public class f_SetUpManager : MonoBehaviour {
 					//RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
 					//c.transform.position = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
 
-					c.transform.position = slots[j].gameObject.transform.position;
+					//c.transform.position = slots[j].gameObject.transform.position;
 
 					slots[j].isOccupied = true;
 					c.rotation = 3;
@@ -899,7 +947,7 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		}
 
-		nextAvailableTraySlot = slots [j];
+		nextAvailableTraySlot = slots [j];*/
 
 	}
 
@@ -1379,6 +1427,10 @@ public class f_SetUpManager : MonoBehaviour {
 				myPlayer = players[i];
 				f_gameManager.myPlayer = myPlayer;
 				myPlayer.SetUpAudio();
+
+
+
+				canvas.worldCamera = myPlayer.GetComponent<Camera>();
 
 				Debug.Log("MyPlayer found.");
 			}
