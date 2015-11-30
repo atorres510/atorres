@@ -24,9 +24,4 @@ Black Pieces
 
 
 
-Faction Designators:
 
-0 null;
-
-1 Clan Zabbers (Red);
-2 18th Holy Battalion (Blue);

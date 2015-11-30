@@ -57,7 +57,7 @@ public class TrayBehaviour : MonoBehaviour {
 
 		Sprite newSprite = Resources.Load<Sprite>("Sprites/FeudalSprites/FactionSprites/Battalion/Altarin");
 
-		Debug.Log (newSprite);
+		//Debug.Log (newSprite);
 
 		buttons [0].image.sprite = newSprite;
 

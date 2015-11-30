@@ -8,9 +8,8 @@ public class MapGenerator : MonoBehaviour {
 	public GameObject normalTilePrefab;
 	public int mapSize;
 	public f_Tile[] specialTiles; // holds tile types of special tiles to replace tiles with.
-
-
 	
+
 	void InstantiateTile(int x, int y, Vector3 position, GameObject prefab){
 
 		GameObject tile;

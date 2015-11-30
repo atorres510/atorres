@@ -81,7 +81,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-
 	void SelectCastle(bool isWhitePlacing){
 
 		int layerMask = 1 << LayerMask.NameToLayer("Castle");
@@ -224,7 +223,6 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	
 	}
-	
 
 	void DropPiece(){
 
@@ -424,7 +422,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-
 	void ReturnToLastOccupiedTile(GameObject piece){
 
 		if (piece.tag == "f_Piece") {
@@ -491,7 +488,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 	
 	}
-
 
 	bool isValidPiecePlacement(GameObject g, f_Tile t){
 
@@ -571,7 +567,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-
 	void RotateCastle(GameObject g){
 		f_Castle c = g.GetComponent<f_Castle>();
 
@@ -638,11 +633,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-
-
-
-
-
 	void MouseControls(bool placingCastle){
 
 
@@ -688,12 +678,6 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 
 	}
-
-
-
-
-
-
 
 
 
@@ -784,9 +768,6 @@ public class f_SetUpManager : MonoBehaviour {
 		//nextAvailableTraySlot = slots [i];
 			
 	}
-
-
-
 
 	GameObject[] pieces;
 	//List<GameObject> piecesInTray = new List<GameObject>();
@@ -1127,16 +1108,6 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
 	bool isValidCastlePlacement(GameObject selectedCastle){
 
 		f_Castle c = selectedCastle.GetComponent<f_Castle> ();
@@ -1380,8 +1351,6 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
-
-
 	f_Tile FindAnchorTile(int x, int y){
 
 
@@ -1405,11 +1374,6 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	
 	}
-
-
-
-
-
 
 	Player[] players;
 
@@ -1512,8 +1476,6 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
-
-
 	void ArePlayersReady(){
 
 		int[] playersReady = new int[players.Length];
@@ -1599,40 +1561,9 @@ public class f_SetUpManager : MonoBehaviour {
 			InitiateSetup();
 		
 		}
-
-
-		/*player = FindObjectOfType<Player> ();
-		playerCamera = player.gameObject.GetComponent<Camera> ();
-		Debug.Log (player);
-
-		if (player.isWhite) {
-				
-			isWhiteSetUp = true;
-		
-		}
-
-		else{
-
-			isWhiteSetUp = false;
-
-		}
-
-		Debug.Log ("iswhite: " + player.isWhite);
-
-		isSetUp = true;
-		isPlacingCastle = true;
-		//isWhiteSetUp = true;
-		selectedObject = emptyObject;
-		CreateTray(trayObject);
-		FillTray();*/
-		
 	
 	}
 	
-
-
-
-
 
 
 	void Update () {
