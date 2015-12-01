@@ -21,7 +21,3 @@ Black Pieces
 14 black sergeant;
 15 black pikeman;
 16 black squire;
-
-
-
-

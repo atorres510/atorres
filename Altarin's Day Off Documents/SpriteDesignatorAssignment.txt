@@ -1,0 +1,20 @@
+Sprite Designators
+
+1 king;
+2 prince;
+3 duke;
+4 knight;
+5 archer/mage;
+6 sergeant;
+7 pikeman;
+8 squire;
+
+
+all pieces should have an 0X_Type format
+	ex: 01_King
+this order allows them to be read properly
+
+
+For Sprite Library's Folder Path, use
+
+"Assets/Resources/Sprites/FeudalSprites/FactionSprites"
