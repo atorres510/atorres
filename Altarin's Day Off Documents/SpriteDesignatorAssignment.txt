@@ -17,4 +17,5 @@ this order allows them to be read properly
 
 For Sprite Library's Folder Path, use
 
+for faction sprites
 "Assets/Resources/Sprites/FeudalSprites/FactionSprites"

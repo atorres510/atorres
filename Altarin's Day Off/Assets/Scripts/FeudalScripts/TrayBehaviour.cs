@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,6 +8,8 @@ public class TrayBehaviour : MonoBehaviour {
 
 	public f_Tile[] slots;
 
+	//fortesting
+	public SpriteLibrary s;
 
 
 	GridLayoutGroup gridLayoutGroup;
@@ -53,18 +54,17 @@ public class TrayBehaviour : MonoBehaviour {
 
 		buttons = GetComponentsInChildren<Button> ();
 
-		int [] spriteOrder = {6, 6, 6, 6, 7, 7, 5, 4, 4, 8, 2, 3, 1};
+		int [] spriteOrder = {7, 7, 7, 7, 6, 6, 5, 4, 4, 8, 2, 3, 1, 0, 0};
 
-		Sprite newSprite = Resources.Load<Sprite>("Sprites/FeudalSprites/FactionSprites/Battalion/Altarin");
-
-		//Debug.Log (newSprite);
-
-		buttons [0].image.sprite = newSprite;
+		for (int i = 0; i < buttons.Length; i++) {
+				
+			buttons[i].image.sprite = s.GetSprite("BATTALION", spriteOrder[i]);
+		
+		
+		}
 
 	
 	}
-
-
 
 	void Start(){
 
