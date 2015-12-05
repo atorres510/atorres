@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class TrayBehaviour : MonoBehaviour {
 
-	public f_Tile[] slots;
+	//public f_Tile[] slots;
 
 	//fortesting
 	public SpriteLibrary s;

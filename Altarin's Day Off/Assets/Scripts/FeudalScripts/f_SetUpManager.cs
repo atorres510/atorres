@@ -13,7 +13,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject screenObject;
 	public Canvas canvas;
 
-
+	Player[] players;
 	Player myPlayer;
 	Camera playerCamera;
 	GameObject selectedObject;
@@ -35,6 +35,8 @@ public class f_SetUpManager : MonoBehaviour {
 	//uses GUI elements to allow for the set up of the game
 	//holds the ability to click and drag units onto tiles
 
+
+	#region NetworkManager
 	void FindNetworkManager(){
 		
 		NetworkManager networkManager = FindObjectOfType<NetworkManager> ();
@@ -55,15 +57,60 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		
 	}
+	#endregion
+
+	#region MouseControls
+	void MouseControls(bool placingCastle){
+		
+		
+		//initial left click selects the piece
+		if (Input.GetMouseButtonDown (0)) {
+			if(isPlacingCastle){
+				
+				SelectCastle(isWhiteSetUp);
+				
+			}
+			
+			else{
+				
+				SelectPiece(isWhiteSetUp);
+			}
+			
+			
+		}
+		//when held, the object is draggable
+		if(Input.GetMouseButton(0)){
+			
+			ClickandDrag(selectedObject);
+			
+		}
+		
+		//drops piece onto tile or back to its original position and clears variables
+		if(Input.GetMouseButtonUp(0)){
+			
+			if(isPlacingCastle){
+				
+				DropCastle();
+				
+			}
+			
+			else{
+				
+				
+				DropPiece();
+			}
+			//DropPiece();
+			//selectedObject = emptyObject;
+			
+		}
+		
+	}
 
 	void ClickandDrag(GameObject g){
 
 		if (g != null) {
 				
-				//Vector3 v3Pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-				///Vector2 mousePos = new Vector2(v3Pos.x, v3Pos.y);
 				g.transform.position = MousePosition();
-				
 
 		}
 
@@ -421,7 +468,9 @@ public class f_SetUpManager : MonoBehaviour {
 
 
 	}
+	#endregion
 
+	#region PiecePlacement 
 	void ReturnToLastOccupiedTile(GameObject piece){
 
 		if (piece.tag == "f_Piece") {
@@ -567,6 +616,27 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
+	bool isValidCastlePlacement(GameObject selectedCastle){
+		
+		f_Castle c = selectedCastle.GetComponent<f_Castle> ();
+		
+		f_Tile t = c.castleGreens;
+		
+		//holds length of board and needs definition outside of this fxn
+		int boardLength = 23;
+		
+		//if greens are out of bounds return false
+		if (t.x < 0 || t.y < 0 || t.x > boardLength || t.y > boardLength) {
+			
+			Debug.Log("This is not valid castle placement:  Castle Greens are out of bounds");
+			return false;
+			
+		}
+		
+		else return true;
+		
+	}
+
 	void RotateCastle(GameObject g){
 		f_Castle c = g.GetComponent<f_Castle>();
 
@@ -633,58 +703,13 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-	void MouseControls(bool placingCastle){
+	#endregion
 
-
-		//initial left click selects the piece
-		if (Input.GetMouseButtonDown (0)) {
-			if(isPlacingCastle){
-
-				SelectCastle(isWhiteSetUp);
-	
-			}
-
-			else{
-
-				SelectPiece(isWhiteSetUp);
-			}
-
-
-		}
-		//when held, the object is draggable
-		if(Input.GetMouseButton(0)){
-
-				ClickandDrag(selectedObject);
-		
-		}
-
-		//drops piece onto tile or back to its original position and clears variables
-		if(Input.GetMouseButtonUp(0)){
-
-			if(isPlacingCastle){
-
-				DropCastle();
-
-			}
-
-			else{
-
-
-				DropPiece();
-			}
-			//DropPiece();
-			//selectedObject = emptyObject;
-		
-		}
-
-	}
-
-
+	#region Tray
 
 	//tray that holds pieces for placement on the board 
-
+	
 	//Rect tray = new Rect(Screen.width, 50, 400, 900);
-
 	f_Tile[] slots;
 	Vector3 oldTrayPosition;
 	float oldFov;
@@ -1107,34 +1132,30 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
-
-	bool isValidCastlePlacement(GameObject selectedCastle){
-
-		f_Castle c = selectedCastle.GetComponent<f_Castle> ();
-
-		f_Tile t = c.castleGreens;
-
-		//holds length of board and needs definition outside of this fxn
-		int boardLength = 23;
-
-		//if greens are out of bounds return false
-		if (t.x < 0 || t.y < 0 || t.x > boardLength || t.y > boardLength) {
-				
-			Debug.Log("This is not valid castle placement:  Castle Greens are out of bounds");
-			return false;
+	bool IsTrayClear(f_Tile[] slots){
 		
+		
+		for (int i = 0; i < slots.Length; i++) {
+			
+			if(slots[i].isOccupied){
+				
+				return false;
+				
+				
+			}
+			
+			
+			
 		}
-
-		else return true;
-
-	
-	
+		
+		return true;
+		
+		
+		
 	}
+	#endregion
 
-
-
-
-
+	#region GUI
 	void OnGUI(){
 
 		if (isSetUp) {
@@ -1329,53 +1350,44 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
-	bool IsTrayClear(f_Tile[] slots){
+	#endregion
 
-	
-		for (int i = 0; i < slots.Length; i++) {
+	#region SetUpMethods
 
-			if(slots[i].isOccupied){
-
-				return false;
-
-
-			}
-				
-		
-		
-		}
-
-		return true;
-	
-	
-	
-	}
-
+	//for setting up screen
 	f_Tile FindAnchorTile(int x, int y){
-
-
+		
+		
 		f_Tile anchorTile = null;
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("f_Tile");
-	
+		
 		for (int i = 0; i < tiles.Length; i++) {
-				
+			
 			f_Tile tile = tiles[i].GetComponent<f_Tile>();
-
+			
 			if(tile.x == x && tile.y == y){
-
+				
 				anchorTile = tile;
 				break;
 			}
-
-		
+			
+			
 		}
-
+		
 		return anchorTile;
-	
-	
+		
+		
 	}
 
-	Player[] players;
+	void InstantiatePieceSet(){
+
+
+
+
+
+
+
+	}
 
 	public void InitiateSetup(){
 		
@@ -1423,10 +1435,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 			}
 
-
-
-
-		
 		}
 
 
@@ -1547,10 +1555,7 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
-
-
-
-
+	#endregion
 
 	void Awake () {
 
@@ -1563,8 +1568,6 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 	
 	}
-	
-
 
 	void Update () {
 

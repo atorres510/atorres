@@ -16,7 +16,43 @@ public class SpriteLibrary : MonoBehaviour {
 	//Stores sprites in arrays by faction.  Uses piece Designation to ID piece sprite type.
 	Dictionary<string, Sprite[]> spriteLibrary = new Dictionary<string, Sprite[]>();
 
+	//used by manager scripts to retrieve sprites given the faction and unit type
+	public Sprite GetSprite(string key, int id){
+		
+		Sprite[] sprites = RetrieveArray(key);
+		
+		//checks if the array would throw an out of index error.  if so, throw error and errorsprite
+		if (sprites.Length < id) {
+			
+			Debug.LogError("Failed to Assign Sprite: Out of Index");
+			return errorSprite;
+			
+		}
+		
+		else{
+			
+			//corrects for array elements
+			id = (id - 1);
+			
+			//checks if the array would throw an out of index error.  if so, throw error and errorsprite
+			if(id < 0){
+				
+				Debug.LogError("Failed to Assign Sprite: Out of Index");
+				return errorSprite;
+				
+			}
+			
+			else{
+				
+				return sprites[id];
+				
+			}
+			
+		}
+		
+	}
 
+	//overloaded method for string usage
 	public Sprite GetSprite(string key, string id){
 		
 		Sprite[] sprites = RetrieveArray(key);
@@ -144,43 +180,6 @@ public class SpriteLibrary : MonoBehaviour {
 	void LoadErrorSprite(){
 
 		errorSprite = Resources.Load<Sprite>("Sprites/FeudalSprites/ErrorSprite");
-	
-	}
-
-
-	//used by manager scripts to retrieve sprites given the faction and unit type
-	public Sprite GetSprite(string key, int id){
-
-		Sprite[] sprites = RetrieveArray(key);
-
-		//checks if the array would throw an out of index error.  if so, throw error and errorsprite
-		if (sprites.Length < id) {
-
-			Debug.LogError("Failed to Assign Sprite: Out of Index");
-			return errorSprite;
-		
-		}
-
-		else{
-
-			//corrects for array elements
-			id = (id - 1);
-
-			//checks if the array would throw an out of index error.  if so, throw error and errorsprite
-			if(id < 0){
-
-				Debug.LogError("Failed to Assign Sprite: Out of Index");
-				return errorSprite;
-
-			}
-
-			else{
-
-				return sprites[id];
-
-			}
-
-		}
 	
 	}
 

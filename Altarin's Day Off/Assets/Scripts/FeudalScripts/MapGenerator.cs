@@ -24,9 +24,7 @@ public class MapGenerator : MonoBehaviour {
 
 	
 	}
-
-
-
+	
 
 	void GenerateMap(int size){
 
