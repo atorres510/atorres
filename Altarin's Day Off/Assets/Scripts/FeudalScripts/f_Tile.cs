@@ -8,7 +8,7 @@ public class f_Tile : MonoBehaviour {
 	
 	public bool isOccupied;
 
-	// 0 = Empty; 1 = oops forgot to assign; 2 = rough terrain;  3 = Mountain terrain;  4 = castle greens; 5 = castle;
+	// 0 = normal; 1 = oops forgot to assign; 2 = rough terrain;  3 = Mountain terrain;  4 = castle greens; 5 = castle;
 	public int tileType; 
 
 
