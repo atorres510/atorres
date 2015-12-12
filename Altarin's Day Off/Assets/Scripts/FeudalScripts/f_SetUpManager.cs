@@ -27,7 +27,7 @@ public class f_SetUpManager : MonoBehaviour {
 	bool isPlacingCastle;
 	public bool isWhiteSetUp;
 	public bool isSetUp;
-	bool isOffline = false;
+	bool isOffline = true;
 
 
 
@@ -1357,7 +1357,6 @@ public class f_SetUpManager : MonoBehaviour {
 	//for setting up screen
 	f_Tile FindAnchorTile(int x, int y){
 		
-		
 		f_Tile anchorTile = null;
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("f_Tile");
 		
@@ -1379,6 +1378,55 @@ public class f_SetUpManager : MonoBehaviour {
 		
 	}
 
+	void InstantiatePlayers(bool onlineStatus){
+
+		//if game mode is offline, instantiate new offline player as myPlayer and create 
+		//an array with it as the only element.
+		if(onlineStatus){
+			
+			GameObject playerPrefab = Resources.Load<GameObject>("Player");
+			GameObject playerObject = Instantiate(playerPrefab) as GameObject;
+			myPlayer = playerObject.GetComponent<Player>();
+			myPlayer.SetUpAudio();
+			
+			players = new Player[]{myPlayer};
+			
+		}
+		
+		//if game mode is online, find all instantiated players from network manager, create
+		//players array and assign myPlayer
+		else{
+			
+			players = FindObjectsOfType<Player> ();
+			
+			Debug.Log ("player list length " + players.Length);
+			for (int i = 0; i < players.Length; i++) {
+				Debug.Log("Looking for MyPlayer");
+				if(players[i].isMyPlayer){
+					
+					myPlayer = players[i];
+					canvas.worldCamera = myPlayer.GetComponent<Camera>();
+					
+					Debug.Log("MyPlayer found.");
+				}
+				
+				Debug.Log("Player " + players[i].playerNumber);
+				
+			}
+			
+		}
+
+		//sends my player to game manager
+		f_gameManager.myPlayer = myPlayer;
+
+		//enables player camera w/ controls
+		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
+		CameraController c = myPlayer.GetComponent<CameraController>();
+		c.enabled = true;
+
+
+	}
+
 	void InstantiatePieceSet(){
 
 
@@ -1389,59 +1437,38 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-	public void InitiateSetup(){
-		
-		Debug.Log ("Initiate Setup");
-
-		players = FindObjectsOfType<Player> ();
-
-		Debug.Log ("player list length " + players.Length);
-		for (int i = 0; i < players.Length; i++) {
-			Debug.Log("Looking for MyPlayer");
-			if(players[i].isMyPlayer){
-
-				myPlayer = players[i];
-				f_gameManager.myPlayer = myPlayer;
-				myPlayer.SetUpAudio();
-
-
-
-				canvas.worldCamera = myPlayer.GetComponent<Camera>();
-
-				Debug.Log("MyPlayer found.");
-			}
-
-			Debug.Log("Player " + players[i].playerNumber);
-		
-		}
+	void SetUpScreen(){
 
 		if (screenObject != null) {
-				
+			
 			ScreenBehavior screen = screenObject.GetComponent<ScreenBehavior>();
-
+			
 			screen.myPlayer = myPlayer;
-
+			
 			if(myPlayer.isWhite){
-
+				
 				screen.SetUpPosition(FindAnchorTile(11,11));
-
+				
 			}
-
-
+			
 			else{
-
+				
 				screen.SetUpPosition(FindAnchorTile(11,12));
-
-
+				
 			}
-
+			
 		}
-
-
 		
-		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
-		CameraController c = myPlayer.GetComponent<CameraController>();
-		c.enabled = true;
+	}
+
+	public void InitiateSetup(){
+
+		Debug.Log ("Initiate Setup");
+
+		InstantiatePlayers(isOffline);
+
+		SetUpScreen();
+		
 		myPlayer.SetUpAudio ();
 
 		trayObject.SetActive(true);
@@ -1578,8 +1605,6 @@ public class f_SetUpManager : MonoBehaviour {
 				MouseControls (isPlacingCastle);
 
 			}
-
-
 
 			ArePlayersReady();
 		}
