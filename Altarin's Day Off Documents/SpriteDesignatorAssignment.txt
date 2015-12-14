@@ -1,5 +1,6 @@
 Sprite Designators
 
+0 (for piece prefabs this space is reserved for the empty piece);
 1 king;
 2 prince;
 3 duke;
@@ -10,8 +11,8 @@ Sprite Designators
 8 squire;
 
 
-all pieces should have an 0X_Type format
-	ex: 01_King
+all pieces should have an 0X_Type_Faction format
+	ex: 01_King_Clan
 this order allows them to be read properly
 
 

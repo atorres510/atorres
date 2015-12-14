@@ -15,7 +15,9 @@ public abstract class f_Piece : MonoBehaviour {
 	public int y;
 	
 	public int pieceDesignator;
-	//pieceID assigns a unique ID number given to each piece.  Used to identified which pieces need to be destroyed in gamemanagers
+	//pieceID assigns a unique ID number given to each piece.  
+	//Used to identified which pieces need to be destroyed in gamemanagers
+
 	//updatePieceSet()
 	public int pieceID; 
 
@@ -30,7 +32,6 @@ public abstract class f_Piece : MonoBehaviour {
 
 	public List<f_Tile> MovementTiles = new List<f_Tile>();
 	
-	
 	public abstract void ProjectMovementTiles ();
 	
 	public abstract bool isTileOccupied (f_Tile t);
@@ -40,6 +41,7 @@ public abstract class f_Piece : MonoBehaviour {
 	//public abstract void Move (GameObject targetTile);
 
 	//public abstract void ThreatenTiles (bool isUpdate);
+
 
 
 	public void InstantiateVariables(){
@@ -54,12 +56,10 @@ public abstract class f_Piece : MonoBehaviour {
 	public void TogglePieceCollider(bool usedTurn){
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
 		if (!f_gameManager.isGameOver) {
-				
 
-			
 			collider.enabled = !usedTurn;
 			ToggleGrayScale(usedTurn);
-		
+			
 		}
 
 		else{
@@ -90,6 +90,20 @@ public abstract class f_Piece : MonoBehaviour {
 	
 	
 	}
+
+	//sets the side and faction, and piece designator. used upon instantiation during setup.
+	public void SetVariables(bool iswhite, Faction fct, int designator, GameObject start){
+
+		isWhite = iswhite;
+		faction = fct;
+		pieceDesignator = designator;
+		startTile = start;
+		StartPosition();
+		
+	}
+
+
+
 
 
 	

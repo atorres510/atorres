@@ -5,9 +5,6 @@ using System.IO;
 
 public class SpriteLibrary : MonoBehaviour {
 
-
-	public GameObject testObject;
-
 	public string[] folderPaths;
 
 	//used to take place of null reference exceptions
@@ -77,7 +74,7 @@ public class SpriteLibrary : MonoBehaviour {
 	}
 
 
-
+	//creates dictionary by reading the folder paths and their contents
 	void CreateSpriteDictionary(string[] folderPaths){
 
 		foreach (string path in folderPaths) {
@@ -189,17 +186,6 @@ public class SpriteLibrary : MonoBehaviour {
 		LoadErrorSprite ();
 		CreateSpriteDictionary (folderPaths);
 	
-
-
-			//for testing
-		//Sprite[] temp = RetrieveArray ("Clan");
-		//SpriteRenderer r = testObject.GetComponent<SpriteRenderer> ();
-		//r.sprite = GetSprite ("SPRITES", "fNormalTile");
-		///string abc = "abcdefghijklm\nopqrstuvwxyz";
-		//string[] abcCut = abc.Split('\\');
-		//foreach (string word in abcCut) {
-		//	Debug.Log(word);
-		//}
 	}
 
 

@@ -1335,18 +1335,7 @@ public class f_GameManager : MonoBehaviour {
 		
 		tileCoordinates = new GameObject[24,24];
 		coordinates = new int[24,24];
-
-		/*
-
-		tileCoordinates = new GameObject[5,5];
-		coordinates = new int[5,5];
-		whitePieces = new f_Piece[2];
-		blackPieces = new f_Piece[2];
-
-		*/
-
-		//tileCoordinates = new GameObject[13,13];
-		//coordinates = new int[13,13];
+		
 		whitePieces = new f_Piece[13];
 		blackPieces = new f_Piece[13];
 		whiteRoyalties = new int[3];
@@ -1383,7 +1372,7 @@ public class f_GameManager : MonoBehaviour {
 		if (isWaiting) {
 				
 
-			WaitingForOtherPlayers();
+			//WaitingForOtherPlayers();
 		
 		
 		}

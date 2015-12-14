@@ -11,6 +11,8 @@ public class Player : Photon.MonoBehaviour {
 	public AudioClip music1;
 	public AudioClip music2;
 
+	//public f_Piece[] pieceSet; do we want this?  consider PUN principles
+
 	bool correctedIsWhite;
 	bool correctedIsReady;
 	int correctedPlayerNumber;
@@ -44,9 +46,6 @@ public class Player : Photon.MonoBehaviour {
 			playerCameraController.enabled = false;
 			playerAudioListener.enabled = false;
 
-		
-		
-		
 		}
 	
 

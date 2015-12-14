@@ -7,6 +7,8 @@ using System.Collections.Generic;
 public class f_SetUpManager : MonoBehaviour {
 
 	public f_GameManager f_gameManager;
+	public MapGenerator mapGenerator;
+	public SpriteLibrary spriteLibrary;
 	public GameObject emptyObject;
 	public GameObject emptyTile;
 	public GameObject trayObject;
@@ -26,38 +28,14 @@ public class f_SetUpManager : MonoBehaviour {
 	bool isPlacingPieces;
 	bool isPlacingCastle;
 	public bool isWhiteSetUp;
-	public bool isSetUp;
-	bool isOffline = true;
+	public bool isSetUp = false;
+	bool isOffline;
 
 
 
 
 	//uses GUI elements to allow for the set up of the game
 	//holds the ability to click and drag units onto tiles
-
-
-	#region NetworkManager
-	void FindNetworkManager(){
-		
-		NetworkManager networkManager = FindObjectOfType<NetworkManager> ();
-		
-		if (networkManager != null) {
-			
-			isOffline = false;
-			Debug.Log("Online: Network Manager Found");
-			
-		}
-		
-		else{
-			
-			isOffline = true;
-			Debug.Log("Offline: Network Manager Not Found");
-			
-		}
-		
-		
-	}
-	#endregion
 
 	#region MouseControls
 	void MouseControls(bool placingCastle){
@@ -1354,6 +1332,175 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#region SetUpMethods
 
+	#region Player and Network Methods
+	//finds network manager and syncronizes offline/online status between managers
+	void FindNetworkManager(){
+		
+		NetworkManager networkManager = FindObjectOfType<NetworkManager> ();
+		
+		if (networkManager != null) {
+			
+			Debug.Log("Network Manager Found");
+			isOffline = networkManager.isOffline;
+			f_gameManager.isOffline = networkManager.isOffline;
+			
+			
+		}
+		
+		else{
+			
+			Debug.Log("Network Manager Not Found");
+			
+		}
+		
+	}
+
+	//whether game is online or offline, find all instantiated players from network manager, create
+	//players array and assign myPlayer
+	void SetPlayers(){
+
+		players = FindObjectsOfType<Player> ();
+
+		//looks through players array and finds myPlayer
+		Debug.Log ("player list length " + players.Length);
+		for (int i = 0; i < players.Length; i++) {
+			Debug.Log("Looking for MyPlayer");
+			if(players[i].isMyPlayer){
+				
+				myPlayer = players[i];
+				canvas.worldCamera = myPlayer.GetComponent<Camera>();
+				
+				Debug.Log("MyPlayer found.");
+			}
+			
+			Debug.Log("Player " + players[i].playerNumber);
+			
+		}
+
+		//sends my player to game manager
+		f_gameManager.myPlayer = myPlayer;
+
+		//enables player camera w/ controls
+		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
+		CameraController c = myPlayer.GetComponent<CameraController>();
+		c.enabled = true;
+
+
+	}
+	#endregion
+
+	#region Piece Instantiation Methods
+
+	//returns an array of prefabs loaded from the resources folder.
+	//prefabs in this folder require a specific order for proper instantiation later
+	GameObject[] ReturnPiecePrefabsArray(){
+
+		string filePath = "Prefabs/FeudalPrefabs/Pieces";
+
+		return Resources.LoadAll<GameObject>(filePath);
+
+	}
+
+	//instantiates, sets variables, assigns sprite, and returns the finished product as a f_piece.
+	f_Piece ReturnInstantiatedPiece(bool isWhite, f_Piece.Faction fctn, int designator, GameObject prefab){
+
+		//temp game object for instantiation
+		GameObject g = Instantiate(prefab) as GameObject;
+
+		//sprite assignment using faction (as a string) as the key for the dictionary
+		SpriteRenderer pieceSprite = g.GetComponent<SpriteRenderer>();
+		string key = fctn.ToString();
+		key = key.Trim();
+		pieceSprite.sprite = spriteLibrary.GetSprite(key, designator);
+
+		//adjusts the pieceDesignator if the piece is not white.
+		//white pieces keep the original designator.
+		if(!isWhite){
+			
+			designator = (designator + 8);
+			
+		}
+
+		//sets variables and returns the final piece.
+		f_Piece p = g.GetComponent<f_Piece>();
+		p.SetVariables(isWhite, fctn, designator, emptyTile); 
+		
+		return p;
+
+
+	}
+
+	//takes the white/black side and faction of player, returning a full 13-piece set for that player.
+	f_Piece[] ReturnPieceSet(bool isWhite, f_Piece.Faction faction){
+
+		//holds the prefabs retreived from the resources folder.
+		GameObject[] piecePrefabs = ReturnPiecePrefabsArray();
+
+		//set to be returned at the end of the fxn.
+		f_Piece[] pieceSet = new f_Piece[13];
+
+		//holds the int that designates the correct prefab from piecePrefabs
+		int pieceDesignator = 0;
+	
+		//instantiate (01king, 02prince, 03duke) x 1
+		for(int i = 0; i < 3; i ++){
+
+			pieceDesignator = i + 1;
+
+			pieceSet[i] = ReturnInstantiatedPiece(isWhite, faction, pieceDesignator, piecePrefabs[pieceDesignator]);
+
+		}
+
+		//instantiate 04knight x 2
+		for(int i = 3; i < 5; i++){
+
+			pieceDesignator = 4;
+
+			pieceSet[i] = ReturnInstantiatedPiece(isWhite, faction, pieceDesignator, piecePrefabs[pieceDesignator]);
+
+		}
+
+		//instantiate 05mage x 1
+		pieceDesignator = 5;
+		pieceSet[5] = ReturnInstantiatedPiece(isWhite, faction, pieceDesignator, piecePrefabs[pieceDesignator]);
+
+		//instantiate 06sergeant x 2
+		for(int i = 6; i < 8; i++){
+			
+			pieceDesignator = 6;
+			
+			pieceSet[i] = ReturnInstantiatedPiece(isWhite, faction, pieceDesignator, piecePrefabs[pieceDesignator]);
+			
+		}
+
+		//instantiate 07pikeman x 4
+		for(int i = 8; i < 12; i++){
+			
+			pieceDesignator = 7;
+			
+			pieceSet[i] = ReturnInstantiatedPiece(isWhite, faction, pieceDesignator, piecePrefabs[pieceDesignator]);
+			
+		}
+
+		//instantiate 08squire x 1
+		pieceDesignator = 8;
+		pieceSet[12] = ReturnInstantiatedPiece(isWhite, faction, pieceDesignator, piecePrefabs[pieceDesignator]);
+
+
+
+		return pieceSet;
+
+
+	}
+
+
+
+
+
+
+	#endregion
+
+	#region ScreenObject Methods
 	//for setting up screen
 	f_Tile FindAnchorTile(int x, int y){
 		
@@ -1376,65 +1523,6 @@ public class f_SetUpManager : MonoBehaviour {
 		return anchorTile;
 		
 		
-	}
-
-	void InstantiatePlayers(bool onlineStatus){
-
-		//if game mode is offline, instantiate new offline player as myPlayer and create 
-		//an array with it as the only element.
-		if(onlineStatus){
-			
-			GameObject playerPrefab = Resources.Load<GameObject>("Player");
-			GameObject playerObject = Instantiate(playerPrefab) as GameObject;
-			myPlayer = playerObject.GetComponent<Player>();
-			myPlayer.SetUpAudio();
-			
-			players = new Player[]{myPlayer};
-			
-		}
-		
-		//if game mode is online, find all instantiated players from network manager, create
-		//players array and assign myPlayer
-		else{
-			
-			players = FindObjectsOfType<Player> ();
-			
-			Debug.Log ("player list length " + players.Length);
-			for (int i = 0; i < players.Length; i++) {
-				Debug.Log("Looking for MyPlayer");
-				if(players[i].isMyPlayer){
-					
-					myPlayer = players[i];
-					canvas.worldCamera = myPlayer.GetComponent<Camera>();
-					
-					Debug.Log("MyPlayer found.");
-				}
-				
-				Debug.Log("Player " + players[i].playerNumber);
-				
-			}
-			
-		}
-
-		//sends my player to game manager
-		f_gameManager.myPlayer = myPlayer;
-
-		//enables player camera w/ controls
-		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
-		CameraController c = myPlayer.GetComponent<CameraController>();
-		c.enabled = true;
-
-
-	}
-
-	void InstantiatePieceSet(){
-
-
-
-
-
-
-
 	}
 
 	void SetUpScreen(){
@@ -1460,16 +1548,21 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 		
 	}
+	#endregion
 
 	public void InitiateSetup(){
 
 		Debug.Log ("Initiate Setup");
 
-		InstantiatePlayers(isOffline);
+		FindNetworkManager();
+
+		SetPlayers();
+
+		//pieces instantiated here, either into the player's array or one at set up
+
+		mapGenerator.GenerateMap();
 
 		SetUpScreen();
-		
-		myPlayer.SetUpAudio ();
 
 		trayObject.SetActive(true);
 		
@@ -1490,22 +1583,11 @@ public class f_SetUpManager : MonoBehaviour {
 		isSetUp = true;
 		isPlacingPieces = true;
 		isPlacingCastle = true;
-		FindNetworkManager ();
-		if (isOffline) {
-				
-			f_gameManager.isOffline = true;
-		
-		}
 
-		else{
-
-			f_gameManager.isOffline = false;
-
-		}
 		//isWhiteSetUp = true;
-		selectedObject = emptyObject;
-		CreateTray(trayObject);
-		FillTray();
+		//selectedObject = emptyObject;
+		//CreateTray(trayObject);
+		//FillTray();
 		
 	
 	
@@ -1584,16 +1666,21 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#endregion
 
-	void Awake () {
+	void Start () {
 
-		isSetUp = false;
 
-		if (isOffline) {
-				
-			InitiateSetup();
-		
-		}
-	
+
+
+			//for testing
+		/*f_Piece[] pieces = ReturnPieceSet(false, f_Piece.Faction.BATTALION);
+
+
+		GameObject[] stuffs = ReturnPiecePrefabsArray();
+
+		foreach (f_Piece p in pieces){
+			Debug.Log(p.gameObject);
+		}*/
+
 	}
 
 	void Update () {
@@ -1602,11 +1689,11 @@ public class f_SetUpManager : MonoBehaviour {
 
 			if(isPlacingPieces){
 
-				MouseControls (isPlacingCastle);
+				//MouseControls (isPlacingCastle);
 
 			}
 
-			ArePlayersReady();
+			//ArePlayersReady();
 		}
 		
 
@@ -1618,7 +1705,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 		if (isPlacingPieces) {
 				
-			SyncTrayAssets();
+			//SyncTrayAssets();
 		
 		}
 

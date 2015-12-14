@@ -58,7 +58,7 @@ public class TrayBehaviour : MonoBehaviour {
 
 		for (int i = 0; i < buttons.Length; i++) {
 				
-			buttons[i].image.sprite = s.GetSprite("BATTALION", spriteOrder[i]);
+			//buttons[i].image.sprite = s.GetSprite("BATTALION", spriteOrder[i]);
 		
 		
 		}

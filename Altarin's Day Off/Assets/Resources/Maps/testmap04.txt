@@ -1,0 +1,22 @@
+Size: 10
+Tile Set: Classic 
+#
+Marsh Tiles{
+(0,0)
+(1,1)
+(2,2)
+(3,3)
+(4,4)
+}
+#
+Mountain Tiles{
+(0,0)
+(4,3)
+(10,7)
+(11,11)
+}
+
+
+
+
+

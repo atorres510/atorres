@@ -3,12 +3,28 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
 
+	public bool isOffline = false;
 	bool beginSetup = false;
-	int numberOfPlayers = 1;
+	int numberOfOtherPlayers;
 
 	void Start(){
 
-		Connect ();
+		if(!isOffline){
+
+			//number of other players will be atleast 1 in multiplayer
+			numberOfOtherPlayers = 1;
+			Connect ();
+
+		}
+
+		else{
+
+			PhotonNetwork.offlineMode = true;
+			PhotonNetwork.CreateRoom(null);
+			numberOfOtherPlayers = 0;
+
+		}
+
 	
 	}
 
@@ -22,7 +38,7 @@ public class NetworkManager : MonoBehaviour {
 	void CheckForSetup(){
 
 
-		if (PhotonNetwork.otherPlayers.Length == numberOfPlayers && !beginSetup) {
+		if (PhotonNetwork.otherPlayers.Length == numberOfOtherPlayers && !beginSetup) {
 
 			Debug.Log("setup begins");
 		
@@ -45,6 +61,35 @@ public class NetworkManager : MonoBehaviour {
 
 	}
 
+	//uses photon instantiate to create player
+	void CreatePlayer(){
+
+		Vector3 myVector = new Vector3 (8.71f, 6.59f, -11.0f);
+		GameObject myPlayer = PhotonNetwork.Instantiate ("Player", myVector, Quaternion.identity, 0);
+		Player p = myPlayer.GetComponent<Player> ();
+		PhotonPlayer[] players = PhotonNetwork.otherPlayers;
+		
+		if (players.Length > 0) {
+			
+			Debug.Log("Number of players currently connected: " + players.Length);
+			p.isWhite = false;
+			p.playerNumber = PhotonNetwork.playerList.Length;
+			CameraController c = p.GetComponent<CameraController>();
+			c.enabled = false;
+			
+		}
+		
+		else {
+			Debug.Log("No other players currently connected.");
+			p.isWhite = true;
+			p.playerNumber = (PhotonNetwork.playerList.Length);
+			CameraController c = p.GetComponent<CameraController>();
+			c.enabled = false;
+			
+		}
+
+	}
+
 
 
 	void Connect(){
@@ -55,14 +100,12 @@ public class NetworkManager : MonoBehaviour {
 
 	void OnGUI(){
 
-
 		GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
-
 
 	}
 	
 	void OnJoinedLobby(){
-		Debug.Log ("OnJoinedLobby");
+		Debug.Log ("OnJoinedLobby()");
 		PhotonNetwork.JoinRandomRoom ();
 
 	}
@@ -78,31 +121,10 @@ public class NetworkManager : MonoBehaviour {
 
 	//joins the room and checks if the player is the first to connect.  if so, that player is player 1(white).
 	void OnJoinedRoom(){
-		Debug.Log ("OnJoinedRoom");
-		Vector3 myVector = new Vector3 (8.71f, 6.59f, -11.0f);
-		GameObject myPlayer = PhotonNetwork.Instantiate ("Player", myVector, Quaternion.identity, 0);
-		Player p = myPlayer.GetComponent<Player> ();
-		PhotonPlayer[] players = PhotonNetwork.otherPlayers;
 
-		if (players.Length > 0) {
-				
-			Debug.Log("Number of players currently connected: " + players.Length);
-			//p.isMyPlayer = true;
-			p.isWhite = false;
-			p.playerNumber = PhotonNetwork.playerList.Length;
-			CameraController c = p.GetComponent<CameraController>();
-			c.enabled = false;
+		Debug.Log ("OnJoinedRoom()");
+		CreatePlayer();
 
-		}
-
-		else {
-			Debug.Log("No other players currently connected.");
-			p.isWhite = true;
-			p.playerNumber = (PhotonNetwork.playerList.Length);
-			CameraController c = p.GetComponent<CameraController>();
-			c.enabled = false;
-
-		}
 
 	}
 

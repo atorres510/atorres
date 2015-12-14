@@ -214,13 +214,6 @@ public class MapGenerator : MonoBehaviour {
 		mountainTiles = ConvertStringArrayToCoordinateArray(specialCoordinates2);
 
 
-		//for debugging
-		//Debug.Log(" '" + sections[1] + "' ");
-		foreach (Coordinate c in marshTiles){
-			Debug.Log(c.x + "," + c.y);
-		}
-
-
 	}
 	#endregion
 
@@ -228,7 +221,7 @@ public class MapGenerator : MonoBehaviour {
 
 	void SetTilePrefabs(){
 
-		string filePath = "Prefabs/FeudalPrefabs";
+		string filePath = "Prefabs/FeudalPrefabs/Tiles";
 
 		normalTilePrefab = Resources.Load<GameObject>(filePath + "/f_NormalTile");
 		marshTilePrefab = Resources.Load<GameObject>(filePath + "/f_RoughTerrainTile");
@@ -290,7 +283,7 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	//generates the map by reading the map file
-	void GenerateMap(TextAsset map){
+	public void GenerateMap(){
 
 		//set up methods
 		SetTilePrefabs();
@@ -327,7 +320,7 @@ public class MapGenerator : MonoBehaviour {
 
 	void Awake () {
 
-		GenerateMap (map);
+		//GenerateMap ();
 
 	}
 
