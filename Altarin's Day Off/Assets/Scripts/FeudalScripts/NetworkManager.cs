@@ -73,19 +73,25 @@ public class NetworkManager : MonoBehaviour {
 			
 			Debug.Log("Number of players currently connected: " + players.Length);
 			p.isWhite = false;
+			p.faction = f_Piece.Faction.BATTALION;
 			p.playerNumber = PhotonNetwork.playerList.Length;
 			CameraController c = p.GetComponent<CameraController>();
 			c.enabled = false;
-			
+			p.AssignFactionID();//assigns faction ID to sync factions between clients via PUN serializeview
+								//this need to be placed here to give the clients enough time to send info
+								//to each other before sprites are assigned.
 		}
-		
+
 		else {
 			Debug.Log("No other players currently connected.");
 			p.isWhite = true;
+			p.faction = f_Piece.Faction.CLAN;
 			p.playerNumber = (PhotonNetwork.playerList.Length);
 			CameraController c = p.GetComponent<CameraController>();
 			c.enabled = false;
-			
+			p.AssignFactionID();//assigns faction ID to sync factions between clients via PUN serializeview
+								//this need to be placed here to give the clients enough time to send info
+								//to each other before sprites are assigned.
 		}
 
 	}

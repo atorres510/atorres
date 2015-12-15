@@ -1368,22 +1368,27 @@ public class f_SetUpManager : MonoBehaviour {
 			if(players[i].isMyPlayer){
 				
 				myPlayer = players[i];
-				canvas.worldCamera = myPlayer.GetComponent<Camera>();
-				
 				Debug.Log("MyPlayer found.");
+
 			}
-			
+
 			Debug.Log("Player " + players[i].playerNumber);
-			
+	
 		}
 
 		//sends my player to game manager
 		f_gameManager.myPlayer = myPlayer;
 
+		//assign's canvas' camera to player's camera.
+		canvas.worldCamera = myPlayer.GetComponent<Camera>();
+
 		//enables player camera w/ controls
 		playerCamera = myPlayer.gameObject.GetComponent<Camera> ();
 		CameraController c = myPlayer.GetComponent<CameraController>();
 		c.enabled = true;
+
+			//enables audio for my player only
+		//myPlayer.SetUpAudio();
 
 
 	}
@@ -1558,13 +1563,22 @@ public class f_SetUpManager : MonoBehaviour {
 
 		SetPlayers();
 
-		//pieces instantiated here, either into the player's array or one at set up
+
+		//pieces instantiated and assigned here for each player
+		for(int i = 0; i < players.Length; i++){
+
+			Debug.Log(i + ":" + players[i].faction);
+			players[i].pieceSet = ReturnPieceSet(players[i].isWhite, players[i].faction);
+
+
+		}
+
 
 		mapGenerator.GenerateMap();
 
 		SetUpScreen();
 
-		trayObject.SetActive(true);
+		//trayObject.SetActive(true);
 		
 		if (myPlayer.isWhite) {
 			

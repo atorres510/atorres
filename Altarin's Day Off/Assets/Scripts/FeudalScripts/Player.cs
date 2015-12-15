@@ -6,18 +6,21 @@ public class Player : Photon.MonoBehaviour {
 	public int playerNumber = 0;
 	public bool isMyPlayer;
 	public bool isWhite;
+	public f_Piece.Faction faction;
+	public int factionID = 0; //ID number to be used in photon seralize view to relay faction more easily.
+
 	public bool isReady;
 	public bool isSecondaryReady; //for testing purposes.  should be removed.
 	public AudioClip music1;
 	public AudioClip music2;
 
-	//public f_Piece[] pieceSet; do we want this?  consider PUN principles
+	public f_Piece[] pieceSet; //do we want this?  consider PUN principles
 
 	bool correctedIsWhite;
 	bool correctedIsReady;
 	int correctedPlayerNumber;
 	bool correctedIsSecondaryReady;
-
+	int correctedFactionID;
 
 	Camera playerCamera;
 	CameraController playerCameraController;
@@ -36,6 +39,7 @@ public class Player : Photon.MonoBehaviour {
 		Transform origin = borderOriginObject.transform;
 		playerCameraController.origin = origin;
 		isMyPlayer = photonView.isMine;
+
 		//playerCamera.enabled = false;
 		//playerCameraController = gameObject.GetComponent<CameraController> ();
 		//GameObject origin = GameObject.FindGameObjectWithTag ("Origin");
@@ -48,35 +52,73 @@ public class Player : Photon.MonoBehaviour {
 
 		}
 	
-
 	}
 
+	//assigns faction's music and enables audiosource.
 	public void SetUpAudio(){
 
-		//AudioClip music;
-
-
-
+		AudioClip music;
+		
 		if (isWhite) {
 				
-			//music = Resources.Load("Audio/ShockDrop&Roll") as AudioClip;
-			audioSource.clip = music1;
-		
+			music = Resources.Load<AudioClip>("Audio/ShockDrop&Roll");
+
 		}
 
 
 		else{
 
+			music = Resources.Load<AudioClip>("Audio/TheBattalionAdvances");
 
-			//music = Resources.Load("Audio/TheBattalionAdvances") as AudioClip;
-			audioSource.clip = music2;
 		}
 
+		audioSource.clip = music;
 
 		audioSource.enabled = true;
 		audioSource.enabled = false;
 		audioSource.enabled = true;
 
+
+	}
+
+	//reads through the faction enums, then uses the order of the enum to assign an ID to be
+	//read later by ReturnFaction.  
+	public void AssignFactionID(){
+
+		f_Piece.Faction[] factions;
+
+		//gathers enum values and place them into the array
+		factions = (f_Piece.Faction[])System.Enum.GetValues(typeof(f_Piece.Faction));
+
+		for(int i = 0; i <factions.Length; i++){
+
+			//once your faction is found, assign the ID number.
+			if(factions[i] == faction){
+
+				factionID = i;
+
+			}
+
+		}
+
+		for(int i = 0; i <factions.Length; i++){
+			
+			Debug.Log(factions[i]);
+
+		}
+		
+	}
+
+	//reads the factionID and returns the correct faction from the array of enums.  
+	//required to sync your/your opponents factions across clients.  
+	f_Piece.Faction ReturnFaction(int id){
+
+		f_Piece.Faction[] factions;
+
+		//gathers enum values and place them into the array
+		factions = (f_Piece.Faction[])System.Enum.GetValues(typeof(f_Piece.Faction));
+
+		return factions[id];
 
 	}
 
@@ -98,8 +140,9 @@ public class Player : Photon.MonoBehaviour {
 			isReady = correctedIsReady;
 			playerNumber = correctedPlayerNumber;
 			isSecondaryReady = correctedIsSecondaryReady;
-
-		
+			factionID = correctedFactionID;
+			faction = ReturnFaction(factionID);
+	
 		}
 	
 	
@@ -114,6 +157,7 @@ public class Player : Photon.MonoBehaviour {
 			stream.SendNext(isReady);
 			stream.SendNext(playerNumber);
 			stream.SendNext(isSecondaryReady);
+			stream.SendNext(factionID);
 		
 		}
 
@@ -124,6 +168,7 @@ public class Player : Photon.MonoBehaviour {
 			this.correctedIsReady = (bool) stream.ReceiveNext();
 			this.correctedPlayerNumber = (int) stream.ReceiveNext();
 			this.correctedIsSecondaryReady = (bool) stream.ReceiveNext();
+			this.correctedFactionID = (int) stream.ReceiveNext();
 
 		}
 
