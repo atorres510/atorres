@@ -2,53 +2,49 @@
 using System.Collections;
 
 public class ScreenBehavior : MonoBehaviour {
+
+	//sets position using anchor tile and which side it will hide
+	void SetScreenPosition(f_Tile anchor, bool isWhiteScreen){
 	
-
-	public Player myPlayer;
-	public f_Tile anchorTile;
-
-	SpriteRenderer spriteRenderer;
-
-	public Sprite[] screenSprites;
-	
-
-
-
-
-	public void SetUpPosition(f_Tile anchor){
-
-		spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
-
 		Vector3 anchorPos = anchor.transform.position;
+	
+		Vector3 posAdjustment;
 
 		Vector3 adjustedPos = new Vector3(0,0,0);
 
-		if (myPlayer.isWhite) {
+
+		if (isWhiteScreen) {
 				
-			Vector3 posAdjustment = new Vector3(0.53f, 7.42f, -9.0f); 
-		
-			adjustedPos = anchorPos + posAdjustment;
+			posAdjustment = new Vector3(0.53f, 7.42f, -9.0f); 
 
-			gameObject.transform.position = adjustedPos;
-
-			spriteRenderer.sprite = screenSprites[0];
-		
-		} 
-
+		}
 
 		else {
 				
-			Vector3 posAdjustment = new Vector3(0.53f, -7.42f, 0.0f); 
-			
-			adjustedPos = anchorPos + posAdjustment;
-			
-			gameObject.transform.position = adjustedPos;
-			
-			spriteRenderer.sprite = screenSprites[1];
-	
+			posAdjustment = new Vector3(0.53f, -7.42f, -9.0f); 
+		
 		}
 
+		adjustedPos = anchorPos + posAdjustment;
+		
+		gameObject.transform.position = adjustedPos;
 
+	}
+
+	//retreives spriter renderer on this gameobject and assigns it a new sprite.
+	void SetScreenSprite(Sprite s){
+
+		SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
+
+		spriteRenderer.sprite = s;
+
+	}
+	//method to be used by setupmanager
+	public void SetUpScreen(f_Tile anchor, bool isWhiteScreen, Sprite sprite){
+
+		SetScreenPosition(anchor, isWhiteScreen);
+
+		SetScreenSprite(sprite);
 
 	}
 	

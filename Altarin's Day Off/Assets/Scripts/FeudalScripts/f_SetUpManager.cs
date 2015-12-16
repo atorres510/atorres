@@ -12,7 +12,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject emptyObject;
 	public GameObject emptyTile;
 	public GameObject trayObject;
-	public GameObject screenObject;
+	GameObject screenObject;
 	public Canvas canvas;
 
 	Player[] players;
@@ -1506,6 +1506,20 @@ public class f_SetUpManager : MonoBehaviour {
 	#endregion
 
 	#region ScreenObject Methods
+
+	//retrieves prefab from resources folder and returns it as an instantiated game object.
+	GameObject ReturnScreenObject(){
+
+		string filePath = "Prefabs/FeudalPrefabs/Screen";
+
+		GameObject screenPrefab = Resources.Load<GameObject>(filePath);
+
+		GameObject screen = Instantiate(screenPrefab) as GameObject;
+
+		return screen;
+	
+	}
+
 	//for setting up screen
 	f_Tile FindAnchorTile(int x, int y){
 		
@@ -1530,25 +1544,35 @@ public class f_SetUpManager : MonoBehaviour {
 		
 	}
 
+	//set up screen 
 	void SetUpScreen(){
+
+		screenObject = ReturnScreenObject();
 
 		if (screenObject != null) {
 			
 			ScreenBehavior screen = screenObject.GetComponent<ScreenBehavior>();
-			
-			screen.myPlayer = myPlayer;
-			
+		
+			//determines y coordinate of anchor tile.  x coordinate will always be 11 regardless of army side.
+			int xAnchor = 11;
+			int yAnchor;
+
+			//(11,11)
 			if(myPlayer.isWhite){
-				
-				screen.SetUpPosition(FindAnchorTile(11,11));
-				
+
+				yAnchor = 11;
+
 			}
-			
+			//(11,12)
 			else{
 				
-				screen.SetUpPosition(FindAnchorTile(11,12));
+				yAnchor = 12;
 				
 			}
+
+			//passes members to screen method.  sprite ID 10 denotes screen sprite.
+			screen.SetUpScreen(FindAnchorTile(xAnchor, yAnchor), myPlayer.isWhite, 
+			                   spriteLibrary.GetSprite(myPlayer.faction.ToString(), 10));
 			
 		}
 		
@@ -1562,24 +1586,18 @@ public class f_SetUpManager : MonoBehaviour {
 		FindNetworkManager();
 
 		SetPlayers();
-
-
+		
 		//pieces instantiated and assigned here for each player
 		for(int i = 0; i < players.Length; i++){
 
-			Debug.Log(i + ":" + players[i].faction);
 			players[i].pieceSet = ReturnPieceSet(players[i].isWhite, players[i].faction);
 
-
 		}
-
-
+		
 		mapGenerator.GenerateMap();
 
 		SetUpScreen();
 
-		//trayObject.SetActive(true);
-		
 		if (myPlayer.isWhite) {
 			
 			isWhiteSetUp = true;
@@ -1598,6 +1616,10 @@ public class f_SetUpManager : MonoBehaviour {
 		isPlacingPieces = true;
 		isPlacingCastle = true;
 
+		//TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour>();
+		//tray.SetUpTray(myPlayer.faction, spriteLibrary);
+		
+		//trayObject.SetActive(true);
 		//isWhiteSetUp = true;
 		//selectedObject = emptyObject;
 		//CreateTray(trayObject);
@@ -1681,9 +1703,6 @@ public class f_SetUpManager : MonoBehaviour {
 	#endregion
 
 	void Start () {
-
-
-
 
 			//for testing
 		/*f_Piece[] pieces = ReturnPieceSet(false, f_Piece.Faction.BATTALION);

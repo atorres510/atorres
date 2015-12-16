@@ -8,15 +8,10 @@ public class TrayBehaviour : MonoBehaviour {
 
 	//public f_Tile[] slots;
 
-	//fortesting
-	public SpriteLibrary s;
-
-
 	GridLayoutGroup gridLayoutGroup;
-	
-	
+
 	//changes the spacing.y in the grid layout group of the piece panel to better fit the screen
-	void FixTheFuckingSpacing(){
+	void CorrectButtonSpacing(){
 		
 		gridLayoutGroup = GetComponent<GridLayoutGroup> ();
 		
@@ -46,31 +41,30 @@ public class TrayBehaviour : MonoBehaviour {
 	}
 
 
-	//sprite order: 6.6.6.6.7.7.5.4.4.8.2.3.1.castle.greens
-	void FillTheFuckOuttaTheButtons(){
+	//uses sprite library and player's faction to determine sprites for buttons
+	void SetButtonSprites(f_Piece.Faction faction, SpriteLibrary library){
 
-	
+		//find buttons that are children of this tray
 		Button[] buttons;
-
 		buttons = GetComponentsInChildren<Button> ();
 
+		//sprite order: 7.7.7.7.6.6.5.4.4.8.2.3.1.castle.castlegreens
 		int [] spriteOrder = {7, 7, 7, 7, 6, 6, 5, 4, 4, 8, 2, 3, 1, 0, 0};
 
 		for (int i = 0; i < buttons.Length; i++) {
 				
-			//buttons[i].image.sprite = s.GetSprite("BATTALION", spriteOrder[i]);
-		
+			//set sprite
+			buttons[i].image.sprite = library.GetSprite(faction.ToString(), spriteOrder[i]);
 		
 		}
-
 	
 	}
 
-	void Start(){
+	//public for use by setupmanager.
+	public void SetUpTray(f_Piece.Faction playerFaction, SpriteLibrary library){
 
-		FixTheFuckingSpacing();
-		FillTheFuckOuttaTheButtons ();
-
+		CorrectButtonSpacing();
+		SetButtonSprites(playerFaction, library);
 
 	}
 

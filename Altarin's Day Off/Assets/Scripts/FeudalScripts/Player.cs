@@ -82,7 +82,7 @@ public class Player : Photon.MonoBehaviour {
 	}
 
 	//reads through the faction enums, then uses the order of the enum to assign an ID to be
-	//read later by ReturnFaction.  
+	//read later by ReturnFaction.  should be called in network manager.
 	public void AssignFactionID(){
 
 		f_Piece.Faction[] factions;
@@ -160,8 +160,7 @@ public class Player : Photon.MonoBehaviour {
 			stream.SendNext(factionID);
 		
 		}
-
-
+		
 		else{
 
 			this.correctedIsWhite = (bool) stream.ReceiveNext();
@@ -171,9 +170,6 @@ public class Player : Photon.MonoBehaviour {
 			this.correctedFactionID = (int) stream.ReceiveNext();
 
 		}
-
-
-
 
 	}
 
