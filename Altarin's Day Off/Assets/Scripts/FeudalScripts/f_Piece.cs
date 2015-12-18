@@ -88,7 +88,6 @@ public abstract class f_Piece : MonoBehaviour {
 
 		}
 	
-	
 	}
 
 	//sets the side and faction, and piece designator. used upon instantiation during setup.

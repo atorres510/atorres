@@ -12,6 +12,8 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject emptyObject;
 	public GameObject emptyTile;
 	public GameObject trayObject;
+	public GameObject utilityPanelObject;
+	public GameObject bannerObject;
 	GameObject screenObject;
 	public Canvas canvas;
 
@@ -1446,6 +1448,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 		//holds the int that designates the correct prefab from piecePrefabs
 		int pieceDesignator = 0;
+
+		int j = 1; //pieceID counter to be used in pieceID assigning.
 	
 		//instantiate (01king, 02prince, 03duke) x 1
 		for(int i = 0; i < 3; i ++){
@@ -1581,7 +1585,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	public void InitiateSetup(){
 
-		Debug.Log ("Initiate Setup");
+		Debug.Log ("Initiateing Setup");
 
 		FindNetworkManager();
 
@@ -1598,6 +1602,14 @@ public class f_SetUpManager : MonoBehaviour {
 
 		SetUpScreen();
 
+		//set UI colors and sprites.
+		Image bannerImage = bannerObject.GetComponent<Image>();
+		bannerImage.sprite = spriteLibrary.GetSprite(myPlayer.faction.ToString(), 9); //9 is the banner's sprite designator.
+		UtilityPanelBehaviour panel = utilityPanelObject.GetComponent<UtilityPanelBehaviour>();
+		panel.SetPanelColor(myPlayer.faction);
+		TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour>();
+		tray.SetUpTray(myPlayer.faction, spriteLibrary);
+		
 		if (myPlayer.isWhite) {
 			
 			isWhiteSetUp = true;
@@ -1609,16 +1621,11 @@ public class f_SetUpManager : MonoBehaviour {
 			isWhiteSetUp = false;
 			
 		}
-		
-		Debug.Log ("is MyPlayer white: " + myPlayer.isWhite);
-		
+	
 		isSetUp = true;
 		isPlacingPieces = true;
 		isPlacingCastle = true;
 
-		//TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour>();
-		//tray.SetUpTray(myPlayer.faction, spriteLibrary);
-		
 		//trayObject.SetActive(true);
 		//isWhiteSetUp = true;
 		//selectedObject = emptyObject;

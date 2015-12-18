@@ -9,7 +9,7 @@ public class TrayBehaviour : MonoBehaviour {
 	//public f_Tile[] slots;
 
 	GridLayoutGroup gridLayoutGroup;
-
+	
 	//changes the spacing.y in the grid layout group of the piece panel to better fit the screen
 	void CorrectButtonSpacing(){
 		
@@ -36,8 +36,7 @@ public class TrayBehaviour : MonoBehaviour {
 			gridLayoutGroup.spacing = new Vector2(spacingX, spacingY);
 			
 		}
-		
-		
+
 	}
 
 
@@ -60,11 +59,48 @@ public class TrayBehaviour : MonoBehaviour {
 	
 	}
 
+	void SetTrayColor(f_Piece.Faction playerFaction){
+
+		//get gameobject's image component
+		Image image = gameObject.GetComponent<Image>();
+		
+		f_Piece.Faction[] factions;
+		
+		//gathers enum values and place them into the array
+		factions = (f_Piece.Faction[])System.Enum.GetValues(typeof(f_Piece.Faction));
+
+		//list of different colors for each faction.  new colors need to be added with 
+		//the addition of new factions.
+		Color32 clanColors = new Color32(153, 110, 110, 219);
+		Color32 battalionColors = new Color32(148, 162, 255, 192);
+		Color32 blankColors = new Color32(255, 255, 255, 255);
+
+		//colors need to be in the same order as they are listed in the f_Piece enum declaration.  
+		Color32[] factionColors = {clanColors, battalionColors, blankColors};
+
+		//find the player's faction in the list and then return the corrisponding color
+		for(int i = 0; i < factions.Length; i++){
+
+			if(playerFaction == factions[i]){
+
+				image.color = factionColors[i];
+				break;
+
+			}
+
+			else{}
+
+		}
+
+	}
+
+
 	//public for use by setupmanager.
 	public void SetUpTray(f_Piece.Faction playerFaction, SpriteLibrary library){
 
 		CorrectButtonSpacing();
 		SetButtonSprites(playerFaction, library);
+		SetTrayColor(playerFaction);
 
 	}
 

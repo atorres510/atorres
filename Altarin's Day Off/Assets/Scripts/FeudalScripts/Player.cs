@@ -101,12 +101,6 @@ public class Player : Photon.MonoBehaviour {
 
 		}
 
-		for(int i = 0; i <factions.Length; i++){
-			
-			Debug.Log(factions[i]);
-
-		}
-		
 	}
 
 	//reads the factionID and returns the correct faction from the array of enums.  
