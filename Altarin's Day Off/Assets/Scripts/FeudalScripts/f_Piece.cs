@@ -19,7 +19,7 @@ public abstract class f_Piece : MonoBehaviour {
 	//Used to identified which pieces need to be destroyed in gamemanagers
 
 	//updatePieceSet()
-	public int pieceID; 
+	public int pieceID; // when = 0, this denotes no assignment of ID yet.  
 
 	public enum Faction {CLAN, BATTALION, NONE};
 	public Faction faction;

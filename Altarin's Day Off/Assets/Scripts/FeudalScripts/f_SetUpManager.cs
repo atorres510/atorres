@@ -23,6 +23,8 @@ public class f_SetUpManager : MonoBehaviour {
 	GameObject selectedObject;
 	Vector2 selectedObjectPosOld;
 
+	int[] buttonIDs;
+
 	GameObject lastCastleSelected;
 	GameObject currentCastleBeingPlaced;
 	//GameObject castleBlack;
@@ -44,7 +46,7 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		
 		//initial left click selects the piece
-		if (Input.GetMouseButtonDown (0)) {
+		/*if (Input.GetMouseButtonDown (0)) {
 			if(isPlacingCastle){
 				
 				SelectCastle(isWhiteSetUp);
@@ -57,31 +59,51 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 			
 			
-		}
+		}*/
 		//when held, the object is draggable
-		if(Input.GetMouseButton(0)){
+		/*if(Input.GetMouseButton(0)){
 			
 			ClickandDrag(selectedObject);
 			
-		}
+		}*/
 		
-		//drops piece onto tile or back to its original position and clears variables
-		if(Input.GetMouseButtonUp(0)){
-			
-			if(isPlacingCastle){
+		//initial left click selects the piece 
+		//drops piece onto tile or back to its original position and clears variables if
+		//selected object is not empty.
+		if(Input.GetMouseButtonDown(0)){
+
+			if(selectedObject == emptyObject){
+
+				if(isPlacingCastle){
+					
+					SelectCastle(isWhiteSetUp);
+					
+				}
 				
-				DropCastle();
-				
+				else{
+					
+					SelectPiece(isWhiteSetUp);
+
+				}
+
 			}
-			
+
 			else{
+
+				if(isPlacingCastle){
+					
+					DropCastle();
+					
+				}
 				
-				
-				DropPiece();
+				else{
+						
+					DropPiece();
+
+				}
+
 			}
-			//DropPiece();
-			//selectedObject = emptyObject;
-			
+
 		}
 		
 	}
@@ -155,8 +177,7 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 			
 		}
-
-
+		
 		else if (hit.collider != null && hit.collider.tag == "f_Tile") {
 
 
@@ -218,13 +239,10 @@ public class f_SetUpManager : MonoBehaviour {
 
 				if(p.occupiedTile != null){
 
-					UI_Element pieceUIelement = p.GetComponent<UI_Element>();
+					/*UI_Element pieceUIelement = p.GetComponent<UI_Element>();
 					p.transform.localScale = currentLocalScale;
 					pieceUIelement.enabled = true;
-					pieceUIelement.SetUpElement();
-
-
-
+					pieceUIelement.SetUpElement();*/ //<----is this still needed?
 
 					p.occupiedTile.isOccupied = false;
 					p.lastOccupiedTile = p.occupiedTile;
@@ -237,6 +255,9 @@ public class f_SetUpManager : MonoBehaviour {
 				selectedObjectPosOld = hit.collider.gameObject.transform.position;
 				selectedObject = hit.collider.gameObject;
 				Debug.Log(selectedObject + " is selected.");
+
+				SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+				r.sortingLayerID = 7; //places object in selectedObject layer
 
 
 				hit = Physics2D.Raycast (MousePosition(), Vector3.right, 0.01f, layerMask);
@@ -263,12 +284,14 @@ public class f_SetUpManager : MonoBehaviour {
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
 			//Debug.Log(t);
 			f_Piece p = selectedObject.GetComponent<f_Piece>();
-			UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
+			//UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>(); still need?
 			
 			if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 				
-				pieceUIElement.enabled = false;
+				//pieceUIElement.enabled = false; //still needed?
 				selectedObject.transform.localScale = Vector3.one;
+				SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+				r.sortingLayerID = 2; //changes layer back to piece layer
 				
 				p.transform.position = t.transform.position;
 				p.x = t.x;
@@ -329,11 +352,14 @@ public class f_SetUpManager : MonoBehaviour {
 				f_Tile t = hit.collider.GetComponent<f_Tile>();
 				//Debug.Log(t);
 				f_Piece p = selectedObject.GetComponent<f_Piece>();
-				UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
+				//UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>(); no longer needed?
 				if(selectedObject != emptyObject && isValidPiecePlacement(selectedObject, t)){
 					
-					pieceUIElement.enabled = false;
+					//pieceUIElement.enabled = false; //no longer needed?
 					selectedObject.transform.localScale = Vector3.one;
+					SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+					r.sortingLayerID = 2; //changes layer back to piece layer
+
 					
 					p.transform.position = t.transform.position;
 					p.x = t.x;
@@ -374,7 +400,7 @@ public class f_SetUpManager : MonoBehaviour {
 			
 			
 			
-			else if(hit.collider != null && hit.collider.tag == "f_TrayObject"){
+			/*else if(hit.collider != null && hit.collider.tag == "f_TrayObject"){
 				if(selectedObject != emptyObject){
 					
 					//for(int i = 0; i < slots.Length; i++){
@@ -423,7 +449,7 @@ public class f_SetUpManager : MonoBehaviour {
 					//pass
 				}
 				
-			}
+			}*/
 
 
 			else{
@@ -464,9 +490,9 @@ public class f_SetUpManager : MonoBehaviour {
 				//if the last occupied tile returns a tile on the game board.
 				if(p.lastOccupiedTile.tag == "f_Tile"){
 
-					UI_Element pieceUIElement = p.GetComponent<UI_Element>();
+					/*UI_Element pieceUIElement = p.GetComponent<UI_Element>();
 
-					pieceUIElement.enabled = false;
+					pieceUIElement.enabled = false;*/ //<--still necessary?
 					selectedObject.transform.localScale = Vector3.one;
 
 					p.transform.position = p.lastOccupiedTile.transform.position;
@@ -479,6 +505,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 				//if the last occupied tile is untagged (a tray slot tile).
 				else{
+					/*
 					UI_Element pieceUIElement = selectedObject.GetComponent<UI_Element>();
 					//f_Tile t = slots[i];
 					
@@ -501,7 +528,7 @@ public class f_SetUpManager : MonoBehaviour {
 					t.isOccupied = true;
 					selectedObjectPosOld = Vector2.zero;
 					selectedObject = emptyObject;
-					//break;
+					//break;*/ //<--is any of this still necessary?
 
 				}
 
@@ -685,7 +712,43 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#endregion
 
-	#region Tray
+	#region Tray & Buttons
+
+	//returns piece based on the button.  used by each individual button's onclick().  
+	//buttons should also have the parameter for this method set via inspector.
+	public void GetSelectedObjectFromButton(int buttonID){
+
+		int id = buttonIDs[buttonID];
+
+		for(int i = 0; i < myPlayer.pieceSet.Length; i++){
+
+			if(myPlayer.pieceSet[i].pieceID == id){
+
+				//deals with issue of pieces being returned to player's hand without having to be
+				//selected.
+				if(myPlayer.pieceSet[i].occupiedTile != null){
+
+					myPlayer.pieceSet[i].occupiedTile.isOccupied = false;
+
+				}
+
+				else{}
+			  
+
+				selectedObject = myPlayer.pieceSet[i].gameObject;
+				SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+				r.sortingLayerID = 7;
+				Debug.Log(selectedObject);
+				break;
+
+			}
+
+			else{}
+
+		}
+
+	}
+
 
 	//tray that holds pieces for placement on the board 
 	
@@ -1430,7 +1493,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 		//sets variables and returns the final piece.
 		f_Piece p = g.GetComponent<f_Piece>();
-		p.SetVariables(isWhite, fctn, designator, emptyTile); 
+		p.SetVariables(isWhite, fctn, designator, emptyTile);
+		p.lastOccupiedTile = emptyTile.GetComponent<f_Tile>();
 		
 		return p;
 
@@ -1438,6 +1502,7 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 
 	//takes the white/black side and faction of player, returning a full 13-piece set for that player.
+	// called in initiateSetup.
 	f_Piece[] ReturnPieceSet(bool isWhite, f_Piece.Faction faction){
 
 		//holds the prefabs retreived from the resources folder.
@@ -1448,8 +1513,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 		//holds the int that designates the correct prefab from piecePrefabs
 		int pieceDesignator = 0;
-
-		int j = 1; //pieceID counter to be used in pieceID assigning.
 	
 		//instantiate (01king, 02prince, 03duke) x 1
 		for(int i = 0; i < 3; i ++){
@@ -1502,10 +1565,20 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
+	//takes a player's piece set and give them a unique set of numbers for each of their pieces.
+	//to be used in game manager. should only be used for myPlayer, as the other player will pass their 
+	//ID's later.. called in initiateSetup.
+	void SetPlayerPieceIDs(Player player){
 
+		f_Piece[] pieces = player.pieceSet;
 
+		for(int i = 0; i < pieces.Length; i++){
 
+			pieces[i].pieceID = ((i + 1) * player.playerNumber);
 
+		}
+		
+	}
 
 	#endregion
 
@@ -1591,12 +1664,14 @@ public class f_SetUpManager : MonoBehaviour {
 
 		SetPlayers();
 		
-		//pieces instantiated and assigned here for each player
+		//pieces instantiated and assigned here for each player. 
 		for(int i = 0; i < players.Length; i++){
 
 			players[i].pieceSet = ReturnPieceSet(players[i].isWhite, players[i].faction);
 
 		}
+		//where pieceID's are assigned to myplayer.
+		SetPlayerPieceIDs(myPlayer);
 		
 		mapGenerator.GenerateMap();
 
@@ -1608,7 +1683,8 @@ public class f_SetUpManager : MonoBehaviour {
 		UtilityPanelBehaviour panel = utilityPanelObject.GetComponent<UtilityPanelBehaviour>();
 		panel.SetPanelColor(myPlayer.faction);
 		TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour>();
-		tray.SetUpTray(myPlayer.faction, spriteLibrary);
+		tray.SetUpTray(myPlayer, spriteLibrary);
+		buttonIDs = tray.GetButtonIDs(); //passes the list of IDs coupled to the buttons for use in set up manager
 		
 		if (myPlayer.isWhite) {
 			
@@ -1624,7 +1700,7 @@ public class f_SetUpManager : MonoBehaviour {
 	
 		isSetUp = true;
 		isPlacingPieces = true;
-		isPlacingCastle = true;
+		isPlacingCastle = false;
 
 		//trayObject.SetActive(true);
 		//isWhiteSetUp = true;
@@ -1730,6 +1806,7 @@ public class f_SetUpManager : MonoBehaviour {
 			if(isPlacingPieces){
 
 				//MouseControls (isPlacingCastle);
+				MouseControls(false); //for testing
 
 			}
 
@@ -1737,7 +1814,7 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 		
 
-		//ClickandDrag (selectedObject);
+		ClickandDrag (selectedObject);
 	
 	}
 
