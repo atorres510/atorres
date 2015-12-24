@@ -2,17 +2,63 @@
 using System.Collections;
 
 public class f_Castle : f_Tile {
-	
-
 
 	public int rotation;  //0 = greens up;  1 = greens left; 2 = greens down; 3 = greens right;
 	public bool isWhite;
+	public f_Piece.Faction faction;
 	public bool isSetup;
 
 
 	public f_Tile occupiedTile;
 	public f_Tile castleGreens;
 
+	#region Set Methods
+	//sets variables for castle, including the assignment of the greens
+	void SetVariables(bool iswhite, f_Piece.Faction fct, f_Tile cgrns, GameObject startTile){
+
+		isWhite = iswhite;
+		faction = fct;
+		castleGreens = cgrns;
+
+		occupiedTile = startTile.GetComponent<f_Tile>();
+		transform.position = startTile.transform.position;
+
+	}
+
+	//uses player's faction and sprite library to assign sprites to castle and greens
+	//also sets sprite to default texture 
+	void SetCastleSprites(f_Piece.Faction fct, SpriteLibrary library){
+
+		string key = fct.ToString();
+		key = key.Trim();
+		
+		defaultTexture = library.GetSprite(key, 11);
+		highLightedTexture = library.GetSprite(key, 12); 
+		highLightedHostileTexture = library.GetSprite(key, 13); 
+
+		castleGreens.defaultTexture = library.GetSprite(key, 14);
+		castleGreens.highLightedTexture = library.GetSprite(key, 15); 
+		castleGreens.highLightedHostileTexture = library.GetSprite(key, 16); 
+
+		SpriteRenderer castleRenderer = gameObject.GetComponent<SpriteRenderer>();
+		castleRenderer.sprite = defaultTexture;
+
+		SpriteRenderer castleGreensRenderer = castleGreens.gameObject.GetComponent<SpriteRenderer>();
+		castleGreensRenderer.sprite = castleGreens.defaultTexture;
+
+	}
+
+	//for public use by setupmanager after instantiation.
+	public void SetUpCastle(Player player, SpriteLibrary library, f_Tile cgrns, GameObject startTile){
+
+		SetVariables(player.isWhite, player.faction, cgrns, startTile);
+		SetCastleSprites(player.faction, library);
+
+	}
+
+
+
+	#endregion
 
 	public void ReplaceOccupiedTile(f_Tile g){
 		

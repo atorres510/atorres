@@ -13,6 +13,13 @@ Sprite Designators
 9 banner;
 10 screen;
 
+11 castle
+12 castle highlighted
+13 castle highlighted hostile
+
+14 castle green
+15 castle green highlighted
+16 castle green highlighted hostile
 
 all pieces should have an 0X_Type_Faction format
 	ex: 01_King_Clan

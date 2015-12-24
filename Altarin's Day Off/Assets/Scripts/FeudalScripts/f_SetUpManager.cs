@@ -180,16 +180,16 @@ public class f_SetUpManager : MonoBehaviour {
 		
 		else if (hit.collider != null && hit.collider.tag == "f_Tile") {
 
-
 			f_Tile t = hit.collider.GetComponent<f_Tile>();
 
 			if(selectedObject != emptyObject){
 
 				f_Castle c = selectedObject.GetComponent<f_Castle>();
-				UI_Element castleUIElement = selectedObject.GetComponent<UI_Element>();
+
+				/*UI_Element castleUIElement = selectedObject.GetComponent<UI_Element>();
 				UI_Element greensUIElement = c.castleGreens.GetComponent<UI_Element>();
 				castleUIElement.enabled = false;
-				greensUIElement.enabled = false;
+				greensUIElement.enabled = false;*/ //<--still need?
 
 
 				c.gameObject.transform.localScale = Vector3.one;
@@ -714,39 +714,56 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#region Tray & Buttons
 
-	//returns piece based on the button.  used by each individual button's onclick().  
+	//returns piece/castle based on the button.  used by each individual button's onclick().  
 	//buttons should also have the parameter for this method set via inspector.
 	public void GetSelectedObjectFromButton(int buttonID){
 
 		int id = buttonIDs[buttonID];
+		Debug.Log(id);
+		//if placing castle, and id = castle, make that selected object.
+		if((id - ((myPlayer.pieceSet.Length + 1) * (myPlayer.playerNumber - 1))) > myPlayer.pieceSet.Length && isPlacingCastle){
 
-		for(int i = 0; i < myPlayer.pieceSet.Length; i++){
-
-			if(myPlayer.pieceSet[i].pieceID == id){
-
-				//deals with issue of pieces being returned to player's hand without having to be
-				//selected.
-				if(myPlayer.pieceSet[i].occupiedTile != null){
-
-					myPlayer.pieceSet[i].occupiedTile.isOccupied = false;
-
-				}
-
-				else{}
-			  
-
-				selectedObject = myPlayer.pieceSet[i].gameObject;
-				SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
-				r.sortingLayerID = 7;
-				Debug.Log(selectedObject);
-				break;
-
-			}
-
-			else{}
+			selectedObject = myPlayer.castle.gameObject;
+			SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+			r.sortingLayerID = 7;
+			lastCastleSelected = selectedObject;
+			Debug.Log(selectedObject);
 
 		}
 
+		else if(!isPlacingCastle){
+
+			for(int i = 0; i < myPlayer.pieceSet.Length; i++){
+				
+				if(myPlayer.pieceSet[i].pieceID == id){
+					
+					//deals with issue of pieces being returned to player's hand without having to be
+					//selected.
+					if(myPlayer.pieceSet[i].occupiedTile != null){
+						
+						myPlayer.pieceSet[i].occupiedTile.isOccupied = false;
+						
+					}
+					
+					else{}
+					
+					
+					selectedObject = myPlayer.pieceSet[i].gameObject;
+					SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+					r.sortingLayerID = 7;
+					Debug.Log(selectedObject);
+					break;
+					
+				}
+				
+				else{}
+				
+			}
+
+		}
+
+		else{}
+		
 	}
 
 
@@ -1501,9 +1518,12 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
-	//takes the white/black side and faction of player, returning a full 13-piece set for that player.
+	//takes the player, returning a full 13-piece set for that player.
 	// called in initiateSetup.
-	f_Piece[] ReturnPieceSet(bool isWhite, f_Piece.Faction faction){
+	f_Piece[] ReturnPieceSet(Player player){
+
+		bool isWhite = player.isWhite;
+		f_Piece.Faction faction = player.faction;
 
 		//holds the prefabs retreived from the resources folder.
 		GameObject[] piecePrefabs = ReturnPiecePrefabsArray();
@@ -1574,11 +1594,47 @@ public class f_SetUpManager : MonoBehaviour {
 
 		for(int i = 0; i < pieces.Length; i++){
 
-			pieces[i].pieceID = ((i + 1) * player.playerNumber);
+			//assigns ID by adding the lenght of the pieces x the player's number to generate a 
+			//number unique to that piece.  length has an added + 1 to accomidate for an additional ID 
+			//for castle identification in the getselectedobject method.  
+			pieces[i].pieceID = ((i + 1) + ((player.playerNumber - 1) * (pieces.Length + 1)));
 
 		}
 		
 	}
+
+	#endregion
+
+	#region Castle Instantion Methods
+
+	//returns an array of prefabs loaded from the resources folder.
+	//prefabs in this folder require a specific order for proper instantiation later
+	GameObject ReturnACastleTilePrefab(string prefabName){
+
+		string filePath = "Prefabs/FeudalPrefabs/Tiles/";
+
+		GameObject prefab = Resources.Load<GameObject>(filePath + prefabName);
+
+		return prefab;
+
+	}
+
+	//instantiates castle greens and castle, and assigns them to the player
+	//also sets up castle and assigns 
+	void InstantiateCastleTiles(Player player){
+
+		GameObject castleObject = Instantiate(ReturnACastleTilePrefab("Castle")) as GameObject;
+		GameObject castleGreensObject = Instantiate(ReturnACastleTilePrefab("CastleGreens")) as GameObject;
+
+		player.castle = castleObject.GetComponent<f_Castle>();
+		player.castleGreens = castleGreensObject.GetComponent<f_Tile>();
+
+		player.castle.SetUpCastle(player, spriteLibrary, player.castleGreens, emptyTile);
+
+	}
+
+
+
 
 	#endregion
 
@@ -1664,15 +1720,16 @@ public class f_SetUpManager : MonoBehaviour {
 
 		SetPlayers();
 		
-		//pieces instantiated and assigned here for each player. 
+		//pieces and castle tiles instantiated and assigned here for each player. 
 		for(int i = 0; i < players.Length; i++){
 
-			players[i].pieceSet = ReturnPieceSet(players[i].isWhite, players[i].faction);
+			players[i].pieceSet = ReturnPieceSet(players[i]);
+			InstantiateCastleTiles(players[i]);
 
 		}
-		//where pieceID's are assigned to myplayer.
+		//where pieceID's are assigned to myplayer's pieceset.
 		SetPlayerPieceIDs(myPlayer);
-		
+
 		mapGenerator.GenerateMap();
 
 		SetUpScreen();
@@ -1698,9 +1755,10 @@ public class f_SetUpManager : MonoBehaviour {
 			
 		}
 	
-		isSetUp = true;
+		isSetUp = true; //for GUI
 		isPlacingPieces = true;
-		isPlacingCastle = false;
+		isPlacingCastle = true;
+	
 
 		//trayObject.SetActive(true);
 		//isWhiteSetUp = true;
@@ -1805,8 +1863,8 @@ public class f_SetUpManager : MonoBehaviour {
 
 			if(isPlacingPieces){
 
-				//MouseControls (isPlacingCastle);
-				MouseControls(false); //for testing
+				MouseControls (isPlacingCastle);
+				//MouseControls(false); //for testing
 
 			}
 

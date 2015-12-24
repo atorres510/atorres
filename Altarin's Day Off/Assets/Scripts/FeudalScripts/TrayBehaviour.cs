@@ -35,7 +35,7 @@ public class TrayBehaviour : MonoBehaviour {
 
 		f_Piece[] pieces = player.pieceSet;
 
-		buttonIDs = new int[pieces.Length];
+		buttonIDs = new int[(pieces.Length + 1)]; //extra +1 to accomidate for addition of castle
 
 		int w; //used to adjust the piece designator between white and black
 		if(player.isWhite){
@@ -50,6 +50,7 @@ public class TrayBehaviour : MonoBehaviour {
 		
 		f_Piece[] pikemen = new f_Piece[4];
 		int j = 0; //for pikemen, sergeants, and knights arrays.
+
 		//looks for pikemen using the piece designator(normalized for white/black pieces)
 		//puts this in the pikemen array to be added to the pieceIDs later
 		for(int i = 0; i< pieces.Length; i++){
@@ -193,6 +194,10 @@ public class TrayBehaviour : MonoBehaviour {
 			
 		}
 
+		//adds an ID for the castle.  assigns it the last ID for the list, then adjusts for # of players to
+		//give it a unique ID.  
+		buttonIDs[k] = (pieces.Length + 1) + ((player.playerNumber - 1) * (pieces.Length + 1));
+
 	}
 	#endregion
 	
@@ -238,7 +243,7 @@ public class TrayBehaviour : MonoBehaviour {
 	void SetButtonSprites(f_Piece.Faction faction, SpriteLibrary library){
 		
 		//sprite order: 7.7.7.7.6.6.5.4.4.8.2.3.1.castle.castlegreens
-		int [] spriteOrder = {7, 7, 7, 7, 6, 6, 5, 4, 4, 8, 2, 3, 1, 0, 0};
+		int [] spriteOrder = {7, 7, 7, 7, 6, 6, 5, 4, 4, 8, 2, 3, 1, 11, 0};
 
 		for (int i = 0; i < buttons.Length; i++) {
 				

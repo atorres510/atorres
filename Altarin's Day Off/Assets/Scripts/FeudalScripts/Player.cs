@@ -15,6 +15,8 @@ public class Player : Photon.MonoBehaviour {
 	public AudioClip music2;
 
 	public f_Piece[] pieceSet; //do we want this?  consider PUN principles
+	public f_Castle castle;
+	public f_Tile castleGreens;
 
 	bool correctedIsWhite;
 	bool correctedIsReady;

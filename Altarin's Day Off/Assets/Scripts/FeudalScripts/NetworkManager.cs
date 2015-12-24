@@ -85,7 +85,7 @@ public class NetworkManager : MonoBehaviour {
 		else {
 			Debug.Log("No other players currently connected.");
 			p.isWhite = true;
-			p.faction = f_Piece.Faction.BATTALION;
+			p.faction = f_Piece.Faction.CLAN;
 			p.playerNumber = (PhotonNetwork.playerList.Length);
 			CameraController c = p.GetComponent<CameraController>();
 			c.enabled = false;
