@@ -242,7 +242,7 @@ public class TrayBehaviour : MonoBehaviour {
 	//uses sprite library and player's faction to determine sprites for buttons
 	void SetButtonSprites(f_Piece.Faction faction, SpriteLibrary library){
 		
-		//sprite order: 7.7.7.7.6.6.5.4.4.8.2.3.1.castle.castlegreens
+		//sprite order: 7.7.7.7.6.6.5.4.4.8.2.3.1.castle.castlegreens,empty
 		int [] spriteOrder = {7, 7, 7, 7, 6, 6, 5, 4, 4, 8, 2, 3, 1, 11, 0};
 
 		for (int i = 0; i < buttons.Length; i++) {

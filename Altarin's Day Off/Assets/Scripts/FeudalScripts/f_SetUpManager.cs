@@ -12,6 +12,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public GameObject emptyObject;
 	public GameObject emptyTile;
 	public GameObject trayObject;
+	public GameObject planningButtonObject;
 	public GameObject utilityPanelObject;
 	public GameObject bannerObject;
 	GameObject screenObject;
@@ -766,429 +767,18 @@ public class f_SetUpManager : MonoBehaviour {
 		
 	}
 
-
-	//tray that holds pieces for placement on the board 
-	
-	//Rect tray = new Rect(Screen.width, 50, 400, 900);
-	f_Tile[] slots;
-	Vector3 oldTrayPosition;
-	float oldFov;
-	Vector3 oldCameraPosition;
-
-	//create tray with slots
-	void CreateTray(GameObject trayObject){
-
-		Vector3 tray = trayObject.transform.position;
-		oldTrayPosition = tray;
-		oldFov = playerCamera.orthographicSize;
-		oldCameraPosition = playerCamera.transform.position;
-
-		slots = new f_Tile[15];
-		int i = 0;
-		int rows = 5;
-		int columns = 3;
-
-		// gives the upper most left corner of the trayObject with a leeway of 0.5x0.5 
-		Vector3 trayOrigin = new Vector3((tray.x - 2.0f), (tray.y + 5.5f), 1);
-		//Vector3 convertedPos = Camera.main.ScreenToWorldPoint(rectPos);
-
-
-		//Vector3 trayPos = Camera.main.ScreenToWorldPoint(tray.center);
-		//trayPos.z = 2.0f;
-		//trayObject.transform.position = trayPos;
-
-		//UI_Element trayUIElement = trayObject.GetComponent<UI_Element> ();
-
-		//values found using trial and error.  Fuck it.
-		float xRatioOrigin = 0.785f;
-		float yRatioOrigin = 0.85f;
-
-		//float xRatioOrigin = 0f;
-		//float yRatioOrigin = 0.85f;
-
-		for(int y = 0; y < rows; y++){
-			float yAdjust = ((- 2f) * y);
-			for(int x = 0; x < columns; x++){
-				Vector3 adjust = new Vector3(2f * x, yAdjust, 0);
-
-				//Vector3 rectPos = tray.center;
-
-
-				//Vector3 adjustedPos = convertedPos + adjust;
-				Vector3 adjustedPos = trayOrigin + adjust;
-
-				adjustedPos.z = -9.0f;
-				//Vector3 adjustedPos = new Vector3(convertedPos.x, convertedPos.y, 1.0f);
-				GameObject g = Instantiate(emptyTile, adjustedPos, Quaternion.identity) as GameObject;
-				//Debug.Log(g);
-				//g.AddComponent<UI_Element>();
-				slots[i] = g.GetComponent<f_Tile>();
-
-
-				UI_Element slotUIElement = g.AddComponent("UI_Element") as UI_Element;
-				Vector3 slotScreenPoint = playerCamera.WorldToScreenPoint(adjustedPos);
-				//slotUIElement.xRatio = slotScreenPoint.x/Screen.width;
-				//slotUIElement.yRatio = slotScreenPoint.y/Screen.height;
-				//slotUIElement.SetUpElement();
-
-				slotUIElement.xRatio = xRatioOrigin + (0.074f * (x));
-				slotUIElement.yRatio = yRatioOrigin - (0.1f * (y));
-				slotUIElement.SetUpElement();
-
-				g.tag = "Untagged";
-				//slots[i].tileType = 6;
-
-				SpriteRenderer r = g.GetComponent<SpriteRenderer>();
-				r.enabled = false;
-
-				//Debug.Log(slots[i] + ", " + g.transform.position);
-
-				i++;
-				//Rect r = guiTexture.GetScreenRect();				
-				
-			}
-
-		}
-
-		//nextAvailableTraySlot = slots [i];
-			
-	}
-
-	GameObject[] pieces;
-	//List<GameObject> piecesInTray = new List<GameObject>();
-
-	void FillTray(){
-
-
-
-
-		/*
-
-		//for new ui stuff
-		TrayBehaviour tray = trayObject.GetComponent<TrayBehaviour> ();
-		slots = tray.slots;
-
-		//slots = new f_Tile[15];
-
-		pieces = GameObject.FindGameObjectsWithTag("f_Piece");
-
-
-		int j = 0;
-
-		//find the pieces
-		for(int i = 0; i < pieces.Length; i++){
-
-			f_Piece p = pieces[i].GetComponent<f_Piece>();
-
-			if(isWhiteSetUp == p.isWhite){
-
-
-				//p.transform.position = new Vector3(slots[j].gameObject.transform.position.x,
-						//slots[j].gameObject.transform.position.y, -10.0f);
-
-				//for new UI tray
-				RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
-				//p.transform.position = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
-				//Vector3 newPiecePosition = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
-				//newPiecePosition.z = -10.0f;
-
-				Vector3 newPiecePosition = transform.TransformPoint(slotRectTransform.position);
-				newPiecePosition.z = -10.0f;
-
-				p.transform.position = newPiecePosition;
-
-				slots[j].isOccupied = true;
-				p.occupiedTile = slots[j];
-
-				//provides an x or y ratio for the piece's UI element script
-				float slotXRatio = newPiecePosition.x/Screen.width;
-				float slotYRatio = newPiecePosition.y/Screen.height;
-
-				//adds UI element script to piece and has it sync to its assigned slot on the tray.
-				UI_Element slotUIelement = slots[j].GetComponent<UI_Element>();
-				UI_Element pieceUIElement = p.gameObject.AddComponent("UI_Element") as UI_Element;
-
-
-				/*pieceUIElement.xRatio = slotUIelement.xRatio;
-				pieceUIElement.yRatio = slotUIelement.yRatio;
-
-				pieceUIElement.xRatio = slotXRatio;
-				pieceUIElement.yRatio = slotYRatio;
-
-
-				pieceUIElement.SetUpElement();
-
-				//piecesInTray.Add(p.gameObject);
-				j++;
-
-			}
-
-			else{
-
-				//pass
-			}
-
-		}
-
-		//find the castle
-		GameObject[] tiles = GameObject.FindGameObjectsWithTag ("f_Tile");
-
-		for (int i = 0; i < tiles.Length; i++) {
-				
-			f_Tile t = tiles[i].GetComponent<f_Tile>();
-
-			if(t.tileType == 5){
-
-				f_Castle c = tiles[i].GetComponent<f_Castle>();
-
-				if(isWhiteSetUp == c.isWhite){
-
-					//for new ui stsuff
-					RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
-					Vector3 newPiecePosition = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
-					newPiecePosition.z = -10.0f;
-
-
-					UI_Element castleUIElement = c.gameObject.AddComponent("UI_Element") as UI_Element;
-
-					//old
-					//UI_Element slotUIElement = slots[j].GetComponent<UI_Element>();
-					/*castleUIElement.xRatio = slotUIElement.xRatio;
-					castleUIElement.yRatio = slotUIElement.yRatio;
-
-					//for new ui stuff
-					float slotXRatio = newPiecePosition.x/Screen.width;
-					float slotYRatio = newPiecePosition.y/Screen.height;
-
-					castleUIElement.xRatio = slotXRatio;
-					castleUIElement.yRatio = slotYRatio;
-
-
-					castleUIElement.SetUpElement();
-
-					f_Tile greens = c.castleGreens;
-
-					UI_Element greensUIElement = greens.gameObject.AddComponent("UI_Element") as UI_Element;
-
-					//old
-					/*greensUIElement.xRatio = slotUIElement.xRatio;
-					greensUIElement.yRatio = slotUIElement.yRatio;*
-
-					//for new ui stuff
-					greensUIElement.xRatio = slotXRatio;
-					greensUIElement.yRatio = slotYRatio;
-
-
-					greensUIElement.SetUpElement();
-
-
-					//for new UI stuff
-					//RectTransform slotRectTransform = slots[j].GetComponent<RectTransform>();
-					//c.transform.position = playerCamera.ScreenToWorldPoint(slotRectTransform.transform.position);
-
-					//c.transform.position = slots[j].gameObject.transform.position;
-
-					slots[j].isOccupied = true;
-					c.rotation = 3;
-					c.occupiedTile = slots[j];
-					c.occupiedTile.isOccupied = true;
-					currentCastleBeingPlaced = c.gameObject;
-					j++;
-					
-				}
-
-				else{
-
-					//pass
-				}
-
-			}
-
-
-			else{
-				
-				//pass
-			}
-		
-		
-		}
-
-		nextAvailableTraySlot = slots [j];*/
-
-	}
-
-	Vector3 currentLocalScale;
-	f_Tile nextAvailableTraySlot; //passes the next available slot to DropPiece;
-
-	void SyncTrayAssets(){
-
-
-
-		if (trayObject == null) {
-				
-			//pass
-		
-		}
-
-
-		else{
-
-			//takes the first slot on the tray and returns its local scale for the pieces;
-			currentLocalScale = slots[0].transform.localScale;
-
-			//currentLocalScale = slots[0].
-
-			//checks if the next available slot has been used and if so, find a new one
-			//if(nextAvailableTraySlot.isOccupied){
-
-				for(int i = 0; i < slots.Length; i++){
-					
-					if(!slots[i].isOccupied){
-						
-						nextAvailableTraySlot = slots[i];
-						
-					}
-					
-					
-				}
-
-			//}
-
-
-
-
-
-
-
-
-			float fov = playerCamera.orthographicSize;
-			//Vector3 dPosition = trayObject.transform.position - oldTrayPosition;
-			Vector3 dPosition = playerCamera.transform.position - oldCameraPosition;
-
-
-
-
-			//for(int i = 0; i < slots.Length; i++){
-				
-				//float aspectRatio = fov / oldFov;
-				//slots[i].transform.localScale = slots[i].transform.localScale * aspectRatio;
-				//slots[i].transform.position += dPosition;
-
-				
-				
-			//}
-
-			
-			/*for (int j = 0; j < pieces.Length; j++) {
-				
-				f_Piece p = pieces[j].GetComponent<f_Piece>();
-				
-				if(p.occupiedTile != null){
-					
-					
-					//float aspectRatio = fov/oldFov;
-					//pieces[j].transform.localScale = pieces[j].transform.localScale * aspectRatio;
-
-					//Vector3 adjustedPos = new Vector3 (p.occupiedTile.transform.position.x, p.occupiedTile.transform.position.y, -10.0f);
-					//pieces[j].transform.position = adjustedPos;
-
-					//if(pieces[j].transform.position != adjustedPos){
-					
-					//	pieces[j].transform.position = adjustedPos;
-					
-					//}
-
-					//Vector3 adjustedPos = new Vector3 (dPosition.x, dPosition.y, 0);
-					//pieces[j].transform.position += adjustedPos;
-					
-				}
-				
-				
-				
-				
-				
-				
-			}*/
-			
-			/*f_Castle c = currentCastleBeingPlaced.GetComponent<f_Castle> ();
-			if (c.occupiedTile != null) {
-
-				//float aspectRatio = fov / oldFov;
-				//currentCastleBeingPlaced.transform.localScale = currentCastleBeingPlaced.transform.localScale * aspectRatio;
-				Vector3 adjustedPos = new Vector3 (c.occupiedTile.transform.position.x, c.occupiedTile.transform.position.y, -10.0f);
-				currentCastleBeingPlaced.transform.position = adjustedPos; 
-			}*/
-			
-			oldTrayPosition = trayObject.transform.position;
-			oldCameraPosition = playerCamera.transform.position;
-			oldFov = fov;
-			
-			
-			/*//check if any piece in the tray is not in the list and add them
-			for (int i = 0; i < pieces.Length; i++) {
-				
-				f_Piece p = pieces[i].GetComponent<f_Piece>();
-				
-				for(int j = 0; j < slots.Length; j++){
-					
-					if(p.occupiedTile == slots[j] && !piecesInTray.Contains(pieces[i])){
-						
-						piecesInTray.Add(pieces[i]);
-						
-					}
-					
-					else{}
-					
-				}
-				
-				
-			}
-			
-			
-			
-			
-			
-			
-			//check if any piece from the tray have left the tray
-			foreach (GameObject element in piecesInTray) {
-				
-				f_Piece p = element.GetComponent<f_Piece>();
-				
-				for(int i = 0; i < slots.Length; i++){
-					
-					if(p.occupiedTile != slots[i]){
-						
-						piecesInTray.Remove(element);
-						
-					}
-					
-					else{}
-					
-					slots[i].transform.position += dPosition;
-					
-				}
-				
-				
-				element.transform.position += dPosition;
-				
-			}*/
-				
-
-
-		}
-	}
-
 	//Destroys tray and the tiles within slots[]
 	void DestroyTray(){
 
-		Destroy(trayObject);
+		
+		/*Destroy(trayObject);
 
 		for(int i = 0; i < slots.Length; i++){
 
 			Destroy (slots[i].gameObject);
 
 
-		}
+		}*/
 	
 	}
 
@@ -1209,9 +799,7 @@ public class f_SetUpManager : MonoBehaviour {
 		}
 		
 		return true;
-		
-		
-		
+	
 	}
 	#endregion
 
@@ -1256,7 +844,7 @@ public class f_SetUpManager : MonoBehaviour {
 						
 						isWhiteSetUp = false;
 						isPlacingCastle = true;
-						FillTray();
+
 						
 						
 					}
@@ -1315,7 +903,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if(!myPlayer.isReady){
 					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {	
 
-						if(IsTrayClear(slots)){
+						//if(IsTrayClear(slots)){
 
 							DestroyTray();
 							Destroy(screenObject);
@@ -1326,14 +914,14 @@ public class f_SetUpManager : MonoBehaviour {
 							isPlacingPieces = false;
 
 
-						}
+						//}
 
-						else{
+						//else{
 
-							Debug.Log("Must finish placing all units");
+							//Debug.Log("Must finish placing all units");
 
 
-						}
+						//}
 						
 						//f_gameManager.SetUpBoard();
 						//StartCoroutine(f_gameManager.Game());
@@ -1844,7 +1432,6 @@ public class f_SetUpManager : MonoBehaviour {
 	#endregion
 
 	void Start () {
-
 			//for testing
 		/*f_Piece[] pieces = ReturnPieceSet(false, f_Piece.Faction.BATTALION);
 
