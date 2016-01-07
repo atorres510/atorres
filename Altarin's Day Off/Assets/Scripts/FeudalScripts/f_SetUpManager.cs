@@ -747,8 +747,7 @@ public class f_SetUpManager : MonoBehaviour {
 					}
 					
 					else{}
-					
-					
+
 					selectedObject = myPlayer.pieceSet[i].gameObject;
 					SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
 					r.sortingLayerID = 7;
@@ -767,35 +766,28 @@ public class f_SetUpManager : MonoBehaviour {
 		
 	}
 
-	//Destroys tray and the tiles within slots[]
+	//Disables trayobject that resides in the canvas
 	void DestroyTray(){
 
-		
-		/*Destroy(trayObject);
-
-		for(int i = 0; i < slots.Length; i++){
-
-			Destroy (slots[i].gameObject);
-
-
-		}*/
+		trayObject.SetActive(false);
 	
 	}
 
-	bool IsTrayClear(f_Tile[] slots){
-		
-		
-		for (int i = 0; i < slots.Length; i++) {
-			
-			if(slots[i].isOccupied){
+	//uses the setup manager's empty tile to determine if pieces are still occupying it.
+	bool IsTrayClear(f_Piece[] playerPieceSet){
+
+		for (int i = 0; i < playerPieceSet.Length; i++) {
+
+			f_Tile t = playerPieceSet[i].occupiedTile;
+
+			//empty tile should have an (x,y) coordinate that is negative (eg -1,-1).
+			//this will designate that the tile is not on the map and therefore the tray is not clear.
+			if(t.x < 0 && t.y < 0){
 				
 				return false;
-				
-				
+
 			}
-			
-			
-			
+
 		}
 		
 		return true;
@@ -838,6 +830,8 @@ public class f_SetUpManager : MonoBehaviour {
 						
 						//f_gameManager.SetUpBoard();
 						//StartCoroutine(f_gameManager.Game());
+						Debug.Log(IsTrayClear(myPlayer.pieceSet) + ": player tray is clear");
+						DestroyTray();
 						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 						c.isSetup = false;
 						
@@ -903,7 +897,7 @@ public class f_SetUpManager : MonoBehaviour {
 				if(!myPlayer.isReady){
 					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {	
 
-						//if(IsTrayClear(slots)){
+						if(IsTrayClear(myPlayer.pieceSet)){
 
 							DestroyTray();
 							Destroy(screenObject);
@@ -914,14 +908,14 @@ public class f_SetUpManager : MonoBehaviour {
 							isPlacingPieces = false;
 
 
-						//}
+						}
 
-						//else{
+						else{
 
-							//Debug.Log("Must finish placing all units");
+							Debug.Log("Must finish placing all units");
 
 
-						//}
+						}
 						
 						//f_gameManager.SetUpBoard();
 						//StartCoroutine(f_gameManager.Game());
