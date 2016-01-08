@@ -645,8 +645,8 @@ public class f_SetUpManager : MonoBehaviour {
 		
 	}
 
-	void RotateCastle(GameObject g){
-		f_Castle c = g.GetComponent<f_Castle>();
+	void RotateCastle(f_Castle c){
+
 
 		int r = c.rotation + 1;
 
@@ -713,7 +713,7 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#endregion
 
-	#region Tray & Buttons
+	#region Tray & Tray Buttons
 
 	//returns piece/castle based on the button.  used by each individual button's onclick().  
 	//buttons should also have the parameter for this method set via inspector.
@@ -795,7 +795,7 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 	#endregion
 
-	#region GUI
+	/*#region GUI
 	void OnGUI(){
 
 		if (isSetUp) {
@@ -992,10 +992,70 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
+	#endregion*/
+
+	#region UI Button Methods
+	//button method that confirms piece placement and marks the player as ready to move onto the 
+	//game/playing phase.
+	public void FinishPlanning(){
+	
+		if(IsTrayClear(myPlayer.pieceSet)){
+
+			DestroyTray();
+			Destroy(screenObject);
+			f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+			//isSetUp = false;
+			c.isSetup = false;
+			myPlayer.isReady = true;
+			isPlacingPieces = false;
+
+		}
+
+		else{
+
+			Debug.Log("All pieces must be placed.");
+
+		}
+	
+	}
+
+	//button method that confirms that castle has valid placement and moves the player into the piece placing phase.
+	public void ConfirmCastlePlacement(){
+
+		//checks if the castle placement is within the bounds of the board before moving on
+		if(isValidCastlePlacement(lastCastleSelected)){
+			
+			f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
+			c.occupiedTile.isOccupied = false;
+			c.occupiedTile = null;
+			
+			isPlacingCastle = false;
+
+		}
+		
+		else{}
+	
+	}
+
+	public void RotateMyPlayerCastle(){
+
+		RotateCastle(myPlayer.castle);
+
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	#endregion
-
+	
 	#region SetUpMethods
-
+	
 	#region Player and Network Methods
 	//finds network manager and syncronizes offline/online status between managers
 	void FindNetworkManager(){
