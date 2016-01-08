@@ -1372,7 +1372,7 @@ public class f_GameManager : MonoBehaviour {
 		if (isWaiting) {
 				
 
-			//WaitingForOtherPlayers();
+			WaitingForOtherPlayers();
 		
 		
 		}

@@ -10,7 +10,7 @@ public class f_SetUpManager : MonoBehaviour {
 	public MapGenerator mapGenerator;
 	public SpriteLibrary spriteLibrary;
 	public GameObject emptyObject;
-	public GameObject emptyTile;
+	public GameObject emptyTile; //used to hold pieces not on the board.  should have coordinates (-1,-1) and be untagged.
 	public GameObject trayObject;
 	public GameObject planningButtonObject;
 	public GameObject utilityPanelObject;
@@ -1286,19 +1286,6 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#endregion
 
-	void Start () {
-			//for testing
-		/*f_Piece[] pieces = ReturnPieceSet(false, f_Piece.Faction.BATTALION);
-
-
-		GameObject[] stuffs = ReturnPiecePrefabsArray();
-
-		foreach (f_Piece p in pieces){
-			Debug.Log(p.gameObject);
-		}*/
-
-	}
-
 	void Update () {
 
 		if(isSetUp){
@@ -1306,11 +1293,16 @@ public class f_SetUpManager : MonoBehaviour {
 			if(isPlacingPieces){
 
 				MouseControls (isPlacingCastle);
-				//MouseControls(false); //for testing
-
+			
 			}
 
-			//ArePlayersReady();
+
+			if(!isOffline){
+
+				ArePlayersReady();
+
+			}
+		
 		}
 		
 
@@ -1318,13 +1310,4 @@ public class f_SetUpManager : MonoBehaviour {
 	
 	}
 
-	void FixedUpdate(){
-
-		if (isPlacingPieces) {
-				
-			//SyncTrayAssets();
-		
-		}
-
-	}
 }
