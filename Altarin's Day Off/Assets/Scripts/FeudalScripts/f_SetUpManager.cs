@@ -795,213 +795,15 @@ public class f_SetUpManager : MonoBehaviour {
 	}
 	#endregion
 
-	/*#region GUI
-	void OnGUI(){
-
-		if (isSetUp) {
-
-			if(isOffline){
-
-				if (!isWhiteSetUp) {
-					
-					if (GUI.Button (new Rect (10, 50, 150, 25), "Start Game")) {
-						
-						//f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-						//c.ReplaceOccupiedTile(c);
-						//c.SetUpCastleGreens(c.castleGreens);
-						isSetUp = false;
-						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-						c.isSetup = false;
-						//c.SetUpCastleGreens(c.castleGreens);
-						//c.ReplaceOccupiedTile(c);
-						DestroyTray();
-						f_gameManager.SetUpBoard();
-						StartCoroutine(f_gameManager.Game());
-						
-					}
-					
-					
-				}
-				
-				else{
-					
-					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {
-						
-						
-						//f_gameManager.SetUpBoard();
-						//StartCoroutine(f_gameManager.Game());
-						Debug.Log(IsTrayClear(myPlayer.pieceSet) + ": player tray is clear");
-						DestroyTray();
-						f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-						c.isSetup = false;
-						
-						
-						isWhiteSetUp = false;
-						isPlacingCastle = true;
-
-						
-						
-					}
-					
-				}
-				
-				
-				if(isPlacingCastle){
-					//press to finish castle placement and move on to unit placement
-					if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
-						//checks if the castle placement is within the bounds of the board before moving on
-						if(isValidCastlePlacement(lastCastleSelected)){
-							
-							f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-							c.occupiedTile.isOccupied = false;
-							c.occupiedTile = null;
-							
-							isPlacingCastle = false;
-							
-							//c.isSetup = false;
-							//c.SetUpCastleGreens(c.castleGreens);
-							//c.ReplaceOccupiedTile(c);
-							
-							
-							
-						}
-						
-						else{}
-						
-						
-						
-						
-					}
-					
-					if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
-						
-						
-						RotateCastle(lastCastleSelected);
-						
-						
-						
-						
-					}
-
-
-				}
-				
-
-				
-				
-			}
-
-			//online play
-			else{
-
-				if(!myPlayer.isReady){
-					if (GUI.Button (new Rect (10, 50, 150, 25), "Finished Planning")) {	
-
-						if(IsTrayClear(myPlayer.pieceSet)){
-
-							DestroyTray();
-							Destroy(screenObject);
-							f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-							//isSetUp = false;
-							c.isSetup = false;
-							myPlayer.isReady = true;
-							isPlacingPieces = false;
-
-
-						}
-
-						else{
-
-							Debug.Log("Must finish placing all units");
-
-
-						}
-						
-						//f_gameManager.SetUpBoard();
-						//StartCoroutine(f_gameManager.Game());
-
-
-						//isSetUp = false;
-						
-						
-						//isWhiteSetUp = false;
-						//isPlacingCastle = true;
-						//FillTray();
-						
-					}
-				}
-
-
-
-
-
-
-
-				if(isPlacingCastle){
-					//press to finish castle placement and move on to unit placement
-					if (GUI.Button (new Rect (10, 90, 150, 25), "Place Units")) {
-						//checks if the castle placement is within the bounds of the board before moving on
-						if(isValidCastlePlacement(lastCastleSelected)){
-							
-							f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
-							c.occupiedTile.isOccupied = false;
-							c.occupiedTile = null;
-							
-							isPlacingCastle = false;
-							//isPlacingPieces = true;
-							
-							//c.isSetup = false;
-							//c.SetUpCastleGreens(c.castleGreens);
-							//c.ReplaceOccupiedTile(c);
-							
-							
-							
-						}
-						
-						else{}
-						
-						
-						
-						
-					}
-					
-					if (GUI.Button (new Rect (10, 130, 150, 25), "Rotate Castle")) {
-						
-						
-						RotateCastle(lastCastleSelected);
-
-						
-						
-					}
-					
-					
-				}
-
-				if (myPlayer.isReady && !f_gameManager.gameOn) {
-					
-					GUI.TextField(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 150, 25), "Player is ready!");
-					//Debug.Log("My player is ready.");
-					
-				}
-
-			}
-
-		}
-
-
-	
-	}
-
-	#endregion*/
-
 	#region UI Button Methods
 	//button method that confirms piece placement and marks the player as ready to move onto the 
 	//game/playing phase.
 	public void FinishPlanning(){
 	
 		if(IsTrayClear(myPlayer.pieceSet)){
-
+			//destroys the tray, last button used, and sets member variables 
 			DestroyTray();
+			planningButtonObject.SetActive(false);
 			Destroy(screenObject);
 			f_Castle c = lastCastleSelected.GetComponent<f_Castle>();
 			//isSetUp = false;
@@ -1040,7 +842,6 @@ public class f_SetUpManager : MonoBehaviour {
 	public void RotateMyPlayerCastle(){
 
 		RotateCastle(myPlayer.castle);
-
 
 	}
 	
