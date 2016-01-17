@@ -980,23 +980,24 @@ public class f_GameManager : MonoBehaviour {
 			whiteCastle.isOccupied = isOccupied;
 			whiteCastle.rotation = rotation;
 		
+			//requires the default rotation of castle prefab to be 0 with a tranform rotation of 0;
 			switch(rotation)
 			{
 
 				case 0:
-					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 90f);
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 0f);
 					break;
 
 				case 1:
-					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 180f);
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 90f);
 					break;
 
 				case 2:
-					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 180f);
 					break;
 
 				case 3:
-					//whiteCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+					whiteCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
 					break;
 
 				default:
@@ -1030,19 +1031,19 @@ public class f_GameManager : MonoBehaviour {
 			{
 				
 			case 0:
-				blackCastle.gameObject.transform.Rotate(Vector3.forward * 90f);
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 0f);
 				break;
 				
 			case 1:
-				blackCastle.gameObject.transform.Rotate(Vector3.forward * 180f);
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 90f);
 				break;
 				
 			case 2:
-				blackCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 180f);
 				break;
 				
 			case 3:
-				//blackCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
+				blackCastle.gameObject.transform.Rotate(Vector3.forward * 270f);
 				break;
 				
 			default:

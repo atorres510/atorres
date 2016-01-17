@@ -22,6 +22,7 @@ public class f_SetUpManager : MonoBehaviour {
 	Player myPlayer;
 	Camera playerCamera;
 	GameObject selectedObject;
+	GameObject oldSelectedObject;
 	Vector2 selectedObjectPosOld;
 
 	int[] buttonIDs;
@@ -106,6 +107,8 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 
 		}
+
+		MoveSelectedObjectToCorrectSortingLayer();
 		
 	}
 
@@ -128,6 +131,51 @@ public class f_SetUpManager : MonoBehaviour {
 		Vector3 v3Pos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
 		Vector3 mousePos = new Vector3(v3Pos.x, v3Pos.y, -10.0f);
 		return mousePos;
+
+	}
+
+	void MoveSelectedObjectToCorrectSortingLayer(){
+
+		if(selectedObject == emptyObject && oldSelectedObject != emptyObject){
+
+			SpriteRenderer r = oldSelectedObject.GetComponent<SpriteRenderer>();
+
+			if(oldSelectedObject.tag == "f_Tile"){
+
+				r.sortingLayerID = 3;
+
+				oldSelectedObject.GetComponent<f_Castle>().castleGreens.GetComponent<SpriteRenderer>().sortingLayerID = 4;
+
+			}
+
+			else if(oldSelectedObject.tag == "f_Piece"){
+
+				r.sortingLayerID = 2;
+
+			}
+
+			else{}
+
+
+		}
+
+
+		else{
+
+			SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
+			r.sortingLayerID = 7; //places object in selectedObject layer
+			
+			if(selectedObject.GetComponent<f_Castle>() != null){
+				
+				f_Castle c = selectedObject.GetComponent<f_Castle>();
+				
+				c.castleGreens.GetComponent<SpriteRenderer>().sortingLayerID = 7;
+				
+			}
+
+		}
+		
+		oldSelectedObject = selectedObject;
 
 	}
 
