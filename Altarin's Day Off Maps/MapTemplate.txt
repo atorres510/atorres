@@ -2,11 +2,11 @@ Size:
 Tile Set: 
 #
 Marsh Tiles{
-
+(x,y)
 }
 #
 Mountain Tiles{
-
+(x,y)
 }
 
 
