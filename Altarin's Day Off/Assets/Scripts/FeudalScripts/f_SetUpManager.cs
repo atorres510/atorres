@@ -1168,10 +1168,12 @@ public class f_SetUpManager : MonoBehaviour {
 
 			players[i].pieceSet = ReturnPieceSet(players[i]);
 			InstantiateCastleTiles(players[i]);
+			SetPlayerPieceIDs(players[i]);
 
 		}
 		//where pieceID's are assigned to myplayer's pieceset.
-		SetPlayerPieceIDs(myPlayer);
+		//SetPlayerPieceIDs(myPlayer);
+
 
 		mapGenerator.GenerateMap();
 
@@ -1248,6 +1250,23 @@ public class f_SetUpManager : MonoBehaviour {
 
 			f_gameManager.myPlayer = myPlayer;
 			f_gameManager.players = players;
+
+			/*for(int i = 0; i < players.Length; i++){
+
+				if(players[i].isWhite){
+
+					f_gameManager.whitePieces = players[i].pieceSet;
+					Debug.Log("whitepieces");
+
+				}
+
+				else if(!players[i].isWhite){
+
+					f_gameManager.blackPieces = players[i].pieceSet;
+					Debug.Log("blackpieces");
+				}
+
+			}*/
 			//f_gameManager.gameOn = true;
 			f_gameManager.SetUpBoard();
 			

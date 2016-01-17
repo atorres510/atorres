@@ -262,11 +262,75 @@ public class f_GameManager : MonoBehaviour {
 
 			}
 
-
-
-
-
 		}
+
+
+		/*if(myPlayer.isWhite){
+
+			for(int i = 0; i < whitePieces.Length; i++){
+
+				f_Piece p = whitePieces[i];
+
+				if(p.isWhite){
+					coordinates[p.x, p.y] = p.pieceDesignator; // 0 Null; 1 B.Pawn; 2 B.Rook; etc;
+					p.startTile = tileCoordinates[p.x, p.y];
+					p.StartPosition();
+					//whitePieces[j] = p;
+					//	Debug.Log("Adding to WhitePieces: " + p + ". PieceID : " + p.pieceID);
+					//Debug.Log(p);
+					j++;
+					
+					//this.myPhotonView.RPC("UpdatePiece", PhotonTargets.Others, p.transform.position, 
+					//   p.x, p.y, true, p.pieceID);
+					
+					
+					if(p.isRoyalty){
+						
+						//Debug.Log("Adding to White Royalty: " + ". PieceID : " + p.pieceID);
+						whiteRoyalties[l] = p.pieceDesignator;
+						l++;
+					}
+				}
+			}
+		}
+
+
+		else{
+
+			for(int i = 0; i < blackPieces.Length; i++){
+				
+				f_Piece p = blackPieces[i];
+				
+				if(!p.isWhite){
+					coordinates[p.x, p.y] = p.pieceDesignator; // 0 Null; 1 B.Pawn; 2 B.Rook; etc;
+					p.startTile = tileCoordinates[p.x, p.y];
+					p.StartPosition();
+					//whitePieces[j] = p;
+					//	Debug.Log("Adding to WhitePieces: " + p + ". PieceID : " + p.pieceID);
+					//Debug.Log(p);
+					j++;
+					
+					//this.myPhotonView.RPC("UpdatePiece", PhotonTargets.Others, p.transform.position, 
+					//   p.x, p.y, true, p.pieceID);
+					
+					
+					if(p.isRoyalty){
+						
+						//Debug.Log("Adding to White Royalty: " + ". PieceID : " + p.pieceID);
+						blackRoyalties[l] = p.pieceDesignator;
+						l++;
+					}
+				}
+			}
+		}*/
+
+
+
+
+
+
+
+
 
 		isWaiting = true; 
 		myPlayer.isSecondaryReady = true;
@@ -711,7 +775,7 @@ public class f_GameManager : MonoBehaviour {
 
 
 			if(myPlayer.isWhite){
-				//Debug.Log("Updating");
+				Debug.Log("Updating");
 				UpdatePieceSet (whitePieces, true, true);
 				this.myPhotonView.RPC("UpdateCastle", PhotonTargets.Others, whiteCastle.x, whiteCastle.y, 
 				                      whiteCastle.isOccupied, whiteCastle.rotation, true);
@@ -721,7 +785,7 @@ public class f_GameManager : MonoBehaviour {
 			//yield return new WaitForSeconds(2f);
 
 			else{
-				//Debug.Log("updating");
+				Debug.Log("updating");
 				UpdatePieceSet (blackPieces, false, true);
 				this.myPhotonView.RPC("UpdateCastle", PhotonTargets.Others, blackCastle.x, blackCastle.y, 
 				                      blackCastle.isOccupied, blackCastle.rotation, false);
