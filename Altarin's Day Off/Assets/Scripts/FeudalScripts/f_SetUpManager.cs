@@ -134,8 +134,10 @@ public class f_SetUpManager : MonoBehaviour {
 
 	}
 
+	//places selected object into its proper sorting layer. called by MouseControls()
 	void MoveSelectedObjectToCorrectSortingLayer(){
 
+		//if old object is not the empty object, place it back in it's proper sort layer
 		if(selectedObject == emptyObject && oldSelectedObject != emptyObject){
 
 			SpriteRenderer r = oldSelectedObject.GetComponent<SpriteRenderer>();
@@ -156,10 +158,17 @@ public class f_SetUpManager : MonoBehaviour {
 
 			else{}
 
+		}
+
+		//no objects have been selected
+		else if(selectedObject == emptyObject && oldSelectedObject == emptyObject){
+
+			//pass
+
 
 		}
 
-
+		//an object has been selected
 		else{
 
 			SpriteRenderer r = selectedObject.GetComponent<SpriteRenderer>();
@@ -174,7 +183,7 @@ public class f_SetUpManager : MonoBehaviour {
 			}
 
 		}
-		
+	
 		oldSelectedObject = selectedObject;
 
 	}
@@ -1353,6 +1362,13 @@ public class f_SetUpManager : MonoBehaviour {
 
 	#endregion
 
+	void Start(){
+		selectedObject = emptyObject;
+		oldSelectedObject = selectedObject;
+
+
+	}
+
 	void Update () {
 
 		if(isSetUp){
@@ -1369,11 +1385,13 @@ public class f_SetUpManager : MonoBehaviour {
 				ArePlayersReady();
 
 			}
+
+			ClickandDrag (selectedObject);
 		
 		}
 		
 
-		ClickandDrag (selectedObject);
+
 	
 	}
 
