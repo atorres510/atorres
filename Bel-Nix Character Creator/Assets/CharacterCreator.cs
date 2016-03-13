@@ -15,7 +15,7 @@ public class CharacterCreator : MonoBehaviour {
     public GameObject paperDoll;
     Image[] paperDollLayers;
 
-    string activeFeature = " ";
+    int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hair
 
 
     bool isBoy;
@@ -40,7 +40,7 @@ public class CharacterCreator : MonoBehaviour {
 
         switch (caseSwitch) {
             case 1: //BodyTypes
-                activeFeature = "BodyType";
+                activeFeature = 0;
 
                 if (isBoy)
                 {
@@ -52,7 +52,7 @@ public class CharacterCreator : MonoBehaviour {
                 }
                 break;
             case 2: //hair
-                activeFeature = "HairType";
+                activeFeature = 4;
                 FillButtons("HAIRTYPES");
                 break;
             case 3: //clothes
@@ -64,7 +64,11 @@ public class CharacterCreator : MonoBehaviour {
 
         }
 
+        picker.CurrentColor = paperDollLayers[activeFeature].color;
+
     }
+
+    
 
 
     #region Paperdoll Methods
@@ -81,30 +85,52 @@ public class CharacterCreator : MonoBehaviour {
         
     }
 
+    public void SetFeaturetoPaperDoll(Button button)
+    {
 
+        Sprite newSprite;
+        Image buttonImage = button.transform.GetChild(0).GetComponent<Image>();
 
+        newSprite = buttonImage.sprite;
+
+        paperDollLayers[activeFeature].sprite = newSprite;
+        
+    }
+
+    public void UpdateActiveFeatureColor() {
+
+        paperDollLayers[activeFeature].color = activeRenderer.material.color;
+
+    }
+
+    void UpdatePaperDoll() { }
 
 
 
     #endregion
-
-
-
-
+    
     #region Button Grid Methods
 
     void SetButtons()
     {
 
-        buttonGrid = gridObject.GetComponentsInChildren<Button>();
+        buttonGrid = gridObject.transform.GetComponentsInChildren<Button>();
 
     }
 
     void FillButtons(string filePath) {
-
-      
-     
+        
         Sprite[] sprites = spriteLibrary.GetSprites(filePath);
+
+        if (currentbuttonGridLength < sprites.Length) {
+
+            for (int i = currentbuttonGridLength; i < sprites.Length; i++) {
+
+                buttonGrid[i].gameObject.SetActive(true);
+
+            }
+
+        }
 
         for (int i = 0; i < sprites.Length; i++)
         {
@@ -120,44 +146,34 @@ public class CharacterCreator : MonoBehaviour {
         {
 
             //set sprite
-            Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
+            /*Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
 
             buttonImage.sprite = blankUISprite;
-            buttonImage.color = Color.white;
+            buttonImage.color = Color.white;*/
+            buttonGrid[i].gameObject.SetActive(false);
 
         }
 
         currentbuttonGridLength = sprites.Length;
+
         
     }
 
     void UpdateButtonColor() {
 
-        if (activeFeature == " ")
+        for (int i = 0; i < currentbuttonGridLength; i++)
         {
 
+            //set sprite
+            Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
+
+            buttonImage.color = activeRenderer.material.color;
 
         }
-
-
-        else {
-
-            for (int i = 0; i < currentbuttonGridLength; i++)
-            {
-
-                //set sprite
-                Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
-
-                buttonImage.color = activeRenderer.material.color;
-
-            }
-
-        }
-
-        
 
 
     }
+
 
 
     #endregion
@@ -178,6 +194,14 @@ public class CharacterCreator : MonoBehaviour {
 
         SetPaperDollLayers();
 
+        for (int i = 0; i < buttonGrid.Length; i++) {
+
+            buttonGrid[i].gameObject.SetActive(false);
+
+        }
+
+        picker.CurrentColor = Color.white;
+
         picker.onValueChanged.AddListener(color =>
         {
             activeRenderer.material.color = color;
@@ -188,6 +212,7 @@ public class CharacterCreator : MonoBehaviour {
 	void Update () {
 
         UpdateButtonColor();
+        UpdateActiveFeatureColor();
 	
 	}
 }
