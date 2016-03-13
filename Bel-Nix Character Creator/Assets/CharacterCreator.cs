@@ -82,7 +82,10 @@ public class CharacterCreator : MonoBehaviour {
             Debug.Log(paperDollLayers[i].gameObject.name);
 
         }
-        
+
+        paperDollLayers[1].gameObject.SetActive(false);
+        paperDollLayers[3].gameObject.SetActive(false);
+
     }
 
     public void SetFeaturetoPaperDoll(Button button)
