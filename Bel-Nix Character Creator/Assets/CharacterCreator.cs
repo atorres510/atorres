@@ -7,19 +7,39 @@ public class CharacterCreator : MonoBehaviour {
     public Renderer activeRenderer;
 
 
-    public Renderer skinRenderer;
-    public Renderer hairRenderer;
-    public Renderer vestRenderer;
-    public Renderer shirtRenderer;
-    public Renderer longShirtRenderer;
-    public Renderer accessoryRenderer;
+    Renderer skinRenderer;
+    Renderer hairRenderer;
+    Renderer vestRenderer;
+    Renderer shirtRenderer;
+    Renderer longShirtRenderer;
+    Renderer accessoryRenderer;
 
     public ColorPicker picker;
 
 
 
 
+    public void SetActiveRenderer(int caseSwitch) {
 
+        switch (caseSwitch) {
+            case 1: //skin
+                activeRenderer = skinRenderer;
+                break;
+            case 2: //hair
+                activeRenderer = hairRenderer;
+                break;
+            case 3: //clothes
+                activeRenderer = shirtRenderer;
+                break;
+            case 4: //accessory
+                activeRenderer = accessoryRenderer;
+                break;
+
+        }
+
+
+
+    }
 
 
 
@@ -33,7 +53,7 @@ public class CharacterCreator : MonoBehaviour {
 
         picker.onValueChanged.AddListener(color =>
         {
-            //renderer.material.color = color;
+            activeRenderer.material.color = color;
         });
     }
 	
