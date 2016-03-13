@@ -73,6 +73,15 @@ public class SpriteLibrary : MonoBehaviour {
 		
 	}
 
+    public Sprite[] GetSprites(string key) {
+
+        Sprite[] sprites = RetrieveArray(key);
+
+        return sprites;
+
+
+    }
+
 
 	//creates dictionary by reading the folder paths and their contents
 	void CreateSpriteDictionary(string[] folderPaths){
@@ -91,6 +100,8 @@ public class SpriteLibrary : MonoBehaviour {
 				string key = MakeKey(cleanedPath);
 				
 				spriteLibrary.Add(key, sprites);
+                
+                
 				
 			}
 		
@@ -176,15 +187,16 @@ public class SpriteLibrary : MonoBehaviour {
 	//loads Error Sprite from resources folder
 	void LoadErrorSprite(){
 
-		errorSprite = Resources.Load<Sprite>("Sprites/FeudalSprites/ErrorSprite");
+		errorSprite = Resources.Load<Sprite>("Sprites/ErrorSprite");
 	
 	}
 
 	
 	void Awake(){
 
-		LoadErrorSprite ();
+		//LoadErrorSprite ();
 		CreateSpriteDictionary (folderPaths);
+        
 	
 	}
 
