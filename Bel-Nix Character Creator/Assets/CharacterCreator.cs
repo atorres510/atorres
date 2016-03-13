@@ -18,7 +18,8 @@ public class CharacterCreator : MonoBehaviour {
     int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hair
 
 
-    bool isBoy;
+    bool isBoy = true;
+    int bodyType = 0; // 0 fit, 1 chubby, 2 fat
    
     Renderer vestRenderer;
     Renderer shirtRenderer;
@@ -97,6 +98,30 @@ public class CharacterCreator : MonoBehaviour {
         newSprite = buttonImage.sprite;
 
         paperDollLayers[activeFeature].sprite = newSprite;
+
+        switch (activeFeature) {
+
+            case 0: //body
+
+                for (int i = 0; i < buttonGrid.Length; i++)
+                {
+                    
+                    if (buttonGrid[i] == button) {
+
+                        bodyType = i;
+                        break;
+
+                    }
+                    
+                }
+                
+                break;
+
+            
+
+
+
+        }
         
     }
 
@@ -106,7 +131,71 @@ public class CharacterCreator : MonoBehaviour {
 
     }
 
-    void UpdatePaperDoll() { }
+    void UpdatePaperDoll() {
+
+
+        if (isBoy)
+        {
+
+
+            paperDollLayers[0].sprite = spriteLibrary.GetSprite("MALE", bodyType);
+
+            switch (bodyType) {
+
+                case 0: //fit
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("01_M_FitClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("01_M_FitClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("01_M_FitClothes".ToUpper(), 2);  //vest
+                    break;
+                case 1: //chubs
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("02_M_ChubbyClothes".ToUpper(), 0);
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("02_M_ChubbyClothes".ToUpper(), 1);
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("02_M_ChubbyClothes".ToUpper(), 2);
+                    break;
+                case 2: //fat
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("03_M_FatClothes".ToUpper(), 0);
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("03_M_FatClothes".ToUpper(), 1);
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("03_M_FatClothes".ToUpper(), 2);
+                    break;
+
+            }
+            
+        }
+
+        else {
+
+            paperDollLayers[0].sprite = spriteLibrary.GetSprite("FEMALE", bodyType);
+
+
+            switch (bodyType)
+            {
+
+                case 0: //fit
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("01_F_FitClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("01_F_FitClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("01_F_FitClothes".ToUpper(), 2);  //vest
+                    break;
+                case 1: //chubs
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("02_F_ChubbyClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("02_F_ChubbyClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("02_F_ChubbyClothes".ToUpper(), 2);  //vest
+                    break;
+                case 2: //fat
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("03_F_FatClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("03_F_FatClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("03_F_FatClothes".ToUpper(), 2);  //vest
+                    break;
+
+            }
+
+        }
+
+
+
+
+
+
+    }
 
 
 
@@ -216,6 +305,7 @@ public class CharacterCreator : MonoBehaviour {
 
         UpdateButtonColor();
         UpdateActiveFeatureColor();
+        UpdatePaperDoll();
 	
 	}
 }
