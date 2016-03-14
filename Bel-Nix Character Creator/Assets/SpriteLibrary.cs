@@ -29,7 +29,7 @@ public class SpriteLibrary : MonoBehaviour {
 		else{
 			
 			//corrects for array elements
-			id = (id - 1);
+			//id = (id - 1);
 			
 			//checks if the array would throw an out of index error.  if so, throw error and errorsprite
 			if(id < 0){

@@ -15,10 +15,12 @@ public class CharacterCreator : MonoBehaviour {
     public GameObject paperDoll;
     Image[] paperDollLayers;
 
-    int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hair
+    public int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hair, 5 general clothing
 
 
-    bool isBoy;
+    bool isBoy = true;
+    int bodyType = 0; // 0 fit, 1 chubby, 2 fat
+    int hairType = 0; 
    
     Renderer vestRenderer;
     Renderer shirtRenderer;
@@ -50,13 +52,112 @@ public class CharacterCreator : MonoBehaviour {
                 {
                     FillButtons("FEMALE");
                 }
+                
+
+                for (int i = 0; i < buttonGrid.Length; i++)
+                {
+
+                    if (i == bodyType)
+                    {
+                        
+                        buttonGrid[i].image.color = buttonGrid[i].colors.pressedColor;
+                    }
+
+                    else {
+
+                        buttonGrid[i].image.color = buttonGrid[i].colors.normalColor;
+
+                    }
+
+
+
+                }
+
                 break;
+
+
             case 2: //hair
                 activeFeature = 4;
                 FillButtons("HAIRTYPES");
+                for (int i = 0; i < buttonGrid.Length; i++)
+                {
+
+                    if (i == hairType)
+                    {
+
+                        buttonGrid[i].image.color = buttonGrid[i].colors.pressedColor;
+                    }
+
+                    else {
+
+                        buttonGrid[i].image.color = buttonGrid[i].colors.normalColor;
+
+                    }
+
+
+
+                }
                 break;
             case 3: //clothes
-                
+                activeFeature = 5; //no feature selected;
+                if (isBoy)
+                {
+
+                    switch (bodyType)
+                    {
+                        case 0: //fit
+                            FillButtons("01_M_FitClothes".ToUpper());
+                            break;
+                        case 1: //chubs
+                            FillButtons("02_M_ChubbyClothes".ToUpper());
+                            break;
+                        case 2: //fat
+                            FillButtons("03_M_FatClothes".ToUpper());
+                            break;
+
+                    }
+
+                }
+
+                else
+                {
+
+                    switch (bodyType)
+                    {
+
+                        case 0: //fit
+                            FillButtons("01_F_FitClothes".ToUpper());
+                            break;
+                        case 1: //chubs
+                            FillButtons("02_F_ChubbyClothes".ToUpper());
+                            break;
+                        case 2: //fat
+                            FillButtons("03_F_FatClothes".ToUpper());
+                            break;
+
+                    }
+
+                }
+
+                for (int i = 1; i < 4; i++) {
+
+                    if (paperDollLayers[i].gameObject.activeSelf)
+                    {
+
+                        buttonGrid[i - 1].image.color = buttonGrid[i - 1].colors.pressedColor;
+
+                    }
+
+                    else {
+
+                        buttonGrid[i - 1].image.color = buttonGrid[i - 1].colors.normalColor;
+                    }
+
+                }
+
+              
+
+
                 break;
             case 4: //accessory
                 
@@ -64,11 +165,23 @@ public class CharacterCreator : MonoBehaviour {
 
         }
 
-        picker.CurrentColor = paperDollLayers[activeFeature].color;
+        if (activeFeature < paperDollLayers.Length) {
+            picker.CurrentColor = paperDollLayers[activeFeature].color;
+        }
+
+        
+        
 
     }
 
-    
+    public void SetActiveColor(Button button)
+    {
+
+        Image buttonImage = button.GetComponent<Image>();
+
+        picker.CurrentColor = buttonImage.color;
+
+    }
 
 
     #region Paperdoll Methods
@@ -91,24 +204,201 @@ public class CharacterCreator : MonoBehaviour {
     public void SetFeaturetoPaperDoll(Button button)
     {
 
-        Sprite newSprite;
-        Image buttonImage = button.transform.GetChild(0).GetComponent<Image>();
+        if (activeFeature == 5 || activeFeature == 1 || activeFeature == 2 || activeFeature == 3)
+        {
 
-        newSprite = buttonImage.sprite;
+            for (int i = 0; i < buttonGrid.Length; i++)
+            {
 
-        paperDollLayers[activeFeature].sprite = newSprite;
-        
+                if (buttonGrid[i] == button)
+                {
+
+                    if (activeFeature == (i + 1))
+                    {
+
+                        paperDollLayers[activeFeature].gameObject.SetActive(!paperDollLayers[activeFeature].gameObject.activeSelf);
+
+                        if (paperDollLayers[activeFeature].gameObject.activeSelf)
+                        {
+
+                            button.image.color = button.colors.pressedColor;
+
+                        }
+
+                        else {
+
+                            button.image.color = button.colors.normalColor;
+                        }
+
+                    }
+
+                    else {
+
+                        activeFeature = (i + 1);
+
+
+                    }
+                    
+                    Debug.Log(activeFeature);
+                    break;
+                }
+
+            }
+
+           
+            picker.CurrentColor = paperDollLayers[activeFeature].color;
+
+        }
+
+
+        else {
+
+            Sprite newSprite;
+            Image buttonImage = button.transform.GetChild(0).GetComponent<Image>();
+
+            newSprite = buttonImage.sprite;
+
+            paperDollLayers[activeFeature].sprite = newSprite;
+
+            switch (activeFeature)
+            {
+
+                case 0: //body
+
+                    for (int i = 0; i < buttonGrid.Length; i++)
+                    {
+
+                        if (buttonGrid[i] == button)
+                        {
+                            bodyType = i;
+                            button.image.color = button.colors.pressedColor;
+                        }
+
+                        else {
+
+                            buttonGrid[i].image.color = buttonGrid[i].colors.normalColor;
+
+                        }
+
+                        
+
+                    }
+
+                    break;
+
+                //clothes 
+                case 1: //longshirt
+                case 2: //shortshirt
+                case 3: //vest
+                    
+                    break;
+
+
+                case 4:
+                    for (int i = 0; i < buttonGrid.Length; i++)
+                    {
+
+                        if (buttonGrid[i] == button)
+                        {
+                            hairType = i;
+                            button.image.color = button.colors.pressedColor;
+                        }
+
+                        else {
+
+                            buttonGrid[i].image.color = buttonGrid[i].colors.normalColor;
+
+                        }
+
+
+
+                    }
+
+                    break;
+
+            }
+
+        }
+ 
     }
 
     public void UpdateActiveFeatureColor() {
 
-        paperDollLayers[activeFeature].color = activeRenderer.material.color;
+
+        if (activeFeature < paperDollLayers.Length) {
+
+            paperDollLayers[activeFeature].color = activeRenderer.material.color;
+
+        }
+        
 
     }
 
-    void UpdatePaperDoll() { }
+    void UpdatePaperDoll() {
 
 
+        if (isBoy)
+        {
+
+
+            paperDollLayers[0].sprite = spriteLibrary.GetSprite("MALE", bodyType);
+
+            switch (bodyType) {
+
+                case 0: //fit
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("01_M_FitClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("01_M_FitClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("01_M_FitClothes".ToUpper(), 2);  //vest
+                    break;
+                case 1: //chubs
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("02_M_ChubbyClothes".ToUpper(), 0);
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("02_M_ChubbyClothes".ToUpper(), 1);
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("02_M_ChubbyClothes".ToUpper(), 2);
+                    break;
+                case 2: //fat
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("03_M_FatClothes".ToUpper(), 0);
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("03_M_FatClothes".ToUpper(), 1);
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("03_M_FatClothes".ToUpper(), 2);
+                    break;
+
+            }
+            
+        }
+
+        else {
+
+            paperDollLayers[0].sprite = spriteLibrary.GetSprite("FEMALE", bodyType);
+
+
+            switch (bodyType)
+            {
+
+                case 0: //fit
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("01_F_FitClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("01_F_FitClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("01_F_FitClothes".ToUpper(), 2);  //vest
+                    break;
+                case 1: //chubs
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("02_F_ChubbyClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("02_F_ChubbyClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("02_F_ChubbyClothes".ToUpper(), 2);  //vest
+                    break;
+                case 2: //fat
+                    paperDollLayers[1].sprite = spriteLibrary.GetSprite("03_F_FatClothes".ToUpper(), 0);  //long
+                    paperDollLayers[2].sprite = spriteLibrary.GetSprite("03_F_FatClothes".ToUpper(), 1);  //short
+                    paperDollLayers[3].sprite = spriteLibrary.GetSprite("03_F_FatClothes".ToUpper(), 2);  //vest
+                    break;
+
+            }
+
+        }
+
+
+
+
+
+
+    }
 
     #endregion
     
@@ -164,13 +454,40 @@ public class CharacterCreator : MonoBehaviour {
 
     void UpdateButtonColor() {
 
-        for (int i = 0; i < currentbuttonGridLength; i++)
+        if (activeFeature == 0 || activeFeature == 4)
+        { //body and hair colors
+
+            for (int i = 0; i < currentbuttonGridLength; i++)
+            {
+
+                //set sprite
+                Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
+
+                buttonImage.color = activeRenderer.material.color;
+
+            }
+
+        }
+
+        else if (activeFeature == 1 || activeFeature == 2 || activeFeature == 3)
         {
 
-            //set sprite
-            Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
+            Image buttonImage = buttonGrid[(activeFeature - 1)].transform.GetChild(0).GetComponent<Image>();
 
             buttonImage.color = activeRenderer.material.color;
+
+        }
+
+        else if (activeFeature == 5){
+
+            for (int i = 0; i < 3; i++) {
+
+                Image buttonImage = buttonGrid[i].transform.GetChild(0).GetComponent<Image>();
+
+                buttonImage.color = paperDollLayers[(i+1)].color;
+
+
+            }
 
         }
 
@@ -180,16 +497,7 @@ public class CharacterCreator : MonoBehaviour {
 
 
     #endregion
-
-    public void SetActiveColor(Button button) {
-
-        Image buttonImage = button.GetComponent<Image>();
-
-        picker.CurrentColor = buttonImage.color;
-        
-    }
-
-
+    
     // Use this for initialization
     void Start () {
 
@@ -216,6 +524,7 @@ public class CharacterCreator : MonoBehaviour {
 
         UpdateButtonColor();
         UpdateActiveFeatureColor();
+        UpdatePaperDoll();
 	
 	}
 }
