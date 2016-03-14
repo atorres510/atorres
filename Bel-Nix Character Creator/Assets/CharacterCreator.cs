@@ -20,8 +20,8 @@ public class CharacterCreator : MonoBehaviour {
 
     bool isBoy = true;
     int bodyType = 0; // 0 fit, 1 chubby, 2 fat
-    int hairType = 0;
-    int backType = 1;
+    int hairType = 1;
+    int backType = 0;
     int shoulderType = 0;
     int handType = 0;
     int headType = 0;
@@ -196,10 +196,10 @@ public class CharacterCreator : MonoBehaviour {
 
         paperDollLayers[1].gameObject.SetActive(false);
         paperDollLayers[3].gameObject.SetActive(false);
-        paperDollLayers[4].gameObject.SetActive(false);
+        /*paperDollLayers[4].gameObject.SetActive(false);
         paperDollLayers[5].gameObject.SetActive(false);
         paperDollLayers[6].gameObject.SetActive(false);
-        paperDollLayers[8].gameObject.SetActive(false);
+        paperDollLayers[8].gameObject.SetActive(false);*/
 
     }
 
@@ -451,7 +451,7 @@ public class CharacterCreator : MonoBehaviour {
     public void UpdateActiveFeatureColor() {
 
 
-        if (activeFeature < paperDollLayers.Length) {
+        if (activeFeature < 4 || activeFeature == 7 || activeFeature == 8) {
 
             paperDollLayers[activeFeature].color = activeRenderer.material.color;
 
