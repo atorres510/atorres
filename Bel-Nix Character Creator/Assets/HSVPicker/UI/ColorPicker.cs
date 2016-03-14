@@ -194,7 +194,7 @@ public class ColorPicker : MonoBehaviour
         _blue = color.b;
     }
 
-    private void SendChangedEvent()
+    public void SendChangedEvent()
     {
         onValueChanged.Invoke(CurrentColor);
         onHSVChanged.Invoke(_hue, _saturation, _brightness);

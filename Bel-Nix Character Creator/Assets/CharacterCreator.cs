@@ -181,6 +181,11 @@ public class CharacterCreator : MonoBehaviour {
 
     }
 
+    public void ResetActiveColor()
+    {
+        picker.SendChangedEvent();
+    }
+
 
     #region Paperdoll Methods
 
@@ -524,6 +529,11 @@ public class CharacterCreator : MonoBehaviour {
 
 
 
+    }
+
+    public void ResizePaperdoll(int resize)
+    {
+        paperDoll.transform.localScale = new Vector3(resize, resize, resize);
     }
 
     #endregion
