@@ -21,11 +21,6 @@ public class CharacterCreator : MonoBehaviour {
     bool isBoy = true;
     int bodyType = 0; // 0 fit, 1 chubby, 2 fat
     int hairType = 0; 
-   
-    Renderer vestRenderer;
-    Renderer shirtRenderer;
-    Renderer longShirtRenderer;
-    Renderer accessoryRenderer;
 
     public ColorPicker picker;
 
@@ -234,8 +229,33 @@ public class CharacterCreator : MonoBehaviour {
 
                     else {
 
+                        
                         activeFeature = (i + 1);
+                        if (paperDollLayers[activeFeature].gameObject.activeSelf)
+                        {
 
+
+
+
+                        }
+
+                        else {
+
+                            paperDollLayers[activeFeature].gameObject.SetActive(!paperDollLayers[activeFeature].gameObject.activeSelf);
+                            if (paperDollLayers[activeFeature].gameObject.activeSelf)
+                            {
+
+                                button.image.color = button.colors.pressedColor;
+
+                            }
+
+                            else {
+
+                                button.image.color = button.colors.normalColor;
+                            }
+
+                        }
+                        
 
                     }
                     
@@ -497,7 +517,11 @@ public class CharacterCreator : MonoBehaviour {
 
 
     #endregion
-    
+
+    #region PNG Export Methods
+
+    #endregion
+
     // Use this for initialization
     void Start () {
 
