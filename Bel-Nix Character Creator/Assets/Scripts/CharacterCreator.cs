@@ -14,7 +14,6 @@ public class CharacterCreator : MonoBehaviour {
     int currentbuttonGridLength;
 
     public Image canvasBackground;
-    public GameObject pleaseWaitUIText;
 
     public string exportName = "CharacterExport";
 
@@ -705,23 +704,11 @@ public class CharacterCreator : MonoBehaviour {
     #region PNG Export Methods
 
     //for stupid button use
-    public void StartUpload() {
+    public void StartUploadPNG() {
 
-        StartCoroutine("StartUploadPNG");
-
-    }
-
-
-    //to enable/disable the please wait text for loading
-    public IEnumerator StartUploadPNG() {
-
-      pleaseWaitUIText.SetActive(true);
-
-      yield return StartCoroutine("UploadPNG");
-
-      pleaseWaitUIText.SetActive(false);
+      StartCoroutine("UploadPNG");
       
-
+      
     }
 
     public void SetExportName(string name) {
