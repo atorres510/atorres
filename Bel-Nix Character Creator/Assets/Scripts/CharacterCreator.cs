@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.IO;
 
 
 public class CharacterCreator : MonoBehaviour {
@@ -11,6 +12,10 @@ public class CharacterCreator : MonoBehaviour {
     public Sprite blankUISprite;
     Button[] buttonGrid;
     int currentbuttonGridLength;
+
+    public Image canvasBackground;
+
+    public string exportName = "CharacterExport";
 
     public GameObject paperDoll;
     Image[] paperDollLayers;
@@ -166,9 +171,18 @@ public class CharacterCreator : MonoBehaviour {
 
         }
 
+    }
 
-        
-        
+    #region ColorPicker Methods
+
+    void SetUpColorPicker() {
+
+        picker.CurrentColor = Color.white;
+
+        picker.onValueChanged.AddListener(color =>
+        {
+            activeRenderer.material.color = color;
+        });
 
     }
 
@@ -186,6 +200,7 @@ public class CharacterCreator : MonoBehaviour {
         picker.SendChangedEvent();
     }
 
+    #endregion
 
     #region Paperdoll Methods
 
@@ -688,28 +703,115 @@ public class CharacterCreator : MonoBehaviour {
 
     #region PNG Export Methods
 
-    #endregion
+    //for button use
+    public void StartUploadPNG() {
+        
+      StartCoroutine("UploadPNG");
+        Debug.Log("screenshot taken");
 
-    // Use this for initialization
-    void Start () {
+    }
 
-        SetButtons();
+    public void SetExportName(string name) {
 
-        SetPaperDollLayers();
+        exportName = name;
+        Debug.Log(exportName);
+        
+    }
 
-        for (int i = 0; i < buttonGrid.Length; i++) {
+    IEnumerator UploadPNG()
+    {
+        //from unity documentation
 
-            buttonGrid[i].gameObject.SetActive(false);
+        RectTransform paperDollRectTransform = paperDoll.GetComponent<RectTransform>();
+        //stores old settings and changes them for the screenshot
+        Vector3 paperDollOldPos = paperDollRectTransform.position;
+        Vector3 paperDollOldScale = paperDollRectTransform.localScale;
+
+        paperDollRectTransform.position = new Vector3(40, 40, 0);
+        paperDollRectTransform.localScale = new Vector3(1, 1, 1);
+
+        //get rid of background temporarily to preserve alpha
+        canvasBackground.enabled = false;
+
+        // We should only read the screen buffer after rendering is complete
+        yield return new WaitForEndOfFrame();
+
+        // Create a texture the size of the screen, ARGB32 format
+        int width = Screen.width;
+        int height = Screen.height;
+
+      
+        Texture2D tex = new Texture2D(70, 70, TextureFormat.ARGB32, false);
+
+        // Read screen contents into the texture
+        tex.ReadPixels(new Rect(5, 5, 75, 75), 0, 0);
+        tex.Apply();
+
+        // Encode texture into PNG
+        byte[] bytes = tex.EncodeToPNG();
+        Object.Destroy(tex);
+
+        ReassignRedundantExportName(exportName, Application.dataPath + "/Screenshots/");
+
+        // For testing purposes, also write to a file in the project folder
+        File.WriteAllBytes(Application.dataPath + "/Screenshots/" + exportName + ".png", bytes);
+
+        paperDollRectTransform.position = paperDollOldPos;
+        paperDollRectTransform.localScale = paperDollOldScale;
+        
+        canvasBackground.enabled = true;
+
+        Debug.Log("screenshot taken");
+
+    }
+
+   void ReassignRedundantExportName(string name, string folderPath) {
+
+        string[] filePaths = Directory.GetFiles(folderPath);
+
+        int counter = 0;
+
+        string currentFilePath = Application.dataPath + "/Screenshots/" + name + ".png";
+
+        foreach (string filePath in filePaths) {
+
+            if (filePath == currentFilePath) {
+
+                counter++;
+
+            }
 
         }
 
-        picker.CurrentColor = Color.white;
+        if (counter != 0) {
 
-        picker.onValueChanged.AddListener(color =>
-        {
-            activeRenderer.material.color = color;
-        });
+            exportName = name + counter;
+
+        }
+
     }
+        
+        #endregion
+  
+    // Use this for initialization
+    void Start () {
+
+    SetButtons();
+
+    SetPaperDollLayers();
+
+    SetUpColorPicker();
+
+    for (int i = 0; i < buttonGrid.Length; i++) {
+
+        buttonGrid[i].gameObject.SetActive(false);
+
+    }
+
+     Debug.Log(Screen.width + "," + Screen.height);
+
+      
+}
 	
 	// Update is called once per frame
 	void Update () {
