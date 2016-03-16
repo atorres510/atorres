@@ -12,7 +12,7 @@ public class CharacterCreator : MonoBehaviour {
     public Sprite blankUISprite;
     Button[] buttonGrid;
     int currentbuttonGridLength;
-
+    
     public Image canvasBackground;
 
     public string exportName = "CharacterExport";
@@ -21,6 +21,7 @@ public class CharacterCreator : MonoBehaviour {
     Image[] paperDollLayers;
 
     public int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hand, 5 back, 6 shoulder, 7 hair, 8 head, 9 general clothing
+
 
 
     bool isBoy = true;
