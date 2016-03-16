@@ -14,6 +14,7 @@ public class CharacterCreator : MonoBehaviour {
     int currentbuttonGridLength;
 
     public Image canvasBackground;
+    public GameObject pleaseWaitUIText;
 
     public string exportName = "CharacterExport";
 
@@ -703,11 +704,23 @@ public class CharacterCreator : MonoBehaviour {
 
     #region PNG Export Methods
 
-    //for button use
-    public void StartUploadPNG() {
-        
-      StartCoroutine("UploadPNG");
-        Debug.Log("screenshot taken");
+    //for stupid button use
+    public void StartUpload() {
+
+        StartCoroutine("StartUploadPNG");
+
+    }
+
+
+    //to enable/disable the please wait text for loading
+    public IEnumerator StartUploadPNG() {
+
+      pleaseWaitUIText.SetActive(true);
+
+      yield return StartCoroutine("UploadPNG");
+
+      pleaseWaitUIText.SetActive(false);
+      
 
     }
 
@@ -737,8 +750,8 @@ public class CharacterCreator : MonoBehaviour {
         yield return new WaitForEndOfFrame();
 
         // Create a texture the size of the screen, ARGB32 format
-        int width = Screen.width;
-        int height = Screen.height;
+       // int width = Screen.width;
+       // int height = Screen.height;
 
       
         Texture2D tex = new Texture2D(70, 70, TextureFormat.ARGB32, false);
@@ -760,8 +773,10 @@ public class CharacterCreator : MonoBehaviour {
         paperDollRectTransform.localScale = paperDollOldScale;
         
         canvasBackground.enabled = true;
-
+        
         Debug.Log("screenshot taken");
+
+        yield return 0;
 
     }
 
@@ -771,24 +786,39 @@ public class CharacterCreator : MonoBehaviour {
 
         int counter = 0;
 
-        string currentFilePath = Application.dataPath + "/Screenshots/" + name + ".png";
+        string currentFilePath;
+        string lessRedundantName = name;
 
-        foreach (string filePath in filePaths) {
+        bool isThereStillARedundancy;
 
-            if (filePath == currentFilePath) {
+        do
+        {
 
-                counter++;
+            currentFilePath = Application.dataPath + "/Screenshots/" + lessRedundantName + ".png";
+            isThereStillARedundancy = false;
+
+            foreach (string filePath in filePaths)
+            {
+
+                if (filePath == currentFilePath)
+                {
+
+                    counter++;
+                    lessRedundantName = name + counter;
+                    isThereStillARedundancy = true;
+                    Debug.Log(counter);
+                    
+
+                }
 
             }
 
-        }
 
-        if (counter != 0) {
 
-            exportName = name + counter;
+        } while (isThereStillARedundancy);
 
-        }
-
+        exportName = lessRedundantName;
+      
     }
         
         #endregion
@@ -807,8 +837,6 @@ public class CharacterCreator : MonoBehaviour {
         buttonGrid[i].gameObject.SetActive(false);
 
     }
-
-     Debug.Log(Screen.width + "," + Screen.height);
 
       
 }
