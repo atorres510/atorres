@@ -118,9 +118,9 @@ public class SpriteLibrary : MonoBehaviour {
 	//cleans filepath, removing "Assets/Resources/", "\", and ".meta" from the string. also trims whitespace
 	string CleanFilePath(string path){
 
-		//removes "Assets/Resources/"
-		string clean  = path.Substring(17);
-		//removes ".meta"
+        //removes "Assets/Resources/"
+       string clean  = path.Substring(17);
+        //removes ".meta"
 		clean = clean.Remove(clean.Length - 5);
 		//removes "\"
 		string [] cleanedStrings = clean.Split ('\\');
@@ -153,9 +153,9 @@ public class SpriteLibrary : MonoBehaviour {
 	//reads path and creates a sprite array of the assets found
 	Sprite[] LoadSpriteArray(string path){
 
-		Sprite[] sprites = Resources.LoadAll<Sprite>(path);
+        Sprite[] sprites = Resources.LoadAll<Sprite>(path);
 
-		return sprites;
+        return sprites;
 
 	}
 
