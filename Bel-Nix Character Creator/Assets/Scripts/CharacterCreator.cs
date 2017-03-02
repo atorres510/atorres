@@ -11,7 +11,7 @@ public class CharacterCreator : MonoBehaviour {
     public GameObject gridObject;
     public Sprite blankUISprite;
     Button[] buttonGrid;
-    int currentbuttonGridLength;
+    int currentbuttonGridLength = 0;
     
     public Image canvasBackground;
 
@@ -20,7 +20,7 @@ public class CharacterCreator : MonoBehaviour {
     public GameObject paperDoll;
     Image[] paperDollLayers;
 
-    public int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hand, 5 back, 6 shoulder, 7 hair, 8 head, 9 general clothing
+    public int activeFeature; // 0 body, 1 long shirt, 2 shirt, 3 vest, 4 hand, 5 back, 6 shoulder, 7 hair, 8 head, 9 general clothing, 10 sex/empty
 
 
 
@@ -169,6 +169,13 @@ public class CharacterCreator : MonoBehaviour {
                 SetActiveButtons(headType);
                 picker.CurrentColor = paperDollLayers[activeFeature].color;
                 break;
+            case 8: //sex or empty
+                activeFeature = 10;
+                DeactivateAllButtons();
+                ResetButtonColors();
+                break;
+           
+
 
         }
 
@@ -698,7 +705,17 @@ public class CharacterCreator : MonoBehaviour {
 
     }
 
+    void DeactivateAllButtons() {
 
+        for (int i = 0; i < buttonGrid.Length; i++){
+
+            buttonGrid[i].gameObject.SetActive(false);
+
+        }
+
+        currentbuttonGridLength = 0;
+
+    }
 
     #endregion
 
@@ -820,11 +837,7 @@ public class CharacterCreator : MonoBehaviour {
 
     SetUpColorPicker();
 
-    for (int i = 0; i < buttonGrid.Length; i++) {
-
-        buttonGrid[i].gameObject.SetActive(false);
-
-    }
+    DeactivateAllButtons();
 
       
 }
