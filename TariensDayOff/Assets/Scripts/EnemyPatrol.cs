@@ -48,7 +48,7 @@ public class EnemyPatrol : MonoBehaviour {
 			StartCoroutine (Patrol (currentWaypoint, waypointPositions));
 		} 
 		else {
-			StartCoroutine (StationaryPosition(currentWaypoint));
+			StartCoroutine (StationaryPosition(waypointPositions));
 		}
 
 		
@@ -249,7 +249,20 @@ public class EnemyPatrol : MonoBehaviour {
 		//donePatrolling = true;
 		positions.Clear ();
 
-		yield return StartCoroutine (Patrol (currentWaypoint, waypointPositions));
+        if (isPatrollingGuard)
+        {
+
+            yield return StartCoroutine(Patrol(currentWaypoint, waypointPositions));
+
+        }
+
+        else {
+
+            yield return StartCoroutine(StationaryPosition(waypointPositions));
+
+
+        }
+		
 		
 	}
 
@@ -356,7 +369,7 @@ public class EnemyPatrol : MonoBehaviour {
 			}
 
 			else{
-				StartCoroutine (StationaryPosition(0));
+				StartCoroutine (StationaryPosition(waypointPositions));
 			}
 
 		} 
@@ -366,7 +379,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 
-	/*void ContinuePatrol(bool suspicious){
+    /*void ContinuePatrol(bool suspicious){
 
 		if (!suspicious) {
 
@@ -391,7 +404,7 @@ public class EnemyPatrol : MonoBehaviour {
 	}*/
 
 
-	IEnumerator StationaryPosition(int i){
+    /*IEnumerator StationaryPosition(int i){
 
 		yield return StartCoroutine (LookAt (waypointPositions [i], rotationSpeed));
 		yield return StartCoroutine (MoveTo (waypointPositions [i], patrolSpeed));
@@ -399,7 +412,21 @@ public class EnemyPatrol : MonoBehaviour {
 		yield return StartCoroutine (LookAt (waypointPositions [i], rotationSpeed));
 
 			}
+*/
 
+    IEnumerator StationaryPosition(List<Vector3> waypoints) {
+
+        for (int i = currentWaypoint; i < waypoints.Count; i++)
+        {
+
+            yield return StartCoroutine(LookAt(waypointPositions[i], rotationSpeed));
+
+        }
+
+        donePatrolling = true;
+
+
+    }
 
 	IEnumerator ReturnToLastWayPoint(){
 			
