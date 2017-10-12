@@ -51,17 +51,17 @@ public class Controller2D : MonoBehaviour {
 	}
 	
 	public IEnumerator TakenDamage(){
-		renderer.enabled = false;
+		GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(takenDamage);
-		renderer.enabled = true;
+		GetComponent<Renderer>().enabled = true;
 		yield return new WaitForSeconds(takenDamage);
-		renderer.enabled = false;
+		GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(takenDamage);
-		renderer.enabled = true;
+		GetComponent<Renderer>().enabled = true;
 		yield return new WaitForSeconds(takenDamage);
-		renderer.enabled = false;
+		GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(takenDamage);
-		renderer.enabled = true;
+		GetComponent<Renderer>().enabled = true;
 		yield return new WaitForSeconds(takenDamage);
 	}
 }

@@ -60,16 +60,16 @@ public class PlayerController2D : MonoBehaviour {
 
 		//Player movement controled with WASD
 		if (Input.GetKey(KeyCode.W)){
-			rigidbody2D.transform.position += Vector3.up * playerSpeed * Time.fixedDeltaTime;
+			GetComponent<Rigidbody2D>().transform.position += Vector3.up * playerSpeed * Time.fixedDeltaTime;
 		}
 		if (Input.GetKey(KeyCode.S)){
-			rigidbody2D.transform.position += Vector3.down * playerSpeed * Time.deltaTime;
+			GetComponent<Rigidbody2D>().transform.position += Vector3.down * playerSpeed * Time.deltaTime;
 		}
 		if (Input.GetKey(KeyCode.A)){
-			rigidbody2D.transform.position += Vector3.left * playerSpeed * Time.deltaTime;
+			GetComponent<Rigidbody2D>().transform.position += Vector3.left * playerSpeed * Time.deltaTime;
 		}
 		if (Input.GetKey(KeyCode.D)){
-			rigidbody2D.transform.position += Vector3.right * playerSpeed * Time.deltaTime;
+			GetComponent<Rigidbody2D>().transform.position += Vector3.right * playerSpeed * Time.deltaTime;
 		}
 
 		//Sprint Toggle w/ LeftShift

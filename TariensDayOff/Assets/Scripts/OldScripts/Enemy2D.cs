@@ -31,19 +31,19 @@ public class Enemy2D : MonoBehaviour {
 	void Update()
 	{
 		if(moveRight){
-			rigidbody.position += Vector3.right * moveSpeed * Time.deltaTime;
+			GetComponent<Rigidbody>().position += Vector3.right * moveSpeed * Time.deltaTime;
 			}
 			
-		if(rigidbody.position.x >= endPosition){
+		if(GetComponent<Rigidbody>().position.x >= endPosition){
 			moveRight = false;
 			}
 		
 		if(!moveRight){
-			rigidbody.position -= Vector3.right * moveSpeed * Time.deltaTime;
+			GetComponent<Rigidbody>().position -= Vector3.right * moveSpeed * Time.deltaTime;
 			
 		}
 		
-		if(rigidbody.position.x <= startingPosition){
+		if(GetComponent<Rigidbody>().position.x <= startingPosition){
 			moveRight = true;
 		}
 		

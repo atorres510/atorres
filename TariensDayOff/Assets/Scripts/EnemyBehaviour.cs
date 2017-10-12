@@ -32,19 +32,19 @@ public class EnemyBehaviour : MonoBehaviour {
 	void Patrol(){
 		//Patrols Enemy to the Right
 		if (moveRight) {
-			rigidbody2D.transform.position += Vector3.right * patrolSpeed * Time.deltaTime;
+			GetComponent<Rigidbody2D>().transform.position += Vector3.right * patrolSpeed * Time.deltaTime;
 			
 		}
 		//Checks if Right Patrol is finished
-		if (rigidbody2D.transform.position.x >= endPosition) {
+		if (GetComponent<Rigidbody2D>().transform.position.x >= endPosition) {
 			moveRight = false;		
 		}
 		//Patrols Enemy to the Left
 		if (!moveRight) {
-			rigidbody2D.transform.position -= Vector3.right * patrolSpeed * Time.deltaTime;
+			GetComponent<Rigidbody2D>().transform.position -= Vector3.right * patrolSpeed * Time.deltaTime;
 		}
 		//Checks if Left Patrol is finished
-		if (rigidbody2D.transform.position.x <= startPosition) {
+		if (GetComponent<Rigidbody2D>().transform.position.x <= startPosition) {
 			moveRight = true; 		
 		}
 
