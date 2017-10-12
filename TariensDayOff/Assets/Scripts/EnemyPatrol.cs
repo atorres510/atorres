@@ -10,10 +10,7 @@ public class EnemyPatrol : MonoBehaviour {
 	public float patrolSpeed;
 	public float rotationSpeed;
 	public bool isPatrollingGuard;
-
-
-
-
+    
 	private float step; // patrollSpeed * deltatime for smoother movement
 	private bool moving; //Dunno what this was for.
 	private int currentWaypoint; //holds the value of the next waypoint in the list for the patrol.  allows for enemies to continue the patrol without restarting if interupted by TrackLastPosition
@@ -48,7 +45,7 @@ public class EnemyPatrol : MonoBehaviour {
 			StartCoroutine (Patrol (currentWaypoint, waypointPositions));
 		} 
 		else {
-			StartCoroutine (StationaryPosition(waypointPositions));
+			StartCoroutine (StationaryLookout(waypointPositions));
 		}
 
 		
@@ -81,11 +78,11 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 
+#region LookAt and MoveTo Functions
 
-	
-	//Rotates about Z axis to look at a specificed target - called in patrol and tracklastposition
+    //Rotates about Z axis to look at a specificed target - called in patrol and tracklastposition
 
-	IEnumerator LookAt(Vector3 target, float rotSpeed){
+    IEnumerator LookAt(Vector3 target, float rotSpeed){
 
 		StopCoroutine ("LookAt");
 
@@ -209,12 +206,13 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 	}
+    #endregion
 
 
-			
+#region Patrol Functions
 
-	//Combines LookAt and MoveTo so the enemy looks then moves to a specified waypoint.
-	IEnumerator Patrol(int i, List<Vector3> waypoints){
+    //Combines LookAt and MoveTo so the enemy looks then moves to a specified waypoint. "isPatrollingGuard" must be true.
+    IEnumerator Patrol(int i, List<Vector3> waypoints){
 
 
 		for (i = currentWaypoint; i < waypoints.Count; i++) {
@@ -230,50 +228,54 @@ public class EnemyPatrol : MonoBehaviour {
 
 	}
 
-	//used to track the last positions of the player backward such that the patrolling guard can return to its original patrol without crashing into walls.
-	IEnumerator ReturnToPatrol(int i, List<Vector3> positions){
-		
-		
-		for (i = (currentPosition); i > 0; i--) {
-			//	Debug.Log ("patrolling on waypoint " + i);
-			//probably want to make this a property.
-			int j = i - 1;
-			//Debug.Log(j);
-			//Debug.Log(positions[j]);
-			//yield return StartCoroutine (LookAt (positions[j], rotationSpeed));
-			yield return StartCoroutine (MoveTo (positions[j], patrolSpeed));
 
+    IEnumerator StationaryLookout(List<Vector3> waypoints)
+    {
 
-		}
-		Debug.Log ("Returned to original patrol.");
-		//donePatrolling = true;
-		positions.Clear ();
-
-        if (isPatrollingGuard)
+        for (int i = currentWaypoint; i < waypoints.Count; i++)
         {
 
-            yield return StartCoroutine(Patrol(currentWaypoint, waypointPositions));
+            yield return StartCoroutine(LookAt(waypointPositions[i], rotationSpeed));
 
         }
 
-        else {
+        donePatrolling = true;
 
-            yield return StartCoroutine(StationaryPosition(waypointPositions));
 
+    }
+
+    //used in Update to constantly check if patrol needs resetting
+    public void RestartPatrol()
+    {
+
+        if (donePatrolling)
+        {
+
+            donePatrolling = false;
+            currentWaypoint = 0;
+
+            if (isPatrollingGuard)
+            {
+                StartCoroutine(Patrol(currentWaypoint, waypointPositions));
+            }
+
+            else
+            {
+                StartCoroutine(StationaryLookout(waypointPositions));
+            }
 
         }
-		
-		
-	}
+    }
+
+    #endregion
 
 
-
-
+#region Player Tracking Functions
 
     //Takes the player's last known position, and creates a path to it.  
     //It also adds to a list of "enemyLastPositions" which allows the guard to back track to their
     //original patrol without wall collision.  Ideally.  
-	public IEnumerator TrackLastPosition(GameObject player){
+    public IEnumerator TrackLastPosition(GameObject player){
 
 
 		trackLastCoroutineCounter++;
@@ -353,27 +355,45 @@ public class EnemyPatrol : MonoBehaviour {
 		
 	}
 
-	//used to see if more than one of a certain coroutine is active.  if so, a break is necessary for this coroutine.
+    //used to track the last positions of the player backward such that the patrolling guard can return to its original patrol without crashing into walls.
+    IEnumerator ReturnToPatrol(int i, List<Vector3> positions)
+    {
 
 
-	//used in Update to constantly check if patrol needs resetting
-	public void RestartPatrol(){
+        for (i = (currentPosition); i > 0; i--)
+        {
+            //	Debug.Log ("patrolling on waypoint " + i);
+            //probably want to make this a property.
+            int j = i - 1;
+            //Debug.Log(j);
+            //Debug.Log(positions[j]);
+            yield return StartCoroutine (LookAt (positions[j], rotationSpeed));
+            yield return StartCoroutine(MoveTo(positions[j], patrolSpeed));
 
-		if (donePatrolling) {
 
-			donePatrolling = false;
-			currentWaypoint = 0;
+        }
+        Debug.Log("Returned to original patrol.");
+        //donePatrolling = true;
+        positions.Clear();
 
-			if(isPatrollingGuard){
-				StartCoroutine (Patrol (currentWaypoint, waypointPositions));
-			}
+        if (isPatrollingGuard)
+        {
 
-			else{
-				StartCoroutine (StationaryPosition(waypointPositions));
-			}
+            yield return StartCoroutine(Patrol(currentWaypoint, waypointPositions));
 
-		} 
-	}
+        }
+
+        else
+        {
+
+            yield return StartCoroutine(StationaryLookout(waypointPositions));
+
+
+        }
+
+
+    }
+
 
 
 
@@ -404,31 +424,8 @@ public class EnemyPatrol : MonoBehaviour {
 	}*/
 
 
-    /*IEnumerator StationaryPosition(int i){
 
-		yield return StartCoroutine (LookAt (waypointPositions [i], rotationSpeed));
-		yield return StartCoroutine (MoveTo (waypointPositions [i], patrolSpeed));
-		i++;
-		yield return StartCoroutine (LookAt (waypointPositions [i], rotationSpeed));
-
-			}
-*/
-
-    IEnumerator StationaryPosition(List<Vector3> waypoints) {
-
-        for (int i = currentWaypoint; i < waypoints.Count; i++)
-        {
-
-            yield return StartCoroutine(LookAt(waypointPositions[i], rotationSpeed));
-
-        }
-
-        donePatrolling = true;
-
-
-    }
-
-	IEnumerator ReturnToLastWayPoint(){
+    IEnumerator ReturnToLastWayPoint(){
 			
 		yield return null;
 
@@ -445,13 +442,13 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 
-
-
-	
-
+#endregion
 
 
 
 
-	
+
+
+
+
 }

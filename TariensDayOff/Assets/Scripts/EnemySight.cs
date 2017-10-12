@@ -54,7 +54,7 @@ public class EnemySight : MonoBehaviour {
 				if(hit.collider.gameObject == player){
 
 					if(hit.fraction > 3f){
-						
+						//if player collides with enemy sight and the enemy was not suspicious
 						if(!suspicious){
 
 							playerInSight = true;
@@ -70,7 +70,7 @@ public class EnemySight : MonoBehaviour {
 							StartCoroutine(enemyPatrol.TrackLastPosition(player));
 							suspicious = enemyPatrol.ReturnSuspicion();
 						}
-
+                        //if player collides with enemy sight and the enemy was supsicious
 						else if (!playerInSight && suspicious){
 
 							playerInSight = true;
@@ -79,6 +79,7 @@ public class EnemySight : MonoBehaviour {
 							enemyPatrol.StopAllCoroutines();
 							//enemyPatrol.StopCoroutine("TrackLastPosition");
 							if(!questionMarkInstantiated){
+                            
 								StartCoroutine(renderQuestionMark());
 							}
 
@@ -91,7 +92,7 @@ public class EnemySight : MonoBehaviour {
 							
 
 					}
-
+                    //if player gets within a certain distance, end the game.  
 					else if(hit.fraction <= 3f){
 						StopAllCoroutines();
 						enemyPatrol.StopAllCoroutines();
