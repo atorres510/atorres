@@ -1,0 +1,21 @@
+Tarien's Day Off Version Notes
+
+-Versions <1.0
+Basic game mechanics, including coins and basic guard AI.  Current guard scripts include 
+patrols, sight, and tracking.  Also includes doors and "vaultpoints".  Player is only able
+to move, sprint, and interact with objects (doors and vaultpoints only).  
+
+-TDOv1.0 - "Guard AI"
+Goals:  -Refine Guard AI
+		-Guard's stopping at certain patrol points to look around, or looking
+		around when the reach the player's last known position.
+		-Having guards look where they are going when retracing their steps or
+		returing to patrol.
+		-Include "reverse patrols", which inverse the order of a patrol pattern
+		for patrols box or closed loop patterns. Possibly after a certain number
+		of patrols. 
+	-Ground Work for Different Guard "Personalities"
+		-Design and code different guard AI that perform different, simple tasks.
+		Example: Stationary guard vs patrol guard.  Elaboration into different
+		enemy types with other abilities can be done in a later version.
+	   
