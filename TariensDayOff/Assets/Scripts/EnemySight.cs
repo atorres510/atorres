@@ -18,10 +18,9 @@ public class EnemySight : MonoBehaviour {
 	
 	private EnemyPatrol enemyPatrol;
 
-	private bool playerInSight;
-	private bool suspicious;
-	private bool questionMarkInstantiated;
-	private bool exclamationMarkInstantiated;
+	private bool isPlayerInSight;
+	private bool isSuspicious;  //
+	private bool isQuestionMarkInstantiated;
 
 	private GameObject gameManagerObject;
 	private GameManager gameManager;
@@ -53,55 +52,34 @@ public class EnemySight : MonoBehaviour {
 
 				if(hit.collider.gameObject == player){
 
-					if(hit.fraction > 3f){
-						//if player collides with enemy sight and the enemy was not suspicious
-						if(!suspicious){
+                    //if player is within the enemy's visual range, make the enemy suspicious, stop their current patrol
+                    //and begin tracking the player's last position.  !isplayerinsight keeps the method from repeating unnecessarily.
+					if(hit.fraction > 3f && !isPlayerInSight){
 
-							playerInSight = true;
-
-							if(!questionMarkInstantiated){
-								StartCoroutine(renderQuestionMark());
-							}
-								
-							//Debug.Log ("Enemy is Suspicious");
-							enemyPatrol.StopAllCoroutines();
-							//enemyPatrol.StopCoroutine("TrackLastPosition");
-							suspicious = true;
-							StartCoroutine(enemyPatrol.TrackLastPosition(player));
-							suspicious = enemyPatrol.ReturnSuspicion();
-						}
-                        //if player collides with enemy sight and the enemy was supsicious
-						else if (!playerInSight && suspicious){
-
-							playerInSight = true;
-							//Debug.Log(playerInSight);
-							//StopAllCoroutines();
-							enemyPatrol.StopAllCoroutines();
-							//enemyPatrol.StopCoroutine("TrackLastPosition");
-							if(!questionMarkInstantiated){
-                            
-								StartCoroutine(renderQuestionMark());
-							}
+                        isPlayerInSight = true;
+                        //Debug.Log(playerInSight);
+                        //StopAllCoroutines();
+                        enemyPatrol.StopAllCoroutines();
+                        //enemyPatrol.StopCoroutine("TrackLastPosition");
+                        if (!isQuestionMarkInstantiated)
+                        {
+                            StartCoroutine(InstantiateQuestionMark());
+                        }
 
 
 
-							suspicious = true;
-							StartCoroutine(enemyPatrol.TrackLastPosition(player));
-							suspicious = enemyPatrol.ReturnSuspicion();
-						}
-							
+                        isSuspicious = true;
+                        StartCoroutine(enemyPatrol.TrackLastPosition(player));
+                        isSuspicious = enemyPatrol.ReturnSuspicion();
 
-					}
-                    //if player gets within a certain distance, end the game.  
+                }
+                    //if player gets too close to the enemy, end the game.  
 					else if(hit.fraction <= 3f){
 						StopAllCoroutines();
 						enemyPatrol.StopAllCoroutines();
-
-						if(!exclamationMarkInstantiated){
-							StartCoroutine(renderExclamationMark());
-							gameManager.GameOver();
-							
-						}
+						InstantiateExclamationMark();
+						gameManager.GameOver();
+						
 					}
 
 
@@ -112,21 +90,16 @@ public class EnemySight : MonoBehaviour {
 
 	void OnTriggerExit2D(Collider2D other){
 		if (other.gameObject == player) {
-			playerInSight = false;
+			isPlayerInSight = false;
 			//Debug.Log (playerInSight);
 		}
 	}
-
-
-				
-
-
-
-	 //Displays question mark above enemy	
-	IEnumerator renderQuestionMark(){
+    
+	 //Displays question mark above enemy.  Question mark is destroyed after 2 seconds.	
+	IEnumerator InstantiateQuestionMark(){
 
 		//Debug.Log ("instantiating");
-		questionMarkInstantiated = true;
+		isQuestionMarkInstantiated = true;
 		//GameObject questionmarkInstance;
 		Vector3 questionMarkPosition = new Vector3 (transform.position.x, (transform.position.y + 1.5f), -1f);
 		questionmarkInstance = Instantiate (questionmarkPrefab, questionMarkPosition, questionmarkPrefab.transform.rotation) as GameObject;
@@ -135,7 +108,7 @@ public class EnemySight : MonoBehaviour {
 
 		//Debug.Log ("done instantiating");
 		Destroy (questionmarkInstance);
-		questionMarkInstantiated = false;
+		isQuestionMarkInstantiated = false;
 
 		yield return null;
 	
@@ -143,44 +116,18 @@ public class EnemySight : MonoBehaviour {
 	
 	}
 
-	//Displays exclamation mark above enemy
-	IEnumerator renderExclamationMark(){
-		
+	//Displays exclamation mark above enemy when they are caught.  The exclamation mark is not 
+    //destroyed.  
+	void InstantiateExclamationMark(){
+        if (isQuestionMarkInstantiated) {
+            Destroy(questionmarkInstance);
+        }
 		//Debug.Log ("instantiating");
-		exclamationMarkInstantiated = true;
 		GameObject exclamationMarkInstance;
 		Vector3 exclamationMarkPosition = new Vector3 (transform.position.x, (transform.position.y + 1.5f), -1f);
 		exclamationMarkInstance = Instantiate (exclamationmarkPrefab, exclamationMarkPosition, exclamationmarkPrefab.transform.rotation) as GameObject;
 		
-		yield return new WaitForSeconds(2);
-		
-		//Debug.Log ("done instantiating");
-		Destroy (exclamationMarkInstance);
-		questionMarkInstantiated = false;
-		
-		yield return null;
-		
-		
-		
 	}
-
-
-
-	void Update(){
-
-
-
-
-	}
-	
-
-
-
-
-
-
-
-
 
 
 

@@ -279,7 +279,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 		trackLastCoroutineCounter++;
-		//Debug.Log ("Counter : " + trackLastCoroutineCounter);
+		Debug.Log ("Counter : " + trackLastCoroutineCounter);
 
 		isSuspicious = true;
 
