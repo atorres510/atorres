@@ -98,7 +98,7 @@ public class EnemyPatrol : MonoBehaviour {
 		Vector3 relative = transform.InverseTransformPoint (target);
 		float degAngle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
 
-		Debug.Log (target);
+		//Debug.Log (target);
 		//Debug.Log ("Angle: " + angle);
 		//.Log ("DegAngle" + degAngle);
 		
@@ -110,7 +110,7 @@ public class EnemyPatrol : MonoBehaviour {
 				forward = -transform.right;
 				angle = Vector3.Angle (targetDir, forward);
 
-				Debug.Log(angle);
+				//Debug.Log(angle);
 				//Debug.Log ("I'm looking right!");
 
 				yield return null;
@@ -128,7 +128,7 @@ public class EnemyPatrol : MonoBehaviour {
 				angle = Vector3.Angle (targetDir, forward);
 				//angle = Mathf.Atan2 (relative.y, relative.x) * Mathf.Rad2Deg;
 				//Debug.Log("I'm looking left!");
-				Debug.Log (angle);
+				//Debug.Log (angle);
 				yield return null;
 			}
 		}
@@ -257,12 +257,14 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 
-
+    //Takes the player's last known position, and creates a path to it.  
+    //It also adds to a list of "enemyLastPositions" which allows the guard to back track to their
+    //original patrol without wall collision.  Ideally.  
 	public IEnumerator TrackLastPosition(GameObject player){
 
 
 		trackLastCoroutineCounter++;
-		Debug.Log ("Counter : " + trackLastCoroutineCounter);
+		//Debug.Log ("Counter : " + trackLastCoroutineCounter);
 
 		isSuspicious = true;
 

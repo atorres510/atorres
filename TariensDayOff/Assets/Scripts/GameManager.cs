@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
@@ -79,9 +80,10 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+    //Runs when play hits "Retry" or "New Game" on GUI after game over.  Loads the current scene.
 	void Restart(){
 
-		Application.LoadLevel(0);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
 
 	}
