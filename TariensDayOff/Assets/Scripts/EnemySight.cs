@@ -53,7 +53,7 @@ public class EnemySight : MonoBehaviour {
 				if(hit.collider.gameObject == player){
 
                     //if player is within the enemy's visual range, make the enemy suspicious, stop their current patrol
-                    //and begin tracking the player's last position.  !isplayerinsight keeps the method from repeating unnecessarily.
+                    //and begin tracking the player's last position.  !isplayerinsight condition keeps the method from repeating unnecessarily.
 					if(hit.fraction > 3f && !isPlayerInSight){
 
                         isPlayerInSight = true;

@@ -17,7 +17,7 @@ public class EnemyPatrol : MonoBehaviour {
 	private bool donePatrolling; //to check if a patrol is finished so the patrol can reset
 
 	private bool isSuspicious;
-	private bool isTracking;
+	private bool isTracking; //true if guard is tracking the player.
 	private int trackLastCoroutineCounter; // to count the number of coroutines currently in action. used to break any pre-existing coroutines; 
 	public float suspiciousPatrolSpeed;
 	public float suspiciousRotationSpeed;
@@ -136,6 +136,14 @@ public class EnemyPatrol : MonoBehaviour {
 		
 	}
 
+    //has the guard look around casually.  which way they look first is randomized
+    IEnumerator LookAround(float rotSpeed) {
+
+
+
+        yield return null;
+
+    }
 
 	//Moves to a specified target position
 	IEnumerator MoveTo(Vector3 target, float moveSpeed){
@@ -207,7 +215,6 @@ public class EnemyPatrol : MonoBehaviour {
 
 	}
     #endregion
-
 
 #region Patrol Functions
 
