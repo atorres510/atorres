@@ -144,7 +144,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 		//Debug.Log ("move to 1");
 
-		while ((transform.position - target).sqrMagnitude > 0.3f) {
+		while ((transform.position - target).sqrMagnitude > 0.0f) {
 			StopCoroutine("MoveTo");
 			transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
 			yield return null;
@@ -160,7 +160,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 		//Debug.Log ("move to 2");
 		
-		while ((transform.position - target).sqrMagnitude > 0.3f) {
+		while ((transform.position - target).sqrMagnitude > 0.0f) {
 			StopCoroutine ("MoveTo");
 			transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
 			yield return null;
@@ -179,7 +179,7 @@ public class EnemyPatrol : MonoBehaviour {
 			
 			//Debug.Log ("move to 3");
 			
-			while ((transform.position - target).sqrMagnitude > 0.3f) {
+			while ((transform.position - target).sqrMagnitude > 0.0f) {
 				StopCoroutine ("MoveTo");
 				transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
 				yield return null;
@@ -195,7 +195,7 @@ public class EnemyPatrol : MonoBehaviour {
 			
 			//Debug.Log ("move to 3");
 			
-			while ((transform.position - target).sqrMagnitude > 0.3f) {
+			while ((transform.position - target).sqrMagnitude > 0.0f) {
 				StopCoroutine ("MoveTo");
 				transform.position = Vector3.MoveTowards(transform.position, target, (moveSpeed * Time.deltaTime));
 				yield return null;
@@ -269,12 +269,12 @@ public class EnemyPatrol : MonoBehaviour {
 
     #endregion
 
-
 #region Player Tracking Functions
 
     //Takes the player's last known position, and creates a path to it.  
     //It also adds to a list of "enemyLastPositions" which allows the guard to back track to their
-    //original patrol without wall collision.  Ideally.  
+    //original patrol without wall collision.  If the guard loses suspicion, he will return to
+    //his post with ReturnToPatrol().  Ideally.  
     public IEnumerator TrackLastPosition(GameObject player){
 
 
@@ -362,13 +362,14 @@ public class EnemyPatrol : MonoBehaviour {
 
         for (i = (currentPosition); i > 0; i--)
         {
-            //	Debug.Log ("patrolling on waypoint " + i);
-            //probably want to make this a property.
+            //Debug.Log ("patrolling on waypoint " + i);
+            //probably want to make this a property.  changes the value by 1 to
+            //call the appropriate array value from the list value.
             int j = i - 1;
-            //Debug.Log(j);
-            //Debug.Log(positions[j]);
+         
             yield return StartCoroutine (LookAt (positions[j], rotationSpeed));
             yield return StartCoroutine(MoveTo(positions[j], patrolSpeed));
+           
 
 
         }

@@ -112,7 +112,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 
 			if(FindDistance(targetWaypoint, player.transform) <= 0.15f){
 
-				Debug.Log("done!");
+				//Debug.Log("done!");
 				playerController2D.enabled = true;
 				vaultpointBoxCollider2D.enabled = true;
 				isJumping = false;
