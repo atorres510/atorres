@@ -136,10 +136,32 @@ public class EnemyPatrol : MonoBehaviour {
 		
 	}
 
+    //looks in a certain direction by a particular angle, write variables as such (LookAt(Vector3.forward, 45.0f, 1.0f)  make the middle 
+    //number positive or negative for left or right, respectively.  
+    IEnumerator LookAt(Vector3 direction, float angle, float inSeconds)
+    {
+        Quaternion fromAngle = transform.rotation;
+        Quaternion toAngle = Quaternion.Euler(transform.eulerAngles + (direction * angle));
+        for (float t = 0f; t < 1; t += Time.deltaTime / inSeconds)
+        {
+            transform.rotation = Quaternion.Lerp(fromAngle, toAngle, t);
+            yield return null;
+        }
+
+        
+        
+    }
+
     //has the guard look around casually.  which way they look first is randomized
-    IEnumerator LookAround(float rotSpeed) {
+    IEnumerator LookAround() {
+        Debug.Log("LookAround");
 
-
+        yield return new WaitForSeconds(1);
+        yield return StartCoroutine(LookAt(Vector3.forward, 45.0f, 0.5f));
+        yield return StartCoroutine(LookAt(Vector3.forward, -45.0f, 0.5f));
+        yield return StartCoroutine(LookAt(Vector3.forward, -45.0f, 0.5f));
+        yield return StartCoroutine(LookAt(Vector3.forward, 45.0f, 0.5f));
+        yield return new WaitForSeconds(1);
 
         yield return null;
 
@@ -228,8 +250,9 @@ public class EnemyPatrol : MonoBehaviour {
 			//yield return StartCoroutine (LookAt (waypoints[i], rotationSpeed));
 			yield return StartCoroutine (MoveTo (waypoints[i], patrolSpeed, rotationSpeed));
 			currentWaypoint++;
-			
-		}
+            yield return StartCoroutine(LookAround());
+
+        }
 	//	Debug.Log ("Done Patrolling");
 		donePatrolling = true;
 
@@ -246,6 +269,7 @@ public class EnemyPatrol : MonoBehaviour {
 
         }
 
+        yield return StartCoroutine(LookAround());
         donePatrolling = true;
 
 
