@@ -153,15 +153,22 @@ public class EnemyPatrol : MonoBehaviour {
     }
 
     //has the guard look around casually.  which way they look first is randomized
-    IEnumerator LookAround() {
+    //angle is the initial angle, where as range is the furthest +/- that the angle may vary.
+    //rotation speed is how fast in seconds the rotation to that angle will take.
+    IEnumerator LookAround(float angle, float angleRange, float rotationSpeed, float speedRange) {
         Debug.Log("LookAround");
 
-        yield return new WaitForSeconds(1);
-        yield return StartCoroutine(LookAt(Vector3.forward, 45.0f, 0.5f));
-        yield return StartCoroutine(LookAt(Vector3.forward, -45.0f, 0.5f));
-        yield return StartCoroutine(LookAt(Vector3.forward, -45.0f, 0.5f));
-        yield return StartCoroutine(LookAt(Vector3.forward, 45.0f, 0.5f));
-        yield return new WaitForSeconds(1);
+        float randomizedAngle = Random.Range((angle - angleRange), (angle + angleRange));
+        float randomizedSpeed = Random.Range((rotationSpeed - speedRange), (rotationSpeed + speedRange));
+
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(LookAt(Vector3.forward, randomizedAngle, randomizedSpeed));
+        yield return StartCoroutine(LookAt(Vector3.forward, -randomizedAngle, randomizedSpeed)); //lets the rotation come back to the center point. should keep out any odd angles be left over.
+        randomizedAngle = Random.Range((angle - angleRange), (angle + angleRange));
+        randomizedSpeed = Random.Range((rotationSpeed - speedRange), (rotationSpeed + speedRange));
+        yield return StartCoroutine(LookAt(Vector3.forward, -randomizedAngle, randomizedSpeed));
+        yield return StartCoroutine(LookAt(Vector3.forward, randomizedAngle, randomizedSpeed));
+        yield return new WaitForSeconds(0.5f);
 
         yield return null;
 
@@ -250,7 +257,7 @@ public class EnemyPatrol : MonoBehaviour {
 			//yield return StartCoroutine (LookAt (waypoints[i], rotationSpeed));
 			yield return StartCoroutine (MoveTo (waypoints[i], patrolSpeed, rotationSpeed));
 			currentWaypoint++;
-            yield return StartCoroutine(LookAround());
+            yield return StartCoroutine(LookAround(45, 10, 0.5f, 0.2f));
 
         }
 	//	Debug.Log ("Done Patrolling");
@@ -269,7 +276,7 @@ public class EnemyPatrol : MonoBehaviour {
 
         }
 
-        yield return StartCoroutine(LookAround());
+        //yield return StartCoroutine(LookAround());
         donePatrolling = true;
 
 
