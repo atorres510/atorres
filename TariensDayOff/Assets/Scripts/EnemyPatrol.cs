@@ -29,7 +29,7 @@ public class EnemyPatrol : MonoBehaviour {
 	
 
 	//Holds a list of waypoints for a patrol
-	public Transform[] waypoints;
+	public Transform[] waypoints; //turn this into a new array called waypointTransforms, which no longer needs to be public.  use "waypoints" name for an array of waypointBehaviours
 	List<Vector3> waypointPositions = new List<Vector3>();
 	List<Vector3> enemyLastPositions = new List<Vector3>();
 
@@ -78,10 +78,9 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 
-#region LookAt and MoveTo Functions
+#region LookAt, LookAround and MoveTo Functions
 
     //Rotates about Z axis to look at a specificed target - called in patrol and tracklastposition
-
     IEnumerator LookAt(Vector3 target, float rotSpeed){
 
 		StopCoroutine ("LookAt");
@@ -256,8 +255,11 @@ public class EnemyPatrol : MonoBehaviour {
 			 //probably want to make this a property.
 			//yield return StartCoroutine (LookAt (waypoints[i], rotationSpeed));
 			yield return StartCoroutine (MoveTo (waypoints[i], patrolSpeed, rotationSpeed));
+
+            ////put a script here that asks if we should read the waypoint behaviour or not./////
+
 			currentWaypoint++;
-            yield return StartCoroutine(LookAround(45, 10, 0.5f, 0.2f));
+            yield return StartCoroutine(LookAround(45, 10, 0.5f, 0.2f)); //this can be removed once new waypoint behaviour is in place.
 
         }
 	//	Debug.Log ("Done Patrolling");
@@ -326,6 +328,7 @@ public class EnemyPatrol : MonoBehaviour {
 		StopCoroutine ("Patrol");
 		StopCoroutine ("TrackLastPosition");
 		StopCoroutine ("ReturnToPatrol");
+        StopCoroutine("LookAround");
 
 
 
@@ -349,7 +352,7 @@ public class EnemyPatrol : MonoBehaviour {
 		//secondsWaited = 0.0f;
 
 
-		yield return new WaitForSeconds (secondsSuspicious);
+		yield return new WaitForSeconds (secondsSuspicious + 0.5f);
 
 		if (trackLastCoroutineCounter > 1) {
 				
@@ -371,6 +374,8 @@ public class EnemyPatrol : MonoBehaviour {
 		Debug.Log(trackLastCoroutineCounter);
 
 		yield return new WaitForSeconds (secondsSuspicious);
+
+        yield return StartCoroutine(LookAround(45, 10, 0.5f, 0.2f));
 		
 		Debug.Log ("I am not suspicious anymore");
 		
