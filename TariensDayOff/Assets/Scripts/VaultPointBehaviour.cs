@@ -86,10 +86,6 @@ public class VaultPointBehaviour : MonoBehaviour {
 
 	}
 
-
-
-
-
 	IEnumerator MovePlayer(float speed){
 
 		if (!isJumping) {
