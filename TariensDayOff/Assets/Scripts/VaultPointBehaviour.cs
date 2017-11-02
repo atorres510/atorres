@@ -28,7 +28,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 		if (other.gameObject == player && !isJumping) {
 			if(Input.GetKeyDown(KeyCode.Space)){
 				//Debug.Log(FindFurthestWaypoint(player.transform, waypointA, waypointB));
-				StartCoroutine(MovePlayer(vaultSpeed));
+				StartCoroutine(VaultPlayer(vaultSpeed));
 
 
 
@@ -86,7 +86,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 
 	}
 
-	IEnumerator MovePlayer(float speed){
+	IEnumerator VaultPlayer(float speed){
 
 		if (!isJumping) {
 

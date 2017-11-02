@@ -18,7 +18,7 @@ public class PlayerController2D : MonoBehaviour {
     private int testDirection;
     private bool testMoving;
 
-	public Transform waypoint;
+	//public Transform waypoint;
 	
 
 	void Start () {
