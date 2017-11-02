@@ -15,7 +15,7 @@ public class PlayerAbilities : MonoBehaviour {
     void Awake(){
 
         player = GameObject.FindGameObjectWithTag("Player");
-
+        //ShadowstepController();
 
     }
 
@@ -28,8 +28,9 @@ public class PlayerAbilities : MonoBehaviour {
 
     void ShadowstepController() {
 
+        //SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
 
-
+        //playerRenderer.color = new Color(0.24f, 0.24f, 0.24f, 0.8f);
 
 
     }
