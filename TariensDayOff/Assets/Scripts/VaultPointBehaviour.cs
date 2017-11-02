@@ -98,6 +98,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 			PlayerController2D playerController2D = player.GetComponent<PlayerController2D>();
 			playerController2D.enabled = false;
 			vaultpointBoxCollider2D.enabled = false;
+            
 
 			Transform targetWaypoint = FindFurthestWaypoint (player.transform, waypointA, waypointB);
 
