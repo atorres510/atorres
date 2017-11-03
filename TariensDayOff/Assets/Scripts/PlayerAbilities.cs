@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class PlayerAbilities : MonoBehaviour {
 
-    public GameObject playerGhostPrefab;
-
-
+    //Player Object and Components
     private GameObject player;
+    private Animator playerAnimator;
     private PlayerController2D playerController;
     private BoxCollider2D playerCollider;
     private Rigidbody2D playerRigidbody;
 
-    private bool isShadowstepping;
+    //Shadowstep Member Variables
+    public GameObject playerGhostPrefab;
 
-
+    private bool isShadowstepping = false;
+    private GameObject ghostClone;
+    
 
 
 
@@ -22,9 +24,7 @@ public class PlayerAbilities : MonoBehaviour {
     void Awake(){
 
         InitializePlayerandComponents();
-        isShadowstepping = false;
-        
-
+     
     }
 
     // Update is called once per frame
@@ -37,6 +37,7 @@ public class PlayerAbilities : MonoBehaviour {
     void InitializePlayerandComponents() {
 
         player = GameObject.FindGameObjectWithTag("Player");
+        playerAnimator = player.GetComponent<Animator>();
         playerController = player.GetComponent<PlayerController2D>();
         playerCollider = player.GetComponent<BoxCollider2D>();
         playerRigidbody = player.GetComponent<Rigidbody2D>();
@@ -47,7 +48,8 @@ public class PlayerAbilities : MonoBehaviour {
     {
 
         playerController.enabled = isEnabled;
-        playerCollider.enabled = isEnabled;
+        //playerCollider.enabled = isEnabled;
+        //playerRigidbody.isKinematic = isEnabled;
         
 
 
@@ -57,31 +59,76 @@ public class PlayerAbilities : MonoBehaviour {
 
 
 
-    #region Shadowstep
+    #region Shadowstep Methods
 
     void ShadowstepController() {
+        
 
+        if (Input.GetKey(KeyCode.LeftShift) && !isShadowstepping) {
 
-        if (Input.GetKey(KeyCode.F) && !isShadowstepping) {
-
-            isShadowstepping = true;
-
-            TogglePlayerComponents(false);
-
-            GameObject ghostClone = (GameObject) Instantiate(playerGhostPrefab, player.transform.position, player.transform.rotation);
-
-
-
-
+            InitiateShadowstep();
+            
         }
         
 
-        //SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+        if (Input.GetKeyUp(KeyCode.LeftShift) && isShadowstepping) {
 
-        //playerRenderer.color = new Color(0.24f, 0.24f, 0.24f, 0.8f);
+            //keeps the clone from moving and sets the proper animations
+            ghostClone.GetComponent<PlayerController2D>().enabled = false;
+            ghostClone.GetComponent<Animator>().SetInteger("direction", 1);
+            ghostClone.GetComponent<Animator>().SetBool("moving", false);
+            ghostClone.GetComponent<Animator>().SetBool("shadowstepping", true);
+
+            ghostClone.GetComponent<Animator>().Play("TarienForwardIdle");
+
+
+
+            playerAnimator.SetBool("shadowstepping", false); //triggers the animation to begin, which will trigger the subsequent methods to continue the ability.
+            
+        }
+
+    }
+
+    //called in ShadowstepController.  sets the player components to false and sets appropriate animation parameters.
+    //also instantiates ghostClone
+    void InitiateShadowstep() {
+
+        isShadowstepping = true;// ensures that the shadowstepController "GetKey" method does not activate more than once. this should be reset in "ResetShadowstep"
+        playerAnimator.SetBool("shadowstepping", true);
+        playerAnimator.SetInteger("direction", 1);
+        playerAnimator.SetBool("moving", false);
+
+
+        TogglePlayerComponents(false);
+        playerCollider.isTrigger = true;
+
+        ghostClone = (GameObject)Instantiate(playerGhostPrefab, player.transform.position, player.transform.rotation);
+
 
 
     }
+
+    //called in the Animator during the Shadowstep animation as an animation event.  
+    //ensure the player is done disapperating before moving them to the ghosts position, then 
+    //destroys the ghost.
+    public void Shadowstep() {
+        
+        player.transform.position = ghostClone.transform.position;
+        Destroy(ghostClone);
+    }
+
+    //called in the Animator.  resets player components and shadowstepping so that the
+    //player can't move during the animation and once animation is complete, that shadowstep can be used again.
+    public void ResetShadowstep() {
+
+        TogglePlayerComponents(true);
+        playerCollider.isTrigger = false;
+        
+        isShadowstepping = false;
+
+
+    }
+
 
    
 

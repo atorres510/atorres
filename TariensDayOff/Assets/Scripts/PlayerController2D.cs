@@ -71,39 +71,34 @@ public class PlayerController2D : MonoBehaviour {
 			GetComponent<Rigidbody2D>().transform.position += Vector3.up * playerSpeed * Time.fixedDeltaTime;//back
             playerAnimator.SetInteger("direction", 2);
             playerAnimator.SetBool("moving", true);
-            testDirection = 2;
-            testMoving = true;
+          
 
         }
 
         if (Input.GetKeyUp(KeyCode.W)) {
             playerAnimator.SetInteger("direction", 2);
             playerAnimator.SetBool("moving", false);
-            testDirection = 2;
-            testMoving = false;
+         
         }
 
 		if (Input.GetKey(KeyCode.S)){
 			GetComponent<Rigidbody2D>().transform.position += Vector3.down * playerSpeed * Time.deltaTime; //forward
             playerAnimator.SetInteger("direction", 1);
             playerAnimator.SetBool("moving", true);
-            testDirection = 1;
-            testMoving = true;
+         
         }
 
         if (Input.GetKeyUp(KeyCode.S)){
             playerAnimator.SetInteger("direction", 1);
             playerAnimator.SetBool("moving", false);
-            testDirection = 1;
-            testMoving = false;
+          
         }
 
 		if (Input.GetKey(KeyCode.A)){
 			GetComponent<Rigidbody2D>().transform.position += Vector3.left * playerSpeed * Time.deltaTime;//left
             playerAnimator.SetInteger("direction", 3);
             playerAnimator.SetBool("moving", true);
-            testDirection = 3;
-            testMoving = true;
+         
         }
 
         if (Input.GetKeyUp(KeyCode.A))
@@ -111,16 +106,14 @@ public class PlayerController2D : MonoBehaviour {
             GetComponent<Rigidbody2D>().transform.position += Vector3.left * playerSpeed * Time.deltaTime;//left
             playerAnimator.SetInteger("direction", 3);
             playerAnimator.SetBool("moving", false);
-            testDirection = 3;
-            testMoving = false;
+        
         }
 
         if (Input.GetKey(KeyCode.D)){
             GetComponent<Rigidbody2D>().transform.position += Vector3.right * playerSpeed * Time.deltaTime;//right
             playerAnimator.SetInteger("direction", 4);
             playerAnimator.SetBool("moving", true);
-            testDirection = 4;
-            testMoving = true;
+          
         }
 
         if (Input.GetKeyUp(KeyCode.D))
@@ -128,8 +121,7 @@ public class PlayerController2D : MonoBehaviour {
             GetComponent<Rigidbody2D>().transform.position += Vector3.right * playerSpeed * Time.deltaTime;//right
             playerAnimator.SetInteger("direction", 4);
             playerAnimator.SetBool("moving", false);
-            testDirection = 4;
-            testMoving = false;
+         
         }
 
         if (isSprintEnabled) {
@@ -146,10 +138,6 @@ public class PlayerController2D : MonoBehaviour {
 
 
         }
-
-        Debug.Log("Direction: " + testDirection);
-        Debug.Log("Moving is: " + testMoving);
-    
         //if (Input.GetKeyDown (KeyCode.Space)) {
         //	StartCoroutine(PlayerJump());
         //}
