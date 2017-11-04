@@ -73,7 +73,8 @@ public class PlayerAbilities : MonoBehaviour {
 
         if (Input.GetKeyUp(KeyCode.LeftShift) && isShadowstepping) {
 
-            //keeps the clone from moving and sets the proper animations
+            //keeps the clone from moving and sets the proper animations.  this ensures the clone is in TarienForwardIdle, which is the only
+            //animation pathway to the shadowstep forward animation.
             ghostClone.GetComponent<PlayerController2D>().enabled = false;
             ghostClone.GetComponent<Animator>().SetInteger("direction", 1);
             ghostClone.GetComponent<Animator>().SetBool("moving", false);
@@ -84,7 +85,7 @@ public class PlayerAbilities : MonoBehaviour {
 
 
             playerAnimator.SetBool("shadowstepping", false); //triggers the animation to begin, which will trigger the subsequent methods to continue the ability.
-            
+           
         }
 
     }
