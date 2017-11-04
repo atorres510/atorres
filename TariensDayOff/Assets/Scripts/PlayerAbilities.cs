@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//This script defines the abilities for the main character and the controller components such as key presses.  Does not include Vaultpoint behaviours.
 public class PlayerAbilities : MonoBehaviour {
+
+    //General Ability Member Variables
+    private bool isUsingAbility;
+ 
 
     //Player Object and Components
     private GameObject player;
@@ -13,9 +17,11 @@ public class PlayerAbilities : MonoBehaviour {
 
     //Shadowstep Member Variables
     public GameObject playerGhostPrefab;
+    public int ghostMaxRadius;
 
     private bool isShadowstepping = false;
     private GameObject ghostClone;
+ 
     
 
 
@@ -31,6 +37,7 @@ public class PlayerAbilities : MonoBehaviour {
     void Update () {
 
         ShadowstepController();
+        SetIsUsingAbility();
 		
 	}
 
@@ -44,22 +51,24 @@ public class PlayerAbilities : MonoBehaviour {
 
     }
 
-    void TogglePlayerComponents(bool isEnabled)
-    {
+    void SetIsUsingAbility() {
 
-        playerController.enabled = isEnabled;
-        //playerCollider.enabled = isEnabled;
-        //playerRigidbody.isKinematic = isEnabled;
+        isUsingAbility = isShadowstepping;
         
-
-
     }
 
+    public bool GetIsUsingAbility() {
+
+        return isUsingAbility;
+        
+    }
+
+   
 
 
 
 
-    #region Shadowstep Methods
+    #region Shadowstep Controller and Methods
 
     void ShadowstepController() {
         
@@ -75,12 +84,14 @@ public class PlayerAbilities : MonoBehaviour {
 
             //keeps the clone from moving and sets the proper animations.  this ensures the clone is in TarienForwardIdle, which is the only
             //animation pathway to the shadowstep forward animation.
+         
             ghostClone.GetComponent<PlayerController2D>().enabled = false;
             ghostClone.GetComponent<Animator>().SetInteger("direction", 1);
             ghostClone.GetComponent<Animator>().SetBool("moving", false);
             ghostClone.GetComponent<Animator>().SetBool("shadowstepping", true);
 
             ghostClone.GetComponent<Animator>().Play("TarienForwardIdle");
+             
 
 
 
@@ -100,8 +111,9 @@ public class PlayerAbilities : MonoBehaviour {
         playerAnimator.SetBool("moving", false);
 
 
-        TogglePlayerComponents(false);
-        playerCollider.isTrigger = true;
+        playerController.enabled = false;
+        playerCollider.isTrigger = true; //does not cause collision but still acts as a trigger for guards
+        playerRigidbody.bodyType = RigidbodyType2D.Static; //keeps player from moving with ghost due to joint
 
         ghostClone = (GameObject)Instantiate(playerGhostPrefab, player.transform.position, player.transform.rotation);
 
@@ -122,9 +134,10 @@ public class PlayerAbilities : MonoBehaviour {
     //player can't move during the animation and once animation is complete, that shadowstep can be used again.
     public void ResetShadowstep() {
 
-        TogglePlayerComponents(true);
+        playerController.enabled = true;
         playerCollider.isTrigger = false;
-        
+        playerRigidbody.bodyType = RigidbodyType2D.Dynamic; //resets rigidbody bodytype to allow collision with walls and enemies
+
         isShadowstepping = false;
 
 

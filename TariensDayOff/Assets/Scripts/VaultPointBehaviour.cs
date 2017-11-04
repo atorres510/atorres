@@ -25,7 +25,7 @@ public class VaultPointBehaviour : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D other){
 
-		if (other.gameObject == player && !isJumping) {
+		if (other.gameObject == player && !isJumping && !player.GetComponent<PlayerAbilities>().GetIsUsingAbility()) {
 			if(Input.GetKeyDown(KeyCode.Space)){
 				//Debug.Log(FindFurthestWaypoint(player.transform, waypointA, waypointB));
 				StartCoroutine(VaultPlayer(vaultSpeed));

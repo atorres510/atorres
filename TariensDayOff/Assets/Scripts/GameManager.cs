@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
 		if (!gameWon) {
 
 			Destroy (player);
+            Destroy(GameObject.FindGameObjectWithTag("PlayerGhost")); //destroys any ghost prefabs.
 			gameOver = true;
 			Debug.Log ("GAME OVER");
 		}

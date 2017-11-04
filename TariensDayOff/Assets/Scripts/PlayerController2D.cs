@@ -32,7 +32,7 @@ public class PlayerController2D : MonoBehaviour {
 	
 	}
 	
-	void Update () {
+	void FixedUpdate () {
 
 		PlayerController ();
 
