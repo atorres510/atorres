@@ -64,7 +64,7 @@ public class PlayerController2D : MonoBehaviour {
 
 
 	void PlayerController(){
-
+        
 		//Player movement controled with WASD //forward = 1, back = 2, left =3, right = 4, moving = true/false;
 
 		if (Input.GetKey(KeyCode.W)){

@@ -20,6 +20,7 @@ public class PlayerAbilities : MonoBehaviour {
     public int ghostMaxRadius;
 
     private bool isShadowstepping = false;
+    private bool isCompletingShadowstep = false;
     private GameObject ghostClone;
  
     
@@ -80,10 +81,12 @@ public class PlayerAbilities : MonoBehaviour {
         }
         
 
-        if (Input.GetKeyUp(KeyCode.LeftShift) && isShadowstepping) {
+        if (Input.GetKeyUp(KeyCode.LeftShift) && isShadowstepping && !isCompletingShadowstep) {
 
             //keeps the clone from moving and sets the proper animations.  this ensures the clone is in TarienForwardIdle, which is the only
             //animation pathway to the shadowstep forward animation.
+
+            isCompletingShadowstep = true;
          
             ghostClone.GetComponent<PlayerController2D>().enabled = false;
             ghostClone.GetComponent<Animator>().SetInteger("direction", 1);
@@ -139,6 +142,7 @@ public class PlayerAbilities : MonoBehaviour {
         playerRigidbody.bodyType = RigidbodyType2D.Dynamic; //resets rigidbody bodytype to allow collision with walls and enemies
 
         isShadowstepping = false;
+        isCompletingShadowstep = false;
 
 
     }
