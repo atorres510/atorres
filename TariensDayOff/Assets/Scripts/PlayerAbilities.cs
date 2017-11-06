@@ -19,14 +19,14 @@ public class PlayerAbilities : MonoBehaviour {
     public GameObject playerGhostPrefab;
     public int ghostMaxRadius;
 
-    private bool isShadowstepping = false;
+    private bool isShadowstepping = false; 
     private bool isCompletingShadowstep = false;
     private GameObject ghostClone;
+
+    //Distract Member Variables
+    public GameObject bombPrefab;
  
     
-
-
-
 
     void Awake(){
 
@@ -42,6 +42,9 @@ public class PlayerAbilities : MonoBehaviour {
 		
 	}
 
+
+
+    #region General Script Methods
     void InitializePlayerandComponents() {
 
         player = GameObject.FindGameObjectWithTag("Player");
@@ -51,42 +54,40 @@ public class PlayerAbilities : MonoBehaviour {
         playerRigidbody = player.GetComponent<Rigidbody2D>();
 
     }
-
+    //called in update, 
     void SetIsUsingAbility() {
 
         isUsingAbility = isShadowstepping;
         
     }
-
+    //get method for isUsingAbility.  necessary for other scripts to determine if other interactions should be allowed.  
+    //currently only called by Vaultpointbehaviour.
     public bool GetIsUsingAbility() {
 
         return isUsingAbility;
         
     }
 
-   
-
-
-
+    #endregion
+    
+    // Abilities //
 
     #region Shadowstep Controller and Methods
 
     void ShadowstepController() {
         
-
         if (Input.GetKey(KeyCode.LeftShift) && !isShadowstepping) {
 
             InitiateShadowstep();
             
         }
         
-
         if (Input.GetKeyUp(KeyCode.LeftShift) && isShadowstepping && !isCompletingShadowstep) {
 
             //keeps the clone from moving and sets the proper animations.  this ensures the clone is in TarienForwardIdle, which is the only
             //animation pathway to the shadowstep forward animation.
 
-            isCompletingShadowstep = true;
+            isCompletingShadowstep = true; //ensure that the "GetKeyUp" method does not activate more than once.  This is reset in "ResetShadowstep"
          
             ghostClone.GetComponent<PlayerController2D>().enabled = false;
             ghostClone.GetComponent<Animator>().SetInteger("direction", 1);
@@ -95,9 +96,6 @@ public class PlayerAbilities : MonoBehaviour {
 
             ghostClone.GetComponent<Animator>().Play("TarienForwardIdle");
              
-
-
-
             playerAnimator.SetBool("shadowstepping", false); //triggers the animation to begin, which will trigger the subsequent methods to continue the ability.
            
         }
@@ -105,23 +103,20 @@ public class PlayerAbilities : MonoBehaviour {
     }
 
     //called in ShadowstepController.  sets the player components to false and sets appropriate animation parameters.
-    //also instantiates ghostClone
+    //also instantiates a ghostClone prefab
     void InitiateShadowstep() {
 
         isShadowstepping = true;// ensures that the shadowstepController "GetKey" method does not activate more than once. this should be reset in "ResetShadowstep"
         playerAnimator.SetBool("shadowstepping", true);
         playerAnimator.SetInteger("direction", 1);
         playerAnimator.SetBool("moving", false);
-
-
+        
         playerController.enabled = false;
         playerCollider.isTrigger = true; //does not cause collision but still acts as a trigger for guards
         playerRigidbody.bodyType = RigidbodyType2D.Static; //keeps player from moving with ghost due to joint
 
         ghostClone = (GameObject)Instantiate(playerGhostPrefab, player.transform.position, player.transform.rotation);
-
-
-
+        
     }
 
     //called in the Animator during the Shadowstep animation as an animation event.  
@@ -133,7 +128,7 @@ public class PlayerAbilities : MonoBehaviour {
         Destroy(ghostClone);
     }
 
-    //called in the Animator.  resets player components and shadowstepping so that the
+    //called in the Animator at the end of the shadowstep animation.  resets player components and shadowstepping so that the
     //player can't move during the animation and once animation is complete, that shadowstep can be used again.
     public void ResetShadowstep() {
 
@@ -148,7 +143,6 @@ public class PlayerAbilities : MonoBehaviour {
     }
 
 
-   
 
 
 
@@ -163,8 +157,44 @@ public class PlayerAbilities : MonoBehaviour {
 
 
 
-    #endregion 
 
+    #endregion
+
+    #region Distract Controller and Methods
+
+    void DistractController() {
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
 
 
 

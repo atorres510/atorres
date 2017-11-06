@@ -17,6 +17,7 @@ public class PlayerController2D : MonoBehaviour {
 
     private int testDirection;
     private bool testMoving;
+    private Vector3 oldPosition;
 
 	//public Transform waypoint;
 	
@@ -33,34 +34,13 @@ public class PlayerController2D : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
-
+        oldPosition = gameObject.transform.position;
 		PlayerController ();
+        MovingOverride(oldPosition, gameObject.transform.position);
 
 	}
 
 
-	/*void OnTriggerEnter2D(Collider2D other){
-
-		if(other.tag == "VaultPoint"){
-			isAbleToJump = true;
-			BoxCollider2D boxcollider2D;
-
-			boxcollider2D = other.GetComponent<BoxCollider2D>();
-			boxcollider2D.enabled = false;
-		}
-	}
-
-	void OnTriggerExit2D(Collider2D other){
-
-		if(other.tag == "VaultPoint"){
-			isAbleToJump = false;
-			BoxCollider2D boxcollider2D;
-			
-			boxcollider2D = other.GetComponent<BoxCollider2D>();
-			boxcollider2D.enabled = true;
-		}
-
-	}*/
 
 
 	void PlayerController(){
@@ -138,40 +118,21 @@ public class PlayerController2D : MonoBehaviour {
 
 
         }
-        //if (Input.GetKeyDown (KeyCode.Space)) {
-        //	StartCoroutine(PlayerJump());
-        //}
+        
     }
 
+    //fixes the moving animations getting "stuck".  checks after the player controller in fixed update to ensure that if the player is not
+    //in a different position, they are not moving.  It then ensures the moving parameter in the animator is set to false.
+    void MovingOverride(Vector3 pos1, Vector3 pos2) {
 
+        if (pos1 == pos2){
+            playerAnimator.SetBool("moving", false);
+            
+        }
 
-
-	/*IEnumerator PlayerJump(){
-
-		if (isAbleToJump == false) {
-			StopCoroutine("PlayerJump");
-			yield return null;
-		}
-
-		if (isAbleToJump == true) {
-			Debug.Log ("jumping!");
-
-			Vector3 newPosition;
-	
-			newPosition = waypoint.position;
-
-			while (transform.position != newPosition) {
-
-					transform.position = Vector3.Lerp (transform.position, newPosition, (Time.deltaTime * smooth)); 
-					yield return null;
-
-			}
-	
-			Debug.Log ("done jumping");
-		}
-	}*/
-
-
+        else { }
+        
+    }
 
 
 
