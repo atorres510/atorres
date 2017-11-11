@@ -21,10 +21,15 @@ public class PlayerAbilities : MonoBehaviour {
 
     private bool isShadowstepping = false; 
     private bool isCompletingShadowstep = false;
-    private GameObject ghostClone;
+    private GameObject ghostClone = null;
 
     //Distract Member Variables
     public GameObject bombPrefab;
+    public float distractDistance;
+
+    private GameObject bombClone = null;
+    private bool isBombDeployed = false;
+  
  
     
 
@@ -37,7 +42,8 @@ public class PlayerAbilities : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        ShadowstepController();
+        //ShadowstepController();
+        DistractController();
         SetIsUsingAbility();
 		
 	}
@@ -126,6 +132,7 @@ public class PlayerAbilities : MonoBehaviour {
         
         player.transform.position = ghostClone.transform.position;
         Destroy(ghostClone);
+
     }
 
     //called in the Animator at the end of the shadowstep animation.  resets player components and shadowstepping so that the
@@ -142,34 +149,49 @@ public class PlayerAbilities : MonoBehaviour {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     #endregion
 
     #region Distract Controller and Methods
 
     void DistractController() {
 
+        if (Input.GetKeyDown(KeyCode.LeftShift) /*&& !isBombDeployed*/) {
 
+            InstantiateBomb(distractDistance);
 
+        }
 
+       
 
+    }
 
+    void InstantiateBomb(float distance) {
 
+        isBombDeployed = true;
+
+        Vector3 playerPosition = player.transform.position;
+        Vector3 instantiatePosition = Vector3.zero;
+
+        int caseSwitch = playerAnimator.GetInteger("direction");
+
+        switch (caseSwitch) {
+
+            case 1: //forward
+                instantiatePosition = playerPosition + (new Vector3(0, -distance, 0));
+                break;
+            case 2: //back
+                instantiatePosition = playerPosition + (new Vector3(0, (distance - 0.5f), 0));
+                break;
+            case 3: //left
+                instantiatePosition = playerPosition + (new Vector3(-distance, -0.5f, 0));
+                break;
+            case 4: //right
+                instantiatePosition = playerPosition + (new Vector3(distance, -0.5f, 0));
+                break;
+
+        }
+
+        bombClone = Instantiate(bombPrefab, instantiatePosition, player.transform.rotation);
 
 
     }

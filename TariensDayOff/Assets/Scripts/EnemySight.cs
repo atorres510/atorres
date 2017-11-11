@@ -75,17 +75,34 @@ public class EnemySight : MonoBehaviour {
                 }
                     //if player gets too close to the enemy, end the game.  
 					else if(hit.fraction <= 3f){
-						StopAllCoroutines();
-						enemyPatrol.StopAllCoroutines();
-						InstantiateExclamationMark();
-						gameManager.GameOver();
+
+                        FoundPlayer();
 						
 					}
 
 
 				}
+
 		}
-	}
+
+
+        else if (other.gameObject.tag == "Distraction" && !isSuspicious)
+        {
+
+            enemyPatrol.StopAllCoroutines();
+            //enemyPatrol.StopCoroutine("TrackLastPosition");
+            if (!isQuestionMarkInstantiated)
+            {
+                StartCoroutine(InstantiateQuestionMark());
+            }
+
+            isSuspicious = true;
+            StartCoroutine(enemyPatrol.TrackLastPosition(other.gameObject));
+            isSuspicious = enemyPatrol.ReturnSuspicion();
+
+        }
+
+    }
 
 
 	void OnTriggerExit2D(Collider2D other){
@@ -129,6 +146,15 @@ public class EnemySight : MonoBehaviour {
 		
 	}
 
+    //called when player has been found, stops coroutines and tells the gamemanager to end the game.
+    void FoundPlayer() {
+
+        StopAllCoroutines();
+        enemyPatrol.StopAllCoroutines();
+        InstantiateExclamationMark();
+        gameManager.GameOver();
+        
+    }
 
 
 }
