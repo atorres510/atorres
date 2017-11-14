@@ -9,7 +9,7 @@ public class EnemyPatrol : MonoBehaviour {
 	//Public control of Enemy patrolling speeds.
 	public float patrolSpeed;
 	public float rotationSpeed;
-	public bool isPatrollingGuard;
+	public bool isPatrollingGuard; //has enemy patrol to waypoints if true.  if false, enemy will remain stationary, only looking at its waypoints.
     
 	private float step; // patrollSpeed * deltatime for smoother movement
 	private bool moving; //Dunno what this was for.
@@ -18,7 +18,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 	private bool isSuspicious;
 	private bool isTracking; //true if guard is tracking the player.
-	private int trackLastCoroutineCounter; // to count the number of coroutines currently in action. used to break any pre-existing coroutines; 
+	private int trackLastCoroutineCounter; // to count the number of coroutines currently in action. used to break any pre-existing coroutines; ***this variable has been temporarily removed due to uselessness.
 	public float suspiciousPatrolSpeed;
 	public float suspiciousRotationSpeed;
 	public float secondsSuspicious;
@@ -54,7 +54,6 @@ public class EnemyPatrol : MonoBehaviour {
 	void Update () {
 		
 		RestartPatrol ();
-		
 		
 	}
 
@@ -318,8 +317,8 @@ public class EnemyPatrol : MonoBehaviour {
     public IEnumerator TrackTargetLastPosition(GameObject target){
 
 
-		trackLastCoroutineCounter++;
-		Debug.Log ("Counter : " + trackLastCoroutineCounter);
+		//trackLastCoroutineCounter++;
+		//Debug.Log ("Counter : " + trackLastCoroutineCounter);
 
 		isSuspicious = true;
 
@@ -354,10 +353,10 @@ public class EnemyPatrol : MonoBehaviour {
 
 		yield return new WaitForSeconds (secondsSuspicious + 0.5f);
 
-        //EnemySight sight = GetComponent<EnemySight>();
-        //sight.DestroyEmoteClone();
+        EnemySight sight = GetComponent<EnemySight>();
+        sight.DestroyEmoteClone();
 
-		if (trackLastCoroutineCounter > 1) {
+		/*if (trackLastCoroutineCounter > 1) {
 				
 			trackLastCoroutineCounter--;
 			Debug.Log("Break. Counter : " + trackLastCoroutineCounter);
@@ -367,14 +366,14 @@ public class EnemyPatrol : MonoBehaviour {
 
 		else{
 			trackLastCoroutineCounter--;
-		}
+		}*/
 
 
 
 		yield return StartCoroutine (MoveTo (playerLastPosition, suspiciousPatrolSpeed));
 
 		//Debug.Log(StartCoroutine(MoveTo(playerLastPosition, suspiciousPatrolSpeed));
-		Debug.Log(trackLastCoroutineCounter);
+		//Debug.Log(trackLastCoroutineCounter);
 
 		yield return new WaitForSeconds (secondsSuspicious);
 
@@ -385,8 +384,8 @@ public class EnemyPatrol : MonoBehaviour {
 		isSuspicious = false;
 
 		currentPosition = enemyLastPositions.Count;
-		//trackLastCoroutineCounter--;
-		if (trackLastCoroutineCounter == 0) {
+        //trackLastCoroutineCounter--;
+        /*if (trackLastCoroutineCounter == 0) {
 				
 			yield return StartCoroutine(ReturnToPatrol(currentWaypoint, enemyLastPositions));
 		
@@ -394,12 +393,13 @@ public class EnemyPatrol : MonoBehaviour {
 
 		else{
 			yield return null;
-		}
+		}*/
+
+        yield return StartCoroutine(ReturnToPatrol(currentWaypoint, enemyLastPositions));
 
 
-	
-		
-	}
+
+    }
 
     //used to track the last positions of the player backward such that the patrolling guard can return to its original patrol without crashing into walls.
     IEnumerator ReturnToPatrol(int i, List<Vector3> positions)
@@ -475,11 +475,7 @@ public class EnemyPatrol : MonoBehaviour {
     IEnumerator ReturnToLastWayPoint(){
 			
 		yield return null;
-
-
-
-
-
+        
 	}
 
 	public bool ReturnSuspicion(){

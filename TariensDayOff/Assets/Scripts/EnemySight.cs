@@ -49,8 +49,7 @@ public class EnemySight : MonoBehaviour {
     void OnTriggerStay2D(Collider2D other){
 
         if (other.gameObject == player) {
-
-
+            
             Vector2 direction = other.transform.position - transform.position;
 
             //	Debug.Log ("Angle of view Achieved");
@@ -58,46 +57,26 @@ public class EnemySight : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, layermask);
             //Debug.DrawRay(transform.position, direction, Color.red, 1f, false);
 
-            if (hit.collider.gameObject == player)
-            {
+            if (hit.collider.gameObject == player) {
 
                 //if player is within the enemy's visual range, make the enemy suspicious, stop their current patrol
                 //and begin tracking the player's last position.  !isplayerinsight condition keeps the method from repeating unnecessarily.
-                if (hit.fraction > 3f && !isPlayerInSight)
-                {
+                if (hit.fraction > 3f && !isPlayerInSight){
 
                     isPlayerInSight = true;
-                    //Debug.Log(playerInSight);
-                    //StopAllCoroutines();
-                    enemyPatrol.StopAllCoroutines();
-                    //enemyPatrol.StopCoroutine("TrackLastPosition");
-                    if (!isQuestionMarkInstantiated)
-                    {
-                        StartCoroutine(InstantiateQuestionMark());
-                    }
-
-
-
-                    isSuspicious = true;
-                    StartCoroutine(enemyPatrol.TrackTargetLastPosition(player));
-                    isSuspicious = enemyPatrol.ReturnSuspicion();
+                    LookingForTarget(player);
 
                 }
                 //if player gets too close to the enemy, end the game.  
-                else if (hit.fraction <= 3f)
-                {
+                else if (hit.fraction <= 3f){
 
                     FoundPlayer();
 
                 }
-
-
+                
             }
-
-
+            
         }
-
-
         
     }
 
@@ -130,37 +109,6 @@ public class EnemySight : MonoBehaviour {
 
     }
 
-    //Displays question mark above enemy.  Question mark is destroyed after 2 seconds.	
-    IEnumerator InstantiateQuestionMark(){
-
-		//Debug.Log ("instantiating");
-		isQuestionMarkInstantiated = true;
-		//GameObject questionmarkInstance;
-		Vector3 questionMarkPosition = new Vector3 (transform.position.x, (transform.position.y + 1.5f), -1f);
-		questionmarkInstance = Instantiate (questionmarkPrefab, questionMarkPosition, questionmarkPrefab.transform.rotation) as GameObject;
-
-		yield return new WaitForSeconds(2);
-
-		//Debug.Log ("done instantiating");
-		Destroy (questionmarkInstance);
-		isQuestionMarkInstantiated = false;
-
-		yield return null;
-	
-	}
-
-	//Displays exclamation mark above enemy when they are caught.  The exclamation mark is not 
-    //destroyed.  
-	void InstantiateExclamationMark(){
-        if (isQuestionMarkInstantiated) {
-            Destroy(questionmarkInstance);
-        }
-		//Debug.Log ("instantiating");
-		GameObject exclamationMarkInstance;
-		Vector3 exclamationMarkPosition = new Vector3 (transform.position.x, (transform.position.y + 1.5f), -1f);
-		exclamationMarkInstance = Instantiate (exclamationmarkPrefab, exclamationMarkPosition, exclamationmarkPrefab.transform.rotation) as GameObject;
-		
-	}
 
 #endregion
 
@@ -169,7 +117,7 @@ public class EnemySight : MonoBehaviour {
 
         StopAllCoroutines();
         enemyPatrol.StopAllCoroutines();
-        InstantiateExclamationMark();
+        InstantiateEmoteClone(exclamationmarkPrefab);
         gameManager.GameOver();
         
     }
@@ -187,10 +135,6 @@ public class EnemySight : MonoBehaviour {
         
 
         enemyPatrol.StopAllCoroutines();
-        //enemyPatrol.StopCoroutine("TrackLastPosition");
-        /*if (!isQuestionMarkInstantiated){
-           StartCoroutine(InstantiateQuestionMark());
-        }*/
 
         InstantiateEmoteClone(questionmarkPrefab);
 
