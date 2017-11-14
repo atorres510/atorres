@@ -9,23 +9,28 @@ public class EnemySight : MonoBehaviour {
 
 	public float fieldOfView = 110f;
 
+    public LayerMask layermask; //set in Inspector, determines the layers that will be detectable by raycasts
+
 	public GameObject questionmarkPrefab;
 	public GameObject exclamationmarkPrefab;
 	private GameObject questionmarkInstance;
+    private GameObject emoteClone;
+    private bool isEmoteInstantiated;
+    private bool isQuestionMarkInstantiated;
 
-	private Collider2D col;
+    private Collider2D col;
 	private GameObject player;
 	
 	private EnemyPatrol enemyPatrol;
 
 	private bool isPlayerInSight;
 	private bool isSuspicious;  //
-	private bool isQuestionMarkInstantiated;
+	
 
 	private GameObject gameManagerObject;
 	private GameManager gameManager;
 
-
+    //Instantiate member variables, along with finding game manager and player.
 	void Awake(){
 
 		gameManagerObject = GameObject.FindGameObjectWithTag ("GameManager");
@@ -41,67 +46,59 @@ public class EnemySight : MonoBehaviour {
 
 	}
 
-	void OnTriggerStay2D(Collider2D other){
-		if (other.gameObject == player) {
+    void OnTriggerStay2D(Collider2D other){
 
-			Vector2 direction = other.transform.position - transform.position;
-
-			//	Debug.Log ("Angle of view Achieved");
-
-			RaycastHit2D hit = Physics2D.Raycast(transform.position, direction); 
-
-				if(hit.collider.gameObject == player){
-
-                    //if player is within the enemy's visual range, make the enemy suspicious, stop their current patrol
-                    //and begin tracking the player's last position.  !isplayerinsight condition keeps the method from repeating unnecessarily.
-					if(hit.fraction > 3f && !isPlayerInSight){
-
-                        isPlayerInSight = true;
-                        //Debug.Log(playerInSight);
-                        //StopAllCoroutines();
-                        enemyPatrol.StopAllCoroutines();
-                        //enemyPatrol.StopCoroutine("TrackLastPosition");
-                        if (!isQuestionMarkInstantiated)
-                        {
-                            StartCoroutine(InstantiateQuestionMark());
-                        }
+        if (other.gameObject == player) {
 
 
+            Vector2 direction = other.transform.position - transform.position;
 
-                        isSuspicious = true;
-                        StartCoroutine(enemyPatrol.TrackLastPosition(player));
-                        isSuspicious = enemyPatrol.ReturnSuspicion();
+            //	Debug.Log ("Angle of view Achieved");
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, layermask);
+            //Debug.DrawRay(transform.position, direction, Color.red, 1f, false);
+
+            if (hit.collider.gameObject == player)
+            {
+
+                //if player is within the enemy's visual range, make the enemy suspicious, stop their current patrol
+                //and begin tracking the player's last position.  !isplayerinsight condition keeps the method from repeating unnecessarily.
+                if (hit.fraction > 3f && !isPlayerInSight)
+                {
+
+                    isPlayerInSight = true;
+                    //Debug.Log(playerInSight);
+                    //StopAllCoroutines();
+                    enemyPatrol.StopAllCoroutines();
+                    //enemyPatrol.StopCoroutine("TrackLastPosition");
+                    if (!isQuestionMarkInstantiated)
+                    {
+                        StartCoroutine(InstantiateQuestionMark());
+                    }
+
+
+
+                    isSuspicious = true;
+                    StartCoroutine(enemyPatrol.TrackLastPosition(player));
+                    isSuspicious = enemyPatrol.ReturnSuspicion();
 
                 }
-                    //if player gets too close to the enemy, end the game.  
-					else if(hit.fraction <= 3f){
+                //if player gets too close to the enemy, end the game.  
+                else if (hit.fraction <= 3f)
+                {
 
-                        FoundPlayer();
-						
-					}
+                    FoundPlayer();
 
-
-				}
-
-		}
+                }
 
 
-        else if (other.gameObject.tag == "Distraction" && !isSuspicious)
-        {
-
-            enemyPatrol.StopAllCoroutines();
-            //enemyPatrol.StopCoroutine("TrackLastPosition");
-            if (!isQuestionMarkInstantiated)
-            {
-                StartCoroutine(InstantiateQuestionMark());
             }
 
-            isSuspicious = true;
-            StartCoroutine(enemyPatrol.TrackLastPosition(other.gameObject));
-            isSuspicious = enemyPatrol.ReturnSuspicion();
 
         }
 
+
+        
     }
 
 
@@ -111,6 +108,29 @@ public class EnemySight : MonoBehaviour {
 			//Debug.Log (playerInSight);
 		}
 	}
+
+
+
+    #region Emote Methods
+    void InstantiateEmoteClone(GameObject emotePrefab) {
+
+        //Debug.Log ("instantiating");
+        isQuestionMarkInstantiated = true;
+        //GameObject questionmarkInstance;
+        Vector3 questionMarkPosition = new Vector3(transform.position.x, (transform.position.y + 1.5f), -1f);
+        questionmarkInstance = Instantiate(questionmarkPrefab, questionMarkPosition, questionmarkPrefab.transform.rotation) as GameObject;
+
+     
+
+        //Debug.Log ("done instantiating");
+        Destroy(questionmarkInstance);
+        isQuestionMarkInstantiated = false;
+
+     
+
+
+
+    }
     
 	 //Displays question mark above enemy.  Question mark is destroyed after 2 seconds.	
 	IEnumerator InstantiateQuestionMark(){
@@ -129,8 +149,6 @@ public class EnemySight : MonoBehaviour {
 
 		yield return null;
 	
-		
-	
 	}
 
 	//Displays exclamation mark above enemy when they are caught.  The exclamation mark is not 
@@ -146,6 +164,8 @@ public class EnemySight : MonoBehaviour {
 		
 	}
 
+#endregion
+
     //called when player has been found, stops coroutines and tells the gamemanager to end the game.
     void FoundPlayer() {
 
@@ -154,6 +174,30 @@ public class EnemySight : MonoBehaviour {
         InstantiateExclamationMark();
         gameManager.GameOver();
         
+    }
+    //For when the enemy should be suspicious, then goes to the position of the object causing suspicion. 
+    //Called by OnTriggerStay in this script, or by soundbehaviours.  
+    public void LookingForOther(GameObject other) {
+
+        if (isPlayerInSight){
+            Debug.Log("Player spotted!");
+        }
+
+        else {
+            Debug.Log(gameObject.name + " heard sound!");
+        }
+        
+
+        enemyPatrol.StopAllCoroutines();
+        //enemyPatrol.StopCoroutine("TrackLastPosition");
+        if (!isQuestionMarkInstantiated){
+            StartCoroutine(InstantiateQuestionMark());
+        }
+
+        isSuspicious = true;
+        StartCoroutine(enemyPatrol.TrackLastPosition(other.gameObject));
+        isSuspicious = enemyPatrol.ReturnSuspicion();
+
     }
 
 
