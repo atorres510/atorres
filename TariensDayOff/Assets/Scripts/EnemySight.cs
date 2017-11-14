@@ -79,7 +79,7 @@ public class EnemySight : MonoBehaviour {
 
 
                     isSuspicious = true;
-                    StartCoroutine(enemyPatrol.TrackLastPosition(player));
+                    StartCoroutine(enemyPatrol.TrackTargetLastPosition(player));
                     isSuspicious = enemyPatrol.ReturnSuspicion();
 
                 }
@@ -112,28 +112,26 @@ public class EnemySight : MonoBehaviour {
 
 
     #region Emote Methods
-    void InstantiateEmoteClone(GameObject emotePrefab) {
+    public void InstantiateEmoteClone(GameObject emotePrefab) {
 
-        //Debug.Log ("instantiating");
-        isQuestionMarkInstantiated = true;
-        //GameObject questionmarkInstance;
-        Vector3 questionMarkPosition = new Vector3(transform.position.x, (transform.position.y + 1.5f), -1f);
-        questionmarkInstance = Instantiate(questionmarkPrefab, questionMarkPosition, questionmarkPrefab.transform.rotation) as GameObject;
+        if (emoteClone != null){
+            Destroy(emoteClone);
+        }
 
-     
+        Vector3 emotePosition = new Vector3(transform.position.x, (transform.position.y + 1.5f), -1f);
+        emoteClone = Instantiate(emotePrefab, emotePosition, emotePrefab.transform.rotation) as GameObject;
+    }
 
-        //Debug.Log ("done instantiating");
-        Destroy(questionmarkInstance);
-        isQuestionMarkInstantiated = false;
+    public void DestroyEmoteClone() {
 
-     
-
-
+        if (emoteClone != null){
+            Destroy(emoteClone);
+        }
 
     }
-    
-	 //Displays question mark above enemy.  Question mark is destroyed after 2 seconds.	
-	IEnumerator InstantiateQuestionMark(){
+
+    //Displays question mark above enemy.  Question mark is destroyed after 2 seconds.	
+    IEnumerator InstantiateQuestionMark(){
 
 		//Debug.Log ("instantiating");
 		isQuestionMarkInstantiated = true;
@@ -177,7 +175,7 @@ public class EnemySight : MonoBehaviour {
     }
     //For when the enemy should be suspicious, then goes to the position of the object causing suspicion. 
     //Called by OnTriggerStay in this script, or by soundbehaviours.  
-    public void LookingForOther(GameObject other) {
+    public void LookingForTarget(GameObject target) {
 
         if (isPlayerInSight){
             Debug.Log("Player spotted!");
@@ -190,12 +188,14 @@ public class EnemySight : MonoBehaviour {
 
         enemyPatrol.StopAllCoroutines();
         //enemyPatrol.StopCoroutine("TrackLastPosition");
-        if (!isQuestionMarkInstantiated){
-            StartCoroutine(InstantiateQuestionMark());
-        }
+        /*if (!isQuestionMarkInstantiated){
+           StartCoroutine(InstantiateQuestionMark());
+        }*/
+
+        InstantiateEmoteClone(questionmarkPrefab);
 
         isSuspicious = true;
-        StartCoroutine(enemyPatrol.TrackLastPosition(other.gameObject));
+        StartCoroutine(enemyPatrol.TrackTargetLastPosition(target.gameObject));
         isSuspicious = enemyPatrol.ReturnSuspicion();
 
     }

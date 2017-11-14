@@ -77,7 +77,7 @@ public class SoundBehaviour : MonoBehaviour {
 
         if (!isWallobstructing && isInRange && (targetObject.GetComponent(typeof(EnemySight)))) {
 
-            targetObject.GetComponent<EnemySight>().LookingForOther(gameObject);
+            targetObject.GetComponent<EnemySight>().LookingForTarget(gameObject);
 
         }
 

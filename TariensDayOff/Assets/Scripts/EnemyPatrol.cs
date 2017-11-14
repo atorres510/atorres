@@ -315,7 +315,7 @@ public class EnemyPatrol : MonoBehaviour {
     //It also adds to a list of "enemyLastPositions" which allows the guard to back track to their
     //original patrol without wall collision.  If the guard loses suspicion, he will return to
     //his post with ReturnToPatrol().  Ideally.  
-    public IEnumerator TrackLastPosition(GameObject player){
+    public IEnumerator TrackTargetLastPosition(GameObject target){
 
 
 		trackLastCoroutineCounter++;
@@ -332,7 +332,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 
-		playerLastPosition = player.transform.position;
+		playerLastPosition = target.transform.position;
 		//playerLastTransform = player.transform;
 		enemyLastPositions.Add (transform.position);
 
@@ -353,6 +353,9 @@ public class EnemyPatrol : MonoBehaviour {
 
 
 		yield return new WaitForSeconds (secondsSuspicious + 0.5f);
+
+        //EnemySight sight = GetComponent<EnemySight>();
+        //sight.DestroyEmoteClone();
 
 		if (trackLastCoroutineCounter > 1) {
 				
