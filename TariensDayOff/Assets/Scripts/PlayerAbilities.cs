@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//This script defines the abilities for the main character and the controller components such as key presses.  Does not include Vaultpoint behaviours.
+//This script defines the abilities for the main character and the controller components such as key presses.  Does not include Vaultpoint or door behaviours, 
+//along with any other behaviours that interact with the environment.
 public class PlayerAbilities : MonoBehaviour {
 
     //General Ability Member Variables
     private bool isUsingAbility;
  
-
     //Player Object and Components
     private GameObject player;
     private Animator playerAnimator;
@@ -26,7 +26,7 @@ public class PlayerAbilities : MonoBehaviour {
     //Distract Member Variables
     public GameObject bombPrefab;
     public float distractDistance;
-
+   
     private GameObject bombClone = null;
     private bool isBombDeployed = false;
   
@@ -160,9 +160,7 @@ public class PlayerAbilities : MonoBehaviour {
             InstantiateBomb(distractDistance);
 
         }
-
-       
-
+        
     }
 
     void InstantiateBomb(float distance) {
@@ -192,8 +190,7 @@ public class PlayerAbilities : MonoBehaviour {
         }
 
         bombClone = Instantiate(bombPrefab, instantiatePosition, player.transform.rotation);
-
-
+        
     }
 
 

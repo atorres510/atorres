@@ -3,32 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class EnemySight : MonoBehaviour {
+    //enemySight relays information to the enemy patrol about the player when entering the field of view
 
-
-	//enemySight relays information to the enemy patrol about the player when entering the field of view
-
+    //Public Member Variables
 	public float fieldOfView = 110f;
-
     public LayerMask layermask; //set in Inspector, determines the layers that will be detectable by raycasts
 
-	public GameObject questionmarkPrefab;
+    //Enemy Compnonents, set at Awake()
+    private EnemyPatrol enemyPatrol;
+    private Collider2D col;
+
+    //Player and GameManger Components, set at Awake()
+    private GameObject player;
+    private GameObject gameManagerObject;
+    private GameManager gameManager;
+
+    //Emote Member Variables
+    public GameObject questionmarkPrefab;
 	public GameObject exclamationmarkPrefab;
+
 	private GameObject questionmarkInstance;
     private GameObject emoteClone;
     private bool isEmoteInstantiated;
     private bool isQuestionMarkInstantiated;
-
-    private Collider2D col;
-	private GameObject player;
-	
-	private EnemyPatrol enemyPatrol;
-
-	private bool isPlayerInSight;
-	private bool isSuspicious;  //
+    
+    //Player Interaction Member Variables
+    private bool isPlayerInSight; //called in OnTriggerStay
+	private bool isSuspicious;  //Dunno what this is for.
 	
 
-	private GameObject gameManagerObject;
-	private GameManager gameManager;
 
     //Instantiate member variables, along with finding game manager and player.
 	void Awake(){
@@ -42,10 +45,9 @@ public class EnemySight : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player");
 		//Debug.Log (player);
 	
-	
-
 	}
 
+    //Uses colliders enemy and player colliders to determine which Player Interaction Methods to call, and when.
     void OnTriggerStay2D(Collider2D other){
 
         if (other.gameObject == player) {
@@ -64,7 +66,7 @@ public class EnemySight : MonoBehaviour {
                 if (hit.fraction > 3f && !isPlayerInSight){
 
                     isPlayerInSight = true;
-                    LookingForTarget(player);
+                    LookForTarget(player);
 
                 }
                 //if player gets too close to the enemy, end the game.  
@@ -87,9 +89,7 @@ public class EnemySight : MonoBehaviour {
 			//Debug.Log (playerInSight);
 		}
 	}
-
-
-
+    
     #region Emote Methods
     public void InstantiateEmoteClone(GameObject emotePrefab) {
 
@@ -110,8 +110,9 @@ public class EnemySight : MonoBehaviour {
     }
 
 
-#endregion
+    #endregion
 
+    #region Player Interaction Methods
     //called when player has been found, stops coroutines and tells the gamemanager to end the game.
     void FoundPlayer() {
 
@@ -123,17 +124,16 @@ public class EnemySight : MonoBehaviour {
     }
     //For when the enemy should be suspicious, then goes to the position of the object causing suspicion. 
     //Called by OnTriggerStay in this script, or by soundbehaviours.  
-    public void LookingForTarget(GameObject target) {
+    public void LookForTarget(GameObject target) {
 
         if (isPlayerInSight){
-            Debug.Log("Player spotted!");
+            Debug.Log(gameObject.name + " is suspicious of player!");
         }
 
         else {
-            Debug.Log(gameObject.name + " heard sound!");
+            Debug.Log(gameObject.name + " heard a sound!");
         }
         
-
         enemyPatrol.StopAllCoroutines();
 
         InstantiateEmoteClone(questionmarkPrefab);
@@ -144,5 +144,6 @@ public class EnemySight : MonoBehaviour {
 
     }
 
+#endregion
 
 }

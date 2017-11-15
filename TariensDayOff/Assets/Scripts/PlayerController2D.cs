@@ -52,7 +52,6 @@ public class PlayerController2D : MonoBehaviour {
             playerAnimator.SetInteger("direction", 2);
             playerAnimator.SetBool("moving", true);
           
-
         }
 
         if (Input.GetKeyUp(KeyCode.W)) {

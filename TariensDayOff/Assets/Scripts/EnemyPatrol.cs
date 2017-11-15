@@ -6,27 +6,28 @@ public class EnemyPatrol : MonoBehaviour {
 
 	//this script deals with enemy movement, patrols, and player tracking.
 
-	//Public control of Enemy patrolling speeds.
+	//Public Member Variables, set in inspector
 	public float patrolSpeed;
 	public float rotationSpeed;
 	public bool isPatrollingGuard; //has enemy patrol to waypoints if true.  if false, enemy will remain stationary, only looking at its waypoints.
     
+    //Patrol Member Variables
 	private float step; // patrollSpeed * deltatime for smoother movement
 	private bool moving; //Dunno what this was for.
 	private int currentWaypoint; //holds the value of the next waypoint in the list for the patrol.  allows for enemies to continue the patrol without restarting if interupted by TrackLastPosition
 	private bool donePatrolling; //to check if a patrol is finished so the patrol can reset
 
-	private bool isSuspicious;
+    //Tracking Member Variables
+    public float suspiciousPatrolSpeed;
+    public float suspiciousRotationSpeed;
+    public float secondsSuspicious;
+    public float secondsUntilDetection;
+    private bool isSuspicious;
 	private bool isTracking; //true if guard is tracking the player.
 	private int trackLastCoroutineCounter; // to count the number of coroutines currently in action. used to break any pre-existing coroutines; ***this variable has been temporarily removed due to uselessness.
-	public float suspiciousPatrolSpeed;
-	public float suspiciousRotationSpeed;
-	public float secondsSuspicious;
-	public float secondsUntilDetection;
 	private Transform playerLastTransform;
 	private Vector3 playerLastPosition;
 	private int currentPosition; //identical to the functionality of currenwaypoint, but used instead for the enemyLast position list
-	
 
 	//Holds a list of waypoints for a patrol
 	public Transform[] waypoints; //turn this into a new array called waypointTransforms, which no longer needs to be public.  use "waypoints" name for an array of waypointBehaviours
@@ -77,7 +78,7 @@ public class EnemyPatrol : MonoBehaviour {
 	}
 
 
-#region LookAt, LookAround and MoveTo Functions
+#region LookAt, LookAround and MoveTo Methods
 
     //Rotates about Z axis to look at a specificed target - called in patrol and tracklastposition
     IEnumerator LookAt(Vector3 target, float rotSpeed){
@@ -154,7 +155,7 @@ public class EnemyPatrol : MonoBehaviour {
     //angle is the initial angle, where as range is the furthest +/- that the angle may vary.
     //rotation speed is how fast in seconds the rotation to that angle will take.
     IEnumerator LookAround(float angle, float angleRange, float rotationSpeed, float speedRange) {
-        Debug.Log("LookAround");
+        //Debug.Log("LookAround");
 
         float randomizedAngle = Random.Range((angle - angleRange), (angle + angleRange));
         float randomizedSpeed = Random.Range((rotationSpeed - speedRange), (rotationSpeed + speedRange));
@@ -202,7 +203,6 @@ public class EnemyPatrol : MonoBehaviour {
 		}
 	}
 
-
 	//overload that uses lookat() and moveto() in jxn with suspicion.  to be used in tracklastposition
 	IEnumerator MoveTo(Vector3 target, float moveSpeed, float rotSpeed, bool suspicion, float waitTimeinSeconds){
 
@@ -243,7 +243,7 @@ public class EnemyPatrol : MonoBehaviour {
 	}
     #endregion
 
-#region Patrol Functions
+#region Patrol Methods
 
     //Combines LookAt and MoveTo so the enemy looks then moves to a specified waypoint. "isPatrollingGuard" must be true.
     IEnumerator Patrol(int i, List<Vector3> waypoints){
@@ -308,7 +308,7 @@ public class EnemyPatrol : MonoBehaviour {
 
     #endregion
 
-#region Player Tracking Functions
+#region Player Tracking Methods
 
     //Takes the player's last known position, and creates a path to it.  
     //It also adds to a list of "enemyLastPositions" which allows the guard to back track to their
@@ -329,14 +329,12 @@ public class EnemyPatrol : MonoBehaviour {
 		StopCoroutine ("ReturnToPatrol");
         StopCoroutine("LookAround");
 
-
-
+        
 		playerLastPosition = target.transform.position;
 		//playerLastTransform = player.transform;
 		enemyLastPositions.Add (transform.position);
-
-		
-		Debug.Log ("Player's Last Position: " + playerLastPosition);
+        
+		//Debug.Log ("Player's Last Position: " + playerLastPosition);
 
 		yield return StartCoroutine (LookAt (playerLastPosition, suspiciousRotationSpeed));
 
@@ -379,7 +377,7 @@ public class EnemyPatrol : MonoBehaviour {
 
         yield return StartCoroutine(LookAround(45, 10, 0.5f, 0.2f));
 		
-		Debug.Log ("I am not suspicious anymore");
+		Debug.Log (gameObject.name + "is not suspicious anymore.");
 		
 		isSuspicious = false;
 
@@ -419,7 +417,7 @@ public class EnemyPatrol : MonoBehaviour {
 
 
         }
-        Debug.Log("Returned to original patrol.");
+        Debug.Log(gameObject.name + " returned to original patrol.");
         //donePatrolling = true;
         positions.Clear();
 
