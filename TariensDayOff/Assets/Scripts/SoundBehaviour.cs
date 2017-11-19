@@ -70,8 +70,8 @@ public class SoundBehaviour : MonoBehaviour {
             
         }
 
-        Debug.Log("Wall obstruction: " + isWallobstructing);
-        Debug.Log("In range: " + isInRange);
+        //Debug.Log("Wall obstruction: " + isWallobstructing);
+        //Debug.Log("In range: " + isInRange);
 
         //if target is an enemy within range and not being obstructed, then call LookForTarget in EnemySight Script of the object.
         if (!isWallobstructing && isInRange && (targetObject.GetComponent(typeof(EnemySight)))) {

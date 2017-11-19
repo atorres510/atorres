@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 //This script defines the abilities for the main character and the controller components such as key presses.  Does not include Vaultpoint or door behaviours, 
-//along with any other behaviours that interact with the environment.
+//along with any other behaviours that interact with the environment. Public members should be set in the inspector.
 public class PlayerAbilities : MonoBehaviour {
 
     //General Ability Member Variables
     private bool isUsingAbility;
+    private int currentAbility = 1; //should always start at 1.
+    private int maxNumAbilities = 2; //should match the number of abilities active (i.e. if distract and shadowstep are active, set max to 2).
+
  
     //Player Object and Components
     private GameObject player;
@@ -17,18 +20,18 @@ public class PlayerAbilities : MonoBehaviour {
 
     //Shadowstep Member Variables
     public GameObject playerGhostPrefab;
-    public int ghostMaxRadius;
+    public int ghostMaxRadius; //sets the limit radius of the shadowstep ability
 
-    private bool isShadowstepping = false; 
-    private bool isCompletingShadowstep = false;
-    private GameObject ghostClone = null;
+    private bool isShadowstepping = false; //called in the controller, ensures the ability is not called more than once
+    private bool isCompletingShadowstep = false; //^^^
+    private GameObject ghostClone = null; //holds the instantiated ghost clone
 
     //Distract Member Variables
     public GameObject bombPrefab;
-    public float distractDistance;
+    public float distractDistance; //distance that the bomb is instantiated from the player at a given direction
    
-    private GameObject bombClone = null;
-    private bool isBombDeployed = false;
+    private GameObject bombClone = null; //holds the instantiated bomb clone
+    private bool isBombDeployed = false; //keeps from more than one bomb being deployed at a time
   
  
     
@@ -42,8 +45,9 @@ public class PlayerAbilities : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        //ShadowstepController();
-        DistractController();
+        AbilityController();
+        AbilitySelector();
+
         SetIsUsingAbility();
 		
 	}
@@ -60,6 +64,42 @@ public class PlayerAbilities : MonoBehaviour {
         playerRigidbody = player.GetComponent<Rigidbody2D>();
 
     }
+    //called in Update, sets currentAbility with F and toggles between the abilities.
+    //maxNumAbilities should be set to the number of abilities available (i.e. if distract and shadowstep are active, then set maxNumbAbilities to 2).
+    void AbilityController() {
+
+        if (Input.GetKeyDown(KeyCode.F) && !isUsingAbility) { //keeps from activating if an ability is in progress.
+
+            currentAbility++;
+
+            if (currentAbility > maxNumAbilities) { //cycles back to the first ability if the maxNum was passed.
+
+                currentAbility = 1;
+
+            }
+            
+        }
+       
+    }
+
+    //Called in Update, switches the active ability controller on and off.
+    void AbilitySelector() {
+
+        switch (currentAbility) {
+
+            case 1: ShadowstepController();
+                //Debug.Log("Shadowstep Active.");
+                break;
+
+            case 2: DistractController();
+                //Debug.Log("Distract Active");
+                break;
+
+        }
+        
+    }
+
+
     //called in update, 
     void SetIsUsingAbility() {
 
@@ -152,15 +192,23 @@ public class PlayerAbilities : MonoBehaviour {
     #endregion
 
     #region Distract Controller and Methods
-
+    //holds key inputs and checks if bomb is still deployed or not.
     void DistractController() {
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) /*&& !isBombDeployed*/) {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isBombDeployed) {
 
             InstantiateBomb(distractDistance);
 
         }
-        
+
+        if (bombClone == null)
+        {
+
+            isBombDeployed = false;
+
+        }
+
+
     }
 
     void InstantiateBomb(float distance) {
