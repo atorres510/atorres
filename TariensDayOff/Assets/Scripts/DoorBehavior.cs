@@ -39,22 +39,34 @@ public class DoorBehavior : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D other){
-		if (other.gameObject == player && !isDoorOpen) {
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				isDoorOpen = true;
-				doorBoxCollider2D.enabled = false; 
-				Debug.Log ("Door is open");
-			}
-		}
-		else if (other.gameObject == player && isDoorOpen) {
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				isDoorOpen = false;
-				doorBoxCollider2D.enabled = true;  
-				Debug.Log ("Door is closed");
-			}
-		}
 
+        if (other.gameObject == player){
 
+            Debug.Log("Player is colliding.");
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("GetKeyDown");
+                if (!isDoorOpen)
+                {
+
+                    isDoorOpen = true;
+                    doorBoxCollider2D.enabled = false;
+                    Debug.Log("Door is open");
+
+                }
+                else if (isDoorOpen)
+                {
+
+                    isDoorOpen = false;
+                    doorBoxCollider2D.enabled = true;
+                    Debug.Log("Door is closed");
+
+                }
+
+            }
+            
+        }
+        
 	}
 
 
