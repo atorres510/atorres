@@ -39,7 +39,7 @@ public class DoorBehavior : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D other){
-
+        Debug.Log(other.name);
         if (other.gameObject == player){
 
             Debug.Log("Player is colliding.");
@@ -68,13 +68,17 @@ public class DoorBehavior : MonoBehaviour {
         }
         
 	}
-
-
-
-
-
-
-
-
-
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
