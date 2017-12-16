@@ -5,13 +5,16 @@ public class DoorBehavior : MonoBehaviour {
 
     //Components
 	public BoxCollider2D doorBoxCollider2D;
-    public SpriteRenderer spriteRenderer;
+    public SpriteRenderer mainSpriteRenderer;
+    public SpriteRenderer topSpriteRenderer;
     //Sprite states
     public Sprite openStateSprite;
     public Sprite closedStateSprite;
+    public Sprite topOpenStateSprite;
+    public Sprite topClosedStateSprite;
 
 
-	private GameObject player;
+    private GameObject player;
 	//private BoxCollider2D boxcollider2D;
 
     [SerializeField]
@@ -37,21 +40,23 @@ public class DoorBehavior : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("GetKeyDown");
-                if (!isDoorOpen)
+                if (!isDoorOpen) //Open Door State
                 {
 
                     isDoorOpen = true;
                     doorBoxCollider2D.enabled = false;
-                    spriteRenderer.sprite = openStateSprite;
+                    mainSpriteRenderer.sprite = openStateSprite;
+                    topSpriteRenderer.sprite = topOpenStateSprite;
                     Debug.Log("Door is open");
 
                 }
-                else if (isDoorOpen)
+                else if (isDoorOpen) //Closed Door State
                 {
 
                     isDoorOpen = false;
                     doorBoxCollider2D.enabled = true;
-                    spriteRenderer.sprite = closedStateSprite;
+                    mainSpriteRenderer.sprite = closedStateSprite;
+                    topSpriteRenderer.sprite = topClosedStateSprite;
                     Debug.Log("Door is closed");
 
                 }
