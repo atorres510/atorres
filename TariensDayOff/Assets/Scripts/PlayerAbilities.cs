@@ -158,7 +158,7 @@ public class PlayerAbilities : MonoBehaviour {
         playerAnimator.SetBool("moving", false);
         
         playerController.enabled = false;
-        playerCollider.isTrigger = true; //does not cause collision but still acts as a trigger for guards
+        //playerCollider.isTrigger = true; //does not cause collision but still acts as a trigger for guards
         playerRigidbody.bodyType = RigidbodyType2D.Static; //keeps player from moving with ghost due to joint
 
         ghostClone = (GameObject)Instantiate(playerGhostPrefab, player.transform.position, player.transform.rotation);
@@ -180,7 +180,7 @@ public class PlayerAbilities : MonoBehaviour {
     public void ResetShadowstep() {
 
         playerController.enabled = true;
-        playerCollider.isTrigger = false;
+        //playerCollider.isTrigger = false;
         playerRigidbody.bodyType = RigidbodyType2D.Dynamic; //resets rigidbody bodytype to allow collision with walls and enemies
 
         isShadowstepping = false;
